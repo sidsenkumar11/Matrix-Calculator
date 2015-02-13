@@ -10,5 +10,6 @@ public class MatrixCalculator {
 
 	public MatrixCalculator(int m, int n) {
 		matrixA = new double[m][n];
+
 	}
 }
