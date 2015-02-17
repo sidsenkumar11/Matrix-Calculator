@@ -5,7 +5,7 @@
  * @version 1.0
  */
 public class MatrixCalculator {
-	
+
 	private Matrix a;
 	private Matrix b;
 
@@ -27,8 +27,54 @@ public class MatrixCalculator {
 		b = new Matrix(x, y);
 	}
 
-	public Matrix add(Matrix a, Matrix b) {
-		return a;
+	/**
+	 * Adds two matrices' values together
+	 * @param a The first matrix
+	 * @param b The second matrix
+	 * @return The matrix of containing the sum
+	 * @throws IllegalOperandException if the given
+	 *		   matrices have different dimensions
+	 */
+	public Matrix add(Matrix a, Matrix b) throws IllegalOperandException {
+
+		if (a.rows() != b.rows() || a.columns() != b.columns()) {
+			throw new IllegalOperandException("Rows and columns are not equal");
+		}
+
+		Matrix sum = new Matrix(a.rows(), a.columns());
+		double sumValue = 0;
+		for (int row = 0; row < a.rows(); row++) {
+			for (int column = 0; column < a.columns(); column++) {
+				sumValue = a.get(row, column) + b.get(row, column);
+				sum.set(row, column, sumValue);
+			}
+		}
+		return sum;
+	}
+
+	/**
+	 * Subtracts two matrices' values
+	 * @param a The first matrix
+	 * @param b The second matrix
+	 * @return The matrix of containing the difference
+	 * @throws IllegalOperandException if the given
+	 *		   matrices have different dimensions
+	 */
+	public Matrix subtract(Matrix a, Matrix b) throws IllegalOperandException {
+
+		if (a.rows() != b.rows() || a.columns() != b.columns()) {
+			throw new IllegalOperandException("Rows and columns are not equal");
+		}
+
+		Matrix difference = new Matrix(a.rows(), a.columns());
+		double differenceValue = 0;
+		for (int row = 0; row < a.rows(); row++) {
+			for (int column = 0; column < a.columns(); column++) {
+				differenceValue = a.get(row, column) - b.get(row, column);
+				difference.set(row, column, differenceValue);
+			}
+		}
+		return difference;
 	}
 
 	/**
