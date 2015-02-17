@@ -6,16 +6,16 @@
  */
 public class MatrixCalculator {
 	
-	private double[][] matrixA;
-	private double[][] matrixB;
+	private Matrix a;
+	private Matrix b;
 
 	/**
 	 * Creates matrix A with m rows and n columns.
 	 * Creates matrix B with 0 rows and 0 columns.
 	 */
 	public MatrixCalculator(int m, int n) {
-		matrixA = new double[m][n];
-		matrixB = new double[0][0];
+		a = new Matrix(m, n);
+		b = new Matrix(m, n);
 	}
 
 	/**
@@ -23,8 +23,12 @@ public class MatrixCalculator {
 	 * Creates matrix B with x rows and y columns.
 	 */
 	public MatrixCalculator(int m, int n, int x, int y) {
-		matrixA = new double[m][n];
-		matrixB = new double[x][y];
+		a = new Matrix(m, n);
+		b = new Matrix(x, y);
+	}
+
+	public Matrix add(Matrix a, Matrix b) {
+		return a;
 	}
 
 	/**
@@ -32,7 +36,7 @@ public class MatrixCalculator {
 	 * @param matrix The matrix to row reduce
 	 * @return The echelon form of the matrix
 	 */
-	public double[][] rowReduce(double[][] matrix) {
+	public Matrix rowReduce(Matrix matrix) {
 		/*
 			1) Begin with the leftmost nonzero column. This is a pivot column. The pivot position is at the top.
 			2) Select a nonzero entry in the pivot column as a pivot.
@@ -50,15 +54,15 @@ public class MatrixCalculator {
 	 * Returns the matrix A
 	 * @return The matrix A
 	 */
-	public double[][] getMatrixA() {
-		return matrixA;
+	public Matrix getMatrixA() {
+		return a;
 	}
 
 	/**
 	 * Returns the matrix B
 	 * @return The matrix B
 	 */
-	public double[][] getMatrixB() {
-		return matrixB;
+	public Matrix getMatrixB() {
+		return b;
 	}
 }
