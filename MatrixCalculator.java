@@ -98,10 +98,17 @@ public class MatrixCalculator {
 
 		Matrix product = new Matrix(a.rows(), b.columns());
 		double sum;
+		double[] row;
+		double[] column;
 		for (int rowA = 0; rowA < a.rows(); rowA++) {
 			sum = 0;
+			row = a.row(rowA);
 			for (int colB = 0; colB < b.columns(); colB++) {
-				sum += a.get(rowA,)
+				 column = b.column(colB);
+				 for (int i = 0; i < row.length; i++) {
+				 	sum += row[i] * column[i];
+				 }
+				 product.set(rowA, colB, sum);
 			}
 		}
 
