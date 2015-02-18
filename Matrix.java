@@ -65,6 +65,45 @@ public class Matrix {
 	}
 
 	/**
+	 * Returns an array of the elements in
+	 * the specified row.
+	 * @param row The desired row of elements
+	 * @return An array with the data from the row
+	 * @throws MatrixIndexOutOfBoundsException if row and column
+	 * 		   are not valid in the matrix
+	 */
+	public double[] row(int row) {
+		if (row < 0 || row >= rows()) {
+			throw new MatrixIndexOutOfBoundsException();
+		}
+		double[] desiredRow = new double[columns()];
+		for (int col = 0; col < columns(); col++) {
+			desiredRow[col] = get(row, col);
+		}
+		return desiredRow;
+	}
+
+	/**
+	 * Returns an array of the elements in
+	 * the specified column.
+	 * @param column The desired column of elements
+	 * @return An array with the data from the column
+	 * @throws MatrixIndexOutOfBoundsException if row and column
+	 * 		   are not valid in the matrix
+	 */
+	public double[] column(int column) {
+		if (column < 0  || column >= columns()) {
+			throw new MatrixIndexOutOfBoundsException();
+		}
+
+		double[] desiredColumn = new double[rows()];
+		for (int row = 0; row < rows(); row++) {
+			desiredColumn[row] = get(row, column);
+		}
+		return desiredColumn;
+	}
+
+	/**
 	 * Matrices are represented as the following:
 	 * [[column 1], [column 2], ... , [column n]]
 	 * @return The string representation of this matrix

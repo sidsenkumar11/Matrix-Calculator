@@ -78,6 +78,37 @@ public class MatrixCalculator {
 	}
 
 	/**
+	 * Multiplies two matrices
+	 * @param a The first matrix
+	 * @param b The second matrix
+	 * @return The matrix containing the product
+	 * @throws IllegalOperandException if the given
+	 *		   matrices' dimensions cannot be multiplied
+	 */
+	public Matrix multiply(Matrix a, Matrix b) throws IllegalOperandException {
+		/*
+			For two matrices to be multiplied, if
+			a is m x n, b must be n x y where y
+			is a positive integer.		
+		*/
+
+		if (a.columns() != b.rows()) {
+			throw new IllegalOperandException("A's columns must be the same as B's rows");
+		}
+
+		Matrix product = new Matrix(a.rows(), b.columns());
+		double sum;
+		for (int rowA = 0; rowA < a.rows(); rowA++) {
+			sum = 0;
+			for (int colB = 0; colB < b.columns(); colB++) {
+				sum += a.get(rowA,)
+			}
+		}
+
+		return product;
+	}
+
+	/**
 	 * Row reduces the given matrix to echelon form.
 	 * @param matrix The matrix to row reduce
 	 * @return The echelon form of the matrix
