@@ -6,27 +6,6 @@
  */
 public class MatrixCalculator {
 
-	private Matrix a;
-	private Matrix b;
-
-	/**
-	 * Creates matrix A with m rows and n columns.
-	 * Creates matrix B with 0 rows and 0 columns.
-	 */
-	public MatrixCalculator(int m, int n) {
-		a = new Matrix(m, n);
-		b = new Matrix(m, n);
-	}
-
-	/**
-	 * Creates matrix A with m rows and n columns.
-	 * Creates matrix B with x rows and y columns.
-	 */
-	public MatrixCalculator(int m, int n, int x, int y) {
-		a = new Matrix(m, n);
-		b = new Matrix(x, y);
-	}
-
 	/**
 	 * Adds two matrices' values together
 	 * @param a The first matrix
@@ -35,7 +14,7 @@ public class MatrixCalculator {
 	 * @throws IllegalOperandException if the given
 	 *		   matrices have different dimensions
 	 */
-	public Matrix add(Matrix a, Matrix b) throws IllegalOperandException {
+	public static Matrix add(Matrix a, Matrix b) throws IllegalOperandException {
 
 		if (a.rows() != b.rows() || a.columns() != b.columns()) {
 			throw new IllegalOperandException("Rows and columns are not equal");
@@ -60,7 +39,7 @@ public class MatrixCalculator {
 	 * @throws IllegalOperandException if the given
 	 *		   matrices have different dimensions
 	 */
-	public Matrix subtract(Matrix a, Matrix b) throws IllegalOperandException {
+	public static Matrix subtract(Matrix a, Matrix b) throws IllegalOperandException {
 
 		if (a.rows() != b.rows() || a.columns() != b.columns()) {
 			throw new IllegalOperandException("Rows and columns are not equal");
@@ -85,7 +64,7 @@ public class MatrixCalculator {
 	 * @throws IllegalOperandException if the given
 	 *		   matrices' dimensions cannot be multiplied
 	 */
-	public Matrix multiply(Matrix a, Matrix b) throws IllegalOperandException {
+	public static Matrix multiply(Matrix a, Matrix b) throws IllegalOperandException {
 		/*
 			For two matrices to be multiplied, if
 			a is m x n, b must be n x y where y
@@ -122,7 +101,7 @@ public class MatrixCalculator {
 	 * @return The dot product of the two vectors
 	 * @throws IllegalOperandException if the two vectors are not the same length
 	 */
-	public double dotProduct(Vector one, Vector two) throws IllegalOperandException {
+	public static double dotProduct(Vector one, Vector two) throws IllegalOperandException {
 		if (one.rows() != two.rows()) {
 			throw new IllegalOperandException("Vectors not same length");
 		}
@@ -139,7 +118,7 @@ public class MatrixCalculator {
 	 * @param matrix The matrix to row reduce
 	 * @return The echelon form of the matrix
 	 */
-	public Matrix rowReduce(Matrix matrix) {
+	public static Matrix rowReduce(Matrix matrix) {
 		/*
 			1) Begin with the leftmost nonzero column. This is a pivot column. The pivot position is at the top.
 			2) Select a nonzero entry in the pivot column as a pivot.
@@ -151,21 +130,5 @@ public class MatrixCalculator {
 		*/
 
 		return matrix;
-	}
-
-	/**
-	 * Returns the matrix A
-	 * @return The matrix A
-	 */
-	public Matrix getMatrixA() {
-		return a;
-	}
-
-	/**
-	 * Returns the matrix B
-	 * @return The matrix B
-	 */
-	public Matrix getMatrixB() {
-		return b;
 	}
 }
