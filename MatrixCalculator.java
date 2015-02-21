@@ -116,6 +116,25 @@ public class MatrixCalculator {
 	}
 
 	/**
+	 * Calculates the dot product of two vectors.
+	 * @param one The first vector
+	 * @param two The second vector
+	 * @return The dot product of the two vectors
+	 * @throws IllegalOperandException if the two vectors are not the same length
+	 */
+	public double dotProduct(Vector one, Vector two) throws IllegalOperandException {
+		if (one.rows() != two.rows()) {
+			throw new IllegalOperandException("Vectors not same length");
+		}
+
+		double sum = 0;
+		for (int i = 0; i < one.rows(); i++) {
+			sum += one.get(i) * two.get(i);
+		}
+		return sum;
+	}
+
+	/**
 	 * Row reduces the given matrix to echelon form.
 	 * @param matrix The matrix to row reduce
 	 * @return The echelon form of the matrix
