@@ -114,6 +114,28 @@ public class MatrixCalculator {
 	}
 
 	/**
+	 * Returns the transpose of the given matrix.
+	 * @param matrix The original matrix
+	 * @return The transpose of the original matrix
+	 */
+	public static Matrix transpose(Matrix matrix) {
+		Matrix transpose = new Matrix(matrix.columns(), matrix.rows());
+		int newRow = 0;
+		int newColumn = 0;
+
+		for (int row = 0; row < matrix.rows(); row++) {
+			newRow = 0;
+			for (int column = 0; column < matrix.columns(); column++) {
+				transpose.set(newRow, newColumn, matrix.get(row, column));
+				newRow++;
+			}
+			newColumn++;
+		}
+
+		return transpose;
+	}
+
+	/**
 	 * Row reduces the given matrix to echelon form.
 	 * @param matrix The matrix to row reduce
 	 * @return The echelon form of the matrix
