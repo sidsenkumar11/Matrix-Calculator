@@ -6,7 +6,7 @@ import Jama.Matrix;
 import Jama.util.Maths;
 
 /**
- * Hilbert Matrix Procedures
+ * Hilbert Matrix Procedures using the Matrix Package
  * 
  * @author Ashika Ganesh
  * @version 1.0
