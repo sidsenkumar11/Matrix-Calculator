@@ -29,7 +29,7 @@ public class Matrix {
 	 * @param columns The number of columns
 	 */
 	public Matrix(int rows, int columns) {
-		matrix = new double[rows][columns];
+		this.matrix = new double[rows][columns];
 	}
 
 	/**

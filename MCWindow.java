@@ -52,7 +52,7 @@ public class MCWindow {
 		MCWindow x = new MCWindow();
 		LinkedList<String> fileLocations = new LinkedList<String>();
 		fileLocations.add("a.dat");
-		fileLocations.add("b.dat");
+		// fileLocations.add("b.dat");
 		// readMatrices passes
 		x.readMatrices(fileLocations);
 
@@ -62,7 +62,18 @@ public class MCWindow {
 			System.out.println();
 		}
 
-		// 
+		// Matrix.row(int row) passes
+		System.out.println(java.util.Arrays.toString(x.matrices.get(0).row(3)));
+
+		// Matrix.column(int column) passes
+		System.out.println(java.util.Arrays.toString(x.matrices.get(0).column(0)));
+
+		// MATRIX CLASS OK
+
+		// Vectors
+		double[] vec = {.2, .5, 1.6, 19};
+		Vector vector = new Vector(vec);
+		System.out.println(vector);
 	}
 
 }

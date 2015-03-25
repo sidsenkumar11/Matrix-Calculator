@@ -14,7 +14,15 @@ public class Vector {
 	 * @param rows The number of rows
 	 */
 	public Vector(int rows) {
-		vector = new double[rows];
+		this.vector = new double[rows];
+	}
+
+	/**
+	 * Constructs a matrix with the double array
+	 * @param vector The vector
+	 */
+	public Vector(double[] vector) {
+		this.vector = vector;
 	}
 
 	/**
@@ -51,6 +59,14 @@ public class Vector {
 	 */
 	public int rows() {
 		return vector.length;
+	}
+
+	/**
+	 * The number of elements in the vector
+	 * @return The number of elements
+	 */
+	public int numElements() {
+		return rows();
 	}
 
 	public String toString() {
