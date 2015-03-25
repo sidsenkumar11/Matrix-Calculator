@@ -13,7 +13,6 @@ public class MCWindow {
 	private LinkedList<Matrix> matrices;
 
 	public MCWindow() {
-
 		this.matrices = new LinkedList<Matrix>();
 	}
 
@@ -54,12 +53,16 @@ public class MCWindow {
 		LinkedList<String> fileLocations = new LinkedList<String>();
 		fileLocations.add("a.dat");
 		fileLocations.add("b.dat");
+		// readMatrices passes
 		x.readMatrices(fileLocations);
 
+		// Matrix.toString passes
 		for (Matrix a : x.matrices) {
 			System.out.println(a);
 			System.out.println();
 		}
+
+		// 
 	}
 
 }

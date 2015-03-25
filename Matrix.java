@@ -37,12 +37,12 @@ public class Matrix {
 	 * @param row The row of the element
 	 * @param column The column of the element
 	 * @return The element in the specified row and column
-	 * @throws MatrixIndexOutOfBoundsException if row and column
+	 * @throws IndexOutOfBoundsException if row and column
 	 * 		   are not valid in the matrix
 	 */
 	public double get(int row, int column) {
 		if (row < 0 || column < 0  || row >= rows() || column >= columns()) {
-			throw new MatrixIndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException();
 		}
 		return matrix[row][column];
 	}
@@ -52,12 +52,12 @@ public class Matrix {
 	 * @param row The row of the element
 	 * @param column The column of the element
 	 * @param value The value to be set
-	 * @throws MatrixIndexOutOfBoundsException if row and column
+	 * @throws IndexOutOfBoundsException if row and column
 	 * 		   are not valid in the matrix
 	 */
 	public void set(int row, int column, double value) {
 		if (row < 0 || column < 0  || row >= rows() || column >= columns()) {
-			throw new MatrixIndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException();
 		}
 		matrix[row][column] = value;
 	}
@@ -83,12 +83,12 @@ public class Matrix {
 	 * the specified row.
 	 * @param row The desired row of elements
 	 * @return An array with the data from the row
-	 * @throws MatrixIndexOutOfBoundsException if row and column
+	 * @throws IndexOutOfBoundsException if row and column
 	 * 		   are not valid in the matrix
 	 */
 	public double[] row(int row) {
 		if (row < 0 || row >= rows()) {
-			throw new MatrixIndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException();
 		}
 		double[] desiredRow = new double[columns()];
 		for (int col = 0; col < columns(); col++) {
@@ -102,12 +102,12 @@ public class Matrix {
 	 * the specified column.
 	 * @param column The desired column of elements
 	 * @return An array with the data from the column
-	 * @throws MatrixIndexOutOfBoundsException if row and column
+	 * @throws IndexOutOfBoundsException if row and column
 	 * 		   are not valid in the matrix
 	 */
 	public double[] column(int column) {
 		if (column < 0  || column >= columns()) {
-			throw new MatrixIndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException();
 		}
 
 		double[] desiredColumn = new double[rows()];

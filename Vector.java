@@ -21,12 +21,12 @@ public class Vector {
 	 * Retrieves an element in the vector
 	 * @param row The row of the element
 	 * @return The element in the specified row
-	 * @throws VectorIndexOutOfBounds if row 
+	 * @throws IndexOutOfBoundsException if row 
 	 * 		   is not valid in the vector
 	 */
 	public double get(int row) {
 		if (row < 0 || row >= rows()) {
-			throw new VectorIndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException();
 		}
 		return vector[row];
 	}
@@ -35,12 +35,12 @@ public class Vector {
 	 * Sets an element in the vector
 	 * @param row The row of the element
 	 * @param value The value to be set
-	 * @throws VectorIndexOutOfBoundsException if row
+	 * @throws IndexOutOfBoundsException if row
 	 * 		   is not valid in the vector
 	 */
 	public void set(int row, double value) {
 		if (row < 0 || row >= rows()) {
-			throw new VectorIndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException();
 		}
 		vector[row] = value;
 	}
