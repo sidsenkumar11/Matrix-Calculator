@@ -35,4 +35,22 @@ public class Hilbert {
 		matrix = new Matrix(array);
 	}
 
+	public void qr_fact_househ() {
+		//In each version, your program should return the matrices Q and R, and the error
+	}
+
+	public void qr_fact_givens() {
+		//In each version, your program should return the matrices Q and R, and the error
+	}
+
+	public void solve_lu_b() {
+	// Implement the procedures to obtain the solution to a system Ax = b, for an n × n matrix A and an n×1 vector b, using the LU and QR-factorizations.
+	}
+
+	public void solve_qr_b() {
+	// Implement the procedures to obtain the solution to a system Ax = b, for an n × n matrix A and an n×1 vector b, using the LU and QR-factorizations.
+	}
+
+
+
 }
