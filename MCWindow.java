@@ -20,9 +20,9 @@ public class MCWindow {
 	/**
 	 * Read in all Matrix .dat files into matrices
 	 */
-	public void readMatrices(LinkedList<String> fileLocations) {
+	public void readMatrices(LinkedList<String> fileNames) {
 
-		for (String fileName : fileLocations) {
+		for (String fileName : fileNames) {
 			try {
 
 				FileReader reader = new FileReader(fileName);
@@ -44,6 +44,22 @@ public class MCWindow {
 			}
 		}
 
+	}
+
+	/**
+	 * For testing that methods work
+	 */
+	public static void main(String[] args) {
+		MCWindow x = new MCWindow();
+		LinkedList<String> fileLocations = new LinkedList<String>();
+		fileLocations.add("a.dat");
+		fileLocations.add("b.dat");
+		x.readMatrices(fileLocations);
+
+		for (Matrix a : x.matrices) {
+			System.out.println(a);
+			System.out.println();
+		}
 	}
 
 }

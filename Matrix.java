@@ -117,22 +117,23 @@ public class Matrix {
 		return desiredColumn;
 	}
 
-	/**
-	 * Matrices are represented as the following:
-	 * [[column 1], [column 2], ... , [column n]]
-	 * @return The string representation of this matrix
-	 */
+	@Override
 	public String toString() {
-		//TODO: check this to see that it works properly
-		String returnString = "[";
+		String returnString = "";
 		for (double[] x : matrix) {
-			returnString += "[";
+			returnString += "|";
 			for (double y : x) {
-				returnString += y + ", ";
+				returnString += String.format("%10s", y) + " |";
 			}
-			returnString = returnString.substring(0, returnString.length() - 2);
-			returnString += "], ";
+			returnString += "\t\n";
 		}
-		return returnString.substring(0, returnString.length() - 2) + "]";
+
+		String border = "";
+		int rowLength = (returnString.length() - 1) / matrix.length;
+		for (int i = 0; i < rowLength; i++) {
+			border += "-";
+		}
+		returnString = border + "\n" + returnString + border;
+		return returnString;
 	}
 }
