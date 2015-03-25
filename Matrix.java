@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 /**
  * Representation of a matrix
  *
@@ -7,6 +9,18 @@
 public class Matrix {
 	
 	private double[][] matrix;
+
+	/**
+	 * Constructs a matrix with the specified data
+	 */
+	public Matrix(LinkedList<String[]> rows) {
+		this.matrix = new double[rows.size()][rows.get(0).length];
+		for (int row = 0; row < rows.size(); row++) {
+			for (int column = 0; column < rows.get(row).length; column++) {
+				set(row, column, Double.parseDouble(rows.get(row)[column]));
+			}
+		}
+	}
 
 	/**
 	 * Constructs a matrix with the specified
