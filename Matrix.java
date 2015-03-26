@@ -145,6 +145,22 @@ public class Matrix {
 		return desiredColumn;
 	}
 
+	/**
+	 *  Returns the norm of the matrix as defined in the PDF
+	 * @return The largest value in the matrix
+	 */
+	public BigDecimal norm() {
+		BigDecimal largest = get(0, 0);
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				if (matrix[i][j].compareTo(largest) > 0) {
+					largest = matrix[i][j];
+				}
+			}
+		}
+		return largest;
+	}
+
 	@Override
 	public String toString() {
 		String returnString = "";

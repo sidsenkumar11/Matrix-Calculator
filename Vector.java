@@ -71,6 +71,20 @@ public class Vector {
 		return rows();
 	}
 
+	/**
+	 *  Returns the norm of the vector as defined in the PDF
+	 * @return The largest value in the vector
+	 */
+	public BigDecimal norm() {
+		BigDecimal largest = get(0);
+		for (int i = 0; i < vector.length; i++) {
+			if (vector[i].compareTo(largest) > 0) {
+				largest = vector[i];
+			}
+		}
+		return largest;
+	}
+
 	public String toString() {
 		String returnString = "[";
 		for (BigDecimal x : vector) {
