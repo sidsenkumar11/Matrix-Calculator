@@ -62,63 +62,11 @@ public class MCWindow {
 		// readMatrices passes
 		x.readMatrices(fileLocations);
 
-		// Matrix.toString passes
-		for (Matrix a : x.matrices) {
-			System.out.println(a);
-			System.out.println();
-		}
-
-		// Matrix.row(int row) passes
-		System.out.println(java.util.Arrays.toString(x.matrices.get(0).row(3)));
-
-		// Matrix.column(int column) passes
-		System.out.println(java.util.Arrays.toString(x.matrices.get(0).column(0)));
-
-		double[] vec = {.2, .5, 1.6, 19};
-		Vector vector = new Vector(vec);
-		System.out.println(vector);
-
-		Matrix one = new Matrix(5, 5);
-		Matrix two = new Matrix(5, 5);
-		int counter = 0;
-		for (int i = 0; i < one.rows(); i++) {
-			for (int j = 0; j < one.columns(); j++) {
-				one.set(i, j, counter++);
-				two.set(i, j, 3);
-			}
-		}
-
-		System.out.println(MatrixCalculator.subtract(one, two));
-
-		System.out.println(MatrixCalculator.multiply(one, 5));
-
-		LinkedList<String[]> matOne = new LinkedList<String[]>();
-		String[] arrOne = {"1", "3", "5"};
-		 String[] arrt = {"2", "4", "6"};
-		matOne.add(arrOne);
-		matOne.add(arrt);
-
-		one = new Matrix(matOne);
-
-
-		LinkedList<String[]> matTwo = new LinkedList<String[]>();
-		// String[] arr = {"2", "1", "3"};
-		// String[] arrTwo = {"3", "3", "2"};
-		// String[] arrThree = {"4", "1", "2"};
-		String[] arr = {"3", "6"};
-		String[] arrTwo = {"1", "4"};
-		String[] arrThree = {"5", "2"};
-		matTwo.add(arr);
-		matTwo.add(arrTwo);
-		matTwo.add(arrThree);
-		two = new Matrix(matTwo);
-
-		System.out.println(MatrixCalculator.multiply(one, two));
-
-		System.out.println(MatrixCalculator.dotProduct(vector, vector));
-		System.out.println((one));
-
-		System.out.println(MatrixCalculator.transpose(one));
+		//System.out.println(MatrixCalculator.lu_fact(x.matrices.get(0))[1]);
+		double[][] matrix = {{1, -2, -2, -3}, {3, -9, 0, -9}, {-1, 2, 4, 7}, {-3, -6, 26, 2}};
+		Matrix a = new Matrix(matrix);
+		System.out.println(MatrixCalculator.lu_fact(a)[0]);
+				System.out.println(MatrixCalculator.lu_fact(a)[1]);
 
 	}
 

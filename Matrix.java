@@ -7,11 +7,12 @@ import java.util.LinkedList;
  * @version 1.0
  */
 public class Matrix {
-	
+
 	private double[][] matrix;
 
 	/**
 	 * Constructs a matrix with the specified data
+	 * @param rows A 2D array made from a linked list and string array
 	 */
 	public Matrix(LinkedList<String[]> rows) {
 		this.matrix = new double[rows.size()][rows.get(0).length];
@@ -20,6 +21,14 @@ public class Matrix {
 				set(row, column, Double.parseDouble(rows.get(row)[column]));
 			}
 		}
+	}
+
+	/**
+	 * Constructs a matrix with the specified data
+	 * @param matrix The matrix in 2D array form
+	 */
+	public Matrix(double[][] matrix) {
+		this.matrix = matrix;
 	}
 
 	/**
