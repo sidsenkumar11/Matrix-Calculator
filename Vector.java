@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+
 /**
  * Representation of a vector
  *
@@ -6,7 +8,7 @@
  */
 public class Vector {
 	
-	private double[] vector;
+	private BigDecimal[] vector;
 
 	/**
 	 * Constructs a matrix with the specified
@@ -14,14 +16,14 @@ public class Vector {
 	 * @param rows The number of rows
 	 */
 	public Vector(int rows) {
-		this.vector = new double[rows];
+		this.vector = new BigDecimal[rows];
 	}
 
 	/**
-	 * Constructs a matrix with the double array
+	 * Constructs a matrix with the BigDecimal array
 	 * @param vector The vector
 	 */
-	public Vector(double[] vector) {
+	public Vector(BigDecimal[] vector) {
 		this.vector = vector;
 	}
 
@@ -32,7 +34,7 @@ public class Vector {
 	 * @throws IndexOutOfBoundsException if row 
 	 * 		   is not valid in the vector
 	 */
-	public double get(int row) {
+	public BigDecimal get(int row) {
 		if (row < 0 || row >= rows()) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -46,7 +48,7 @@ public class Vector {
 	 * @throws IndexOutOfBoundsException if row
 	 * 		   is not valid in the vector
 	 */
-	public void set(int row, double value) {
+	public void set(int row, BigDecimal value) {
 		if (row < 0 || row >= rows()) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -71,7 +73,7 @@ public class Vector {
 
 	public String toString() {
 		String returnString = "[";
-		for (double x : vector) {
+		for (BigDecimal x : vector) {
 			returnString += x + ", ";
 		}
 		returnString = returnString.substring(0, returnString.length() - 2);

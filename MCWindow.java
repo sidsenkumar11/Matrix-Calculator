@@ -64,8 +64,10 @@ public class MCWindow {
 		x.readMatrices(fileLocations);
 
 		//System.out.println(MatrixCalculator.lu_fact(x.matrices.get(0))[1]);
-		double[][] matrix = {{1, -2, -2, -3}, {3, -9, 0, -9}, {-1, 2, 4, 7}, {-3, -6, 26, 2}};
+		// double[][] matrix = {{1, -2, -2, -3}, {3, -9, 0, -9}, {-1, 2, 4, 7}, {-3, -6, 26, 2}};
+		double[][] matrix = {{1, .5, .333333, .25}, {.5, .333333, .25, .2}, {.333333, .25, .2, .166667}, {.25, .2, .166667, .142857}};
 		Matrix a = new Matrix(matrix);
+		//System.out.println(a);
 		System.out.println(MatrixCalculator.lu_fact(a)[0]);
 		System.out.println(MatrixCalculator.lu_fact(a)[1]);
 

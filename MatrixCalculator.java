@@ -1,3 +1,7 @@
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+
 /**
  * Calculates various operations on matrices and vectors
  * @author Siddarth Senthilkumar
@@ -20,10 +24,10 @@ public class MatrixCalculator {
 		}
 
 		Matrix sum = new Matrix(a.rows(), a.columns());
-		double sumValue = 0;
+		BigDecimal sumValue;
 		for (int row = 0; row < a.rows(); row++) {
 			for (int column = 0; column < a.columns(); column++) {
-				sumValue = a.get(row, column) + b.get(row, column);
+				sumValue = a.get(row, column).add(b.get(row, column));
 				sum.set(row, column, sumValue);
 			}
 		}
@@ -45,10 +49,10 @@ public class MatrixCalculator {
 		}
 
 		Matrix difference = new Matrix(a.rows(), a.columns());
-		double differenceValue = 0;
+		BigDecimal differenceValue;
 		for (int row = 0; row < a.rows(); row++) {
 			for (int column = 0; column < a.columns(); column++) {
-				differenceValue = a.get(row, column) - b.get(row, column);
+				differenceValue = a.get(row, column).subtract(b.get(row, column));
 				difference.set(row, column, differenceValue);
 			}
 		}
@@ -75,17 +79,17 @@ public class MatrixCalculator {
 		}
 
 		Matrix product = new Matrix(a.rows(), b.columns());
-		double sum;
-		double[] row;
-		double[] column;
+		BigDecimal sum;
+		BigDecimal[] row;
+		BigDecimal[] column;
 		for (int rowA = 0; rowA < a.rows(); rowA++) {
-			sum = 0;
+			sum = BigDecimal.ZERO;
 			row = a.row(rowA);
 			for (int colB = 0; colB < b.columns(); colB++) {
-				sum = 0;
+				sum = BigDecimal.ZERO;
 				column = b.column(colB);
 				for (int i = 0; i < row.length; i++) {
-					sum += row[i] * column[i];
+					sum = sum.add(row[i].multiply(column[i]));
 				}
 				product.set(rowA, colB, sum);
 			}
@@ -99,13 +103,13 @@ public class MatrixCalculator {
 	 * @param scalar The constant to multiply by
 	 * @return The matrix containing the product
 	 */
-	public static Matrix multiply(Matrix a, double scalar) {
+	public static Matrix multiply(Matrix a, BigDecimal scalar) {
 
 		Matrix product = new Matrix(a.rows(), a.columns());
 
 		for (int i = 0; i < a.rows(); i++) {
 			for (int j = 0; j < a.columns(); j++) {
-				product.set(i, j, scalar * a.get(i, j));
+				product.set(i, j, new BigDecimal("" + scalar).multiply(a.get(i, j)));
 			}
 		}
 
@@ -119,14 +123,14 @@ public class MatrixCalculator {
 	 * @return The dot product of the two vectors
 	 * @throws IllegalArgumentException if the two vectors are not the same length
 	 */
-	public static double dotProduct(Vector one, Vector two) throws IllegalArgumentException {
+	public static BigDecimal dotProduct(Vector one, Vector two) throws IllegalArgumentException {
 		if (one.rows() != two.rows()) {
 			throw new IllegalArgumentException("Vectors not same length");
 		}
 
-		double sum = 0;
+		BigDecimal sum = BigDecimal.ZERO;
 		for (int i = 0; i < one.rows(); i++) {
-			sum += one.get(i) * two.get(i);
+			sum = sum.add(one.get(i).multiply(two.get(i)));
 		}
 		return sum;
 	}
@@ -168,7 +172,7 @@ public class MatrixCalculator {
 		for (int i = 0; i < a.rows(); i++) {
 			for (int j = 0; j < a.columns(); j++) {
 				if (i == j) {
-					l.set(i, j, 1);
+					l.set(i, j, BigDecimal.ONE);
 				}
 			}
 		}
@@ -183,7 +187,7 @@ public class MatrixCalculator {
 		// Therefore l(i, 0) = a(i, 0) / u(0, 0)
 
 		for (int i = 1; i < a.rows(); i++) {
-			double value = a.get(i, 0) / u.get(0, 0);
+			BigDecimal value = a.get(i, 0).divide(u.get(0, 0));
 			l.set(i, 0, value);
 		}
 
@@ -193,28 +197,21 @@ public class MatrixCalculator {
 		// and l(i, j) = 1 / u(j, j) * (a(i, j) - sum of k = 0 to j - 1 of u(k, j)*l(i, k))
 		for (int i = 1; i < a.rows(); i++) {
 			for (int j = 1; j < a.columns(); j++) {
-				double sum = 0;
-				for (int k = 0; k <= i - 1; k++) {
-					sum += u.get(k, j) * l.get(i, k);
-				}
-				u.set(i, j, a.get(i, j) - sum);
-
-				sum = 0;
-				for (int k = 0; k <= j - 1; k++) {
-					sum += u.get(k, j) * l.get(i, k);
-				}
-				l.set(i, j, (a.get(i, j) - sum) / u.get(j, j));
-			}
-		}
-
-		for (int i = 0; i < a.rows(); i++) {
-			for (int j = 0; j < a.columns(); j++) {
-				if (i == j) {
-					l.set(i, j, 1);
-				} else if (i > j) {
-					u.set(i, j, 0);
+				if (i <= j) {
+					// Only U should be affected
+					BigDecimal sum = BigDecimal.ZERO;
+					for (int k = 0; k <= i - 1; k++) {
+						sum = sum.add(u.get(k, j).multiply(l.get(i, k)));
+					}
+					u.set(i, j, a.get(i, j).subtract(sum));
 				} else {
-					l.set(i, j, 0);
+					// Lower Triangle, only L affected
+					BigDecimal sum = BigDecimal.ZERO;
+					for (int k = 0; k <= j - 1; k++) {
+						sum = sum.add(u.get(k, j).multiply(l.get(i, k)));
+					}
+					MathContext mc = new MathContext(2, RoundingMode.HALF_UP);
+					l.set(i, j, (a.get(i, j).subtract(sum)).divide(u.get(j, j), mc));
 				}
 			}
 		}

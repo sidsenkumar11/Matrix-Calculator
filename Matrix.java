@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.math.BigDecimal;
 
 /**
  * Representation of a matrix
@@ -8,17 +9,17 @@ import java.util.LinkedList;
  */
 public class Matrix {
 
-	private double[][] matrix;
+	private BigDecimal[][] matrix;
 
 	/**
 	 * Constructs a matrix with the specified data
 	 * @param rows A 2D array made from a linked list and string array
 	 */
 	public Matrix(LinkedList<String[]> rows) {
-		this.matrix = new double[rows.size()][rows.get(0).length];
+		this.matrix = new BigDecimal[rows.size()][rows.get(0).length];
 		for (int row = 0; row < rows.size(); row++) {
 			for (int column = 0; column < rows.get(row).length; column++) {
-				set(row, column, Double.parseDouble(rows.get(row)[column]));
+				set(row, column, new BigDecimal(rows.get(row)[column]));
 			}
 		}
 	}
@@ -27,8 +28,21 @@ public class Matrix {
 	 * Constructs a matrix with the specified data
 	 * @param matrix The matrix in 2D array form
 	 */
-	public Matrix(double[][] matrix) {
+	public Matrix(BigDecimal[][] matrix) {
 		this.matrix = matrix;
+	}
+
+	/**
+	 * Constructs a matrix with the specified data
+	 * @param matrix The matrix in 2D array form
+	 */
+	public Matrix(double[][] matrix) {
+		this.matrix = new BigDecimal[matrix.length][matrix[0].length];
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				this.matrix[i][j] = new BigDecimal("" + matrix[i][j]);
+			}
+		}
 	}
 
 	/**
@@ -38,7 +52,12 @@ public class Matrix {
 	 * @param columns The number of columns
 	 */
 	public Matrix(int rows, int columns) {
-		this.matrix = new double[rows][columns];
+		this.matrix = new BigDecimal[rows][columns];
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				matrix[i][j] = BigDecimal.ZERO;
+			}
+		}
 	}
 
 	/**
@@ -49,7 +68,7 @@ public class Matrix {
 	 * @throws IndexOutOfBoundsException if row and column
 	 * 		   are not valid in the matrix
 	 */
-	public double get(int row, int column) {
+	public BigDecimal get(int row, int column) {
 		if (row < 0 || column < 0  || row >= rows() || column >= columns()) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -64,7 +83,7 @@ public class Matrix {
 	 * @throws IndexOutOfBoundsException if row and column
 	 * 		   are not valid in the matrix
 	 */
-	public void set(int row, int column, double value) {
+	public void set(int row, int column, BigDecimal value) {
 		if (row < 0 || column < 0  || row >= rows() || column >= columns()) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -95,11 +114,11 @@ public class Matrix {
 	 * @throws IndexOutOfBoundsException if row and column
 	 * 		   are not valid in the matrix
 	 */
-	public double[] row(int row) {
+	public BigDecimal[] row(int row) {
 		if (row < 0 || row >= rows()) {
 			throw new IndexOutOfBoundsException();
 		}
-		double[] desiredRow = new double[columns()];
+		BigDecimal[] desiredRow = new BigDecimal[columns()];
 		for (int col = 0; col < columns(); col++) {
 			desiredRow[col] = get(row, col);
 		}
@@ -114,12 +133,12 @@ public class Matrix {
 	 * @throws IndexOutOfBoundsException if row and column
 	 * 		   are not valid in the matrix
 	 */
-	public double[] column(int column) {
+	public BigDecimal[] column(int column) {
 		if (column < 0  || column >= columns()) {
 			throw new IndexOutOfBoundsException();
 		}
 
-		double[] desiredColumn = new double[rows()];
+		BigDecimal[] desiredColumn = new BigDecimal[rows()];
 		for (int row = 0; row < rows(); row++) {
 			desiredColumn[row] = get(row, column);
 		}
@@ -129,10 +148,10 @@ public class Matrix {
 	@Override
 	public String toString() {
 		String returnString = "";
-		for (double[] x : matrix) {
+		for (BigDecimal[] x : matrix) {
 			returnString += "|";
-			for (double y : x) {
-				returnString += String.format("%10s", y) + " |";
+			for (BigDecimal y : x) {
+				returnString += String.format("%15s", y) + " |";
 			}
 			returnString += "\t\n";
 		}
