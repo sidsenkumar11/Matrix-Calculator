@@ -49,6 +49,12 @@ public class MCWindow {
 	 * For testing that methods work
 	 */
 	public static void main(String[] args) {
+		// Things I have finished testing below:
+		// MCWindow - readMatrices
+		// Matrix
+		// Vector
+		// MatrixCalculator - add, subtract, multiply by scalar, multiply 2 matrices, dot product, transpose
+
 		MCWindow x = new MCWindow();
 		LinkedList<String> fileLocations = new LinkedList<String>();
 		fileLocations.add("a.dat");
@@ -68,12 +74,52 @@ public class MCWindow {
 		// Matrix.column(int column) passes
 		System.out.println(java.util.Arrays.toString(x.matrices.get(0).column(0)));
 
-		// MATRIX CLASS OK
-
-		// Vectors
 		double[] vec = {.2, .5, 1.6, 19};
 		Vector vector = new Vector(vec);
 		System.out.println(vector);
+
+		Matrix one = new Matrix(5, 5);
+		Matrix two = new Matrix(5, 5);
+		int counter = 0;
+		for (int i = 0; i < one.rows(); i++) {
+			for (int j = 0; j < one.columns(); j++) {
+				one.set(i, j, counter++);
+				two.set(i, j, 3);
+			}
+		}
+
+		System.out.println(MatrixCalculator.subtract(one, two));
+
+		System.out.println(MatrixCalculator.multiply(one, 5));
+
+		LinkedList<String[]> matOne = new LinkedList<String[]>();
+		String[] arrOne = {"1", "3", "5"};
+		 String[] arrt = {"2", "4", "6"};
+		matOne.add(arrOne);
+		matOne.add(arrt);
+
+		one = new Matrix(matOne);
+
+
+		LinkedList<String[]> matTwo = new LinkedList<String[]>();
+		// String[] arr = {"2", "1", "3"};
+		// String[] arrTwo = {"3", "3", "2"};
+		// String[] arrThree = {"4", "1", "2"};
+		String[] arr = {"3", "6"};
+		String[] arrTwo = {"1", "4"};
+		String[] arrThree = {"5", "2"};
+		matTwo.add(arr);
+		matTwo.add(arrTwo);
+		matTwo.add(arrThree);
+		two = new Matrix(matTwo);
+
+		System.out.println(MatrixCalculator.multiply(one, two));
+
+		System.out.println(MatrixCalculator.dotProduct(vector, vector));
+		System.out.println((one));
+
+		System.out.println(MatrixCalculator.transpose(one));
+
 	}
 
 }

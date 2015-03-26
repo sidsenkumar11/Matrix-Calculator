@@ -1,6 +1,5 @@
 /**
- * Calculates various operations on matrices
- * and vectors.
+ * Calculates various operations on matrices and vectors
  * @author Siddarth Senthilkumar
  * @version 1.0
  */
@@ -11,13 +10,13 @@ public class MatrixCalculator {
 	 * @param a The first matrix
 	 * @param b The second matrix
 	 * @return The matrix of containing the sum
-	 * @throws IllegalOperandException if the given
+	 * @throws IllegalArgumentException if the given
 	 *		   matrices have different dimensions
 	 */
-	public static Matrix add(Matrix a, Matrix b) throws IllegalOperandException {
+	public static Matrix add(Matrix a, Matrix b) {
 
 		if (a.rows() != b.rows() || a.columns() != b.columns()) {
-			throw new IllegalOperandException("Rows and columns are not equal");
+			throw new IllegalArgumentException("Rows and columns are not equal");
 		}
 
 		Matrix sum = new Matrix(a.rows(), a.columns());
@@ -36,13 +35,13 @@ public class MatrixCalculator {
 	 * @param a The first matrix
 	 * @param b The second matrix
 	 * @return The matrix of containing the difference
-	 * @throws IllegalOperandException if the given
+	 * @throws IllegalArgumentException if the given
 	 *		   matrices have different dimensions
 	 */
-	public static Matrix subtract(Matrix a, Matrix b) throws IllegalOperandException {
+	public static Matrix subtract(Matrix a, Matrix b) {
 
 		if (a.rows() != b.rows() || a.columns() != b.columns()) {
-			throw new IllegalOperandException("Rows and columns are not equal");
+			throw new IllegalArgumentException("Rows and columns are not equal");
 		}
 
 		Matrix difference = new Matrix(a.rows(), a.columns());
@@ -61,10 +60,10 @@ public class MatrixCalculator {
 	 * @param a The first matrix
 	 * @param b The second matrix
 	 * @return The matrix containing the product
-	 * @throws IllegalOperandException if the given
+	 * @throws IllegalArgumentException if the given
 	 *		   matrices' dimensions cannot be multiplied
 	 */
-	public static Matrix multiply(Matrix a, Matrix b) throws IllegalOperandException {
+	public static Matrix multiply(Matrix a, Matrix b) {
 		/*
 			For two matrices to be multiplied, if
 			a is m x n, b must be n x y where y
@@ -72,7 +71,7 @@ public class MatrixCalculator {
 		*/
 
 		if (a.columns() != b.rows()) {
-			throw new IllegalOperandException("A's columns must be the same as B's rows");
+			throw new IllegalArgumentException("A's columns must be the same as B's rows");
 		}
 
 		Matrix product = new Matrix(a.rows(), b.columns());
@@ -83,11 +82,30 @@ public class MatrixCalculator {
 			sum = 0;
 			row = a.row(rowA);
 			for (int colB = 0; colB < b.columns(); colB++) {
-				 column = b.column(colB);
-				 for (int i = 0; i < row.length; i++) {
-				 	sum += row[i] * column[i];
-				 }
-				 product.set(rowA, colB, sum);
+				sum = 0;
+				column = b.column(colB);
+				for (int i = 0; i < row.length; i++) {
+					sum += row[i] * column[i];
+				}
+				product.set(rowA, colB, sum);
+			}
+		}
+		return product;
+	}
+
+	/**
+	 * Multiplies a matrix by a scalar
+	 * @param a The matrix
+	 * @param scalar The constant to multiply by
+	 * @return The matrix containing the product
+	 */
+	public static Matrix multiply(Matrix a, double scalar) {
+
+		Matrix product = new Matrix(a.rows(), a.columns());
+
+		for (int i = 0; i < a.rows(); i++) {
+			for (int j = 0; j < a.columns(); j++) {
+				product.set(i, j, scalar * a.get(i, j));
 			}
 		}
 
@@ -99,11 +117,11 @@ public class MatrixCalculator {
 	 * @param one The first vector
 	 * @param two The second vector
 	 * @return The dot product of the two vectors
-	 * @throws IllegalOperandException if the two vectors are not the same length
+	 * @throws IllegalArgumentException if the two vectors are not the same length
 	 */
-	public static double dotProduct(Vector one, Vector two) throws IllegalOperandException {
+	public static double dotProduct(Vector one, Vector two) throws IllegalArgumentException {
 		if (one.rows() != two.rows()) {
-			throw new IllegalOperandException("Vectors not same length");
+			throw new IllegalArgumentException("Vectors not same length");
 		}
 
 		double sum = 0;
