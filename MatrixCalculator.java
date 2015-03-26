@@ -98,6 +98,35 @@ public class MatrixCalculator {
 	}
 
 	/**
+	 * Multiplies a matrix by a vector
+	 * @param a The matrix
+	 * @param x The vector
+	 * @return The vector containing the product
+	 * @throws IllegalArgumentException if the given
+	 *		   matrix's and vector's dimensions cannot be multiplied
+	 */
+	public static Vector multiply(Matrix a, Vector x) {
+
+		if (a.columns() != x.rows()) {
+			throw new IllegalArgumentException("A's columns must be the same as B's rows");
+		}
+
+		Vector product = new Vector(a.rows());
+		BigDecimal sum;
+		BigDecimal[] row;
+		BigDecimal[] column;
+		for (int rowA = 0; rowA < a.rows(); rowA++) {
+			sum = BigDecimal.ZERO;
+			row = a.row(rowA);
+			for (int i = 0; i < row.length; i++) {
+				sum = sum.add(row[i].multiply(x.get(i)));
+			}
+			product.set(rowA, sum);
+		}
+		return product;
+	}
+
+	/**
 	 * Multiplies a matrix by a scalar
 	 * @param a The matrix
 	 * @param scalar The constant to multiply by
@@ -220,6 +249,14 @@ public class MatrixCalculator {
 		return matrices;
 	}
 
+	/**
+	 * Uses LU factored matrix to solve for vector x.
+	 * Assumes there is a solution.
+	 * @param l The lower triangular matrix
+	 * @param u The upper triangular matrix
+	 * @param b The vector b in Ax = b
+	 * @return The solution vector
+	 */
 	public static Vector solve_lu_b(Matrix l, Matrix u, Vector b) {
 		Vector x = new Vector(l.columns());
 		Vector y = new Vector(l.columns());
@@ -254,10 +291,27 @@ public class MatrixCalculator {
 		return x;
 	}
 
-	public static Vector solve_qr_b(Matrix a, Vector b) {
-		Vector x = new Vector(a.columns());
-		return x;
+	/**
+	 * Uses QR factored matrix to solve for vector x.
+	 * Assumes there is a solution.
+	 * @param q The orthonormal matrix
+	 * @param r The upper triangular matrix
+	 * @param b The vector b in Ax = b
+	 * @return The solution vector
+	 */
+	public static Vector solve_qr_b(Matrix q, Matrix r, Vector b) {
+		Vector x = new Vector(q.columns());
+		Vector d = multiply(transpose(q), b);
 
+		for (int i = d.numElements() - 1; i >= 0; i--) {
+			BigDecimal sumOfProducts = BigDecimal.ZERO;
+			for (int j = r.rows() - 1; j > i; j--) {
+				sumOfProducts = sumOfProducts.add(r.get(i, j).multiply(x.get(j)));
+			}
+			BigDecimal value = ((d.get(i).subtract(sumOfProducts))).divide(r.get(i, i));
+			x.set(i, value);
+		}
+		return x;
 	}
 
 	/**
