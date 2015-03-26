@@ -1,56 +1,50 @@
-package hilbert;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import Jama.Matrix;
-import Jama.util.Maths;
+import java.math.BigDecimal;
 
 /**
  * Hilbert Matrix Procedures using the Matrix Package
  * 
- * @author Ashika Ganesh
+ * @author Ashika Ganesh and Siddarth Senthilkumar
  * @version 1.0
  */
 public class Hilbert {
-	private double[][] array;
-	private Matrix matrix, l, u, b, q, r;
-	private int size;
+	private Matrix h;
+	private Vector b;
 
-	public Hilbert(int columns) {
-		size = columns;
-		b = new Matrix(columns, 1, 1);
-		array = new double[columns][columns];
-		for (int i = 0; i < array.length; i++) {
-			for (int j = 0; j < array[i].length; j++) {
-				array[i][j] = (1.0 / (i + j + 1));
+	/**
+	 * Constructs an nxn Hilbert Matrix
+	 * and a vector b based on the PDF specifications
+	 * @param n The number of rows/columns
+	 */
+	public Hilbert(int n) {
+		h = new Matrix(n, n);
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				h.set(i, j, new BigDecimal("" + (1.0 / (i + j + 1))));
 			}
 		}
-		matrix = new Matrix(array);
+
+		b = new Vector(n);
+		for (int i = 0; i < n; i++) {
+			b.set(i, new BigDecimal("" + Math.pow(.1, n / 3)));
+		}
 	}
 
-	public Hilbert(double[][] array) {
-		size = array.length;
-		b = new Matrix(size, 1, 1);
-		this.array = array;
-		matrix = new Matrix(array);
+	/**
+	 * Solves the Hilbert Matrix for the special vector
+	 * b associated with it by this class.
+	 */
+	public void solveUsingLU() {
+		Matrix[] lu = MatrixCalculator.lu_fact(h);
+		Vector x = MatrixCalculator.solve_lu_b(lu[0], lu[1], b);
+		System.out.println("-----------------------");
+		System.out.println("HILBERT SOLVED USING LU");
+		System.out.println("-----------------------");
+		System.out.println("n = " + h.rows());
+		System.out.println("Vector x: " + x);
+		System.out.println("||LU - H||: " + (MatrixCalculator.subtract(MatrixCalculator.multiply(lu[0], lu[1]), h)).norm());
+		System.out.println("||Hx - b||: " + MatrixCalculator.subtract(MatrixCalculator.multiply(h, x), b).norm());
 	}
-
-	public void qr_fact_househ() {
-		//In each version, your program should return the matrices Q and R, and the error
-	}
-
-	public void qr_fact_givens() {
-		//In each version, your program should return the matrices Q and R, and the error
-	}
-
-	public void solve_lu_b() {
-	// Implement the procedures to obtain the solution to a system Ax = b, for an n × n matrix A and an n×1 vector b, using the LU and QR-factorizations.
-	}
-
-	public void solve_qr_b() {
-	// Implement the procedures to obtain the solution to a system Ax = b, for an n × n matrix A and an n×1 vector b, using the LU and QR-factorizations.
-	}
-
-
 
 }

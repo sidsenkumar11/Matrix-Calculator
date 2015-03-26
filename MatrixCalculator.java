@@ -286,7 +286,8 @@ public class MatrixCalculator {
 			for (int j = u.rows() - 1; j > i; j--) {
 				sumOfProducts = sumOfProducts.add(u.get(i, j).multiply(x.get(j)));
 			}
-			BigDecimal value = ((y.get(i).subtract(sumOfProducts))).divide(u.get(i, i));
+			MathContext mc = new MathContext(2, RoundingMode.HALF_UP);
+			BigDecimal value = ((y.get(i).subtract(sumOfProducts))).divide(u.get(i, i), mc);
 			x.set(i, value);
 		}
 
@@ -310,12 +311,31 @@ public class MatrixCalculator {
 			for (int j = r.rows() - 1; j > i; j--) {
 				sumOfProducts = sumOfProducts.add(r.get(i, j).multiply(x.get(j)));
 			}
-			BigDecimal value = ((d.get(i).subtract(sumOfProducts))).divide(r.get(i, i));
+			MathContext mc = new MathContext(2, RoundingMode.HALF_UP);
+			BigDecimal value = ((d.get(i).subtract(sumOfProducts))).divide(r.get(i, i), mc);
 			x.set(i, value);
 		}
 		return x;
 	}
 
+	/**
+	 * Subtracts two vectors
+	 * @param a The first vector
+	 * @param b The second vector
+	 * @return The difference vector
+	 * @throws IllegalArgumentException Vectors' lengths do not match
+	 */
+	public static Vector subtract(Vector a, Vector b) {
+		if (a.numElements() != b.numElements()) {
+			throw new IllegalArgumentException("Vectors' number of elements are not equal");
+		}
+
+		Vector x = new Vector(a.numElements());
+		for (int i = 0; i < a.numElements(); i++) {
+			x.set(i, a.get(i).subtract(b.get(i)));
+		}
+		return x;
+	}
 	/**
 	 * Row reduces the given matrix to echelon form.
 	 * @param matrix The matrix to row reduce

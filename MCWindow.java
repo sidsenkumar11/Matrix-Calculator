@@ -86,6 +86,10 @@ public class MCWindow {
 		// double[] b = {-1, 7, 2};
 		// Vector bb = new Vector(b);
 		// System.out.println((MatrixCalculator.solve_qr_b(q, r, bb)));
+
+		// Testing Hilbert class
+		Hilbert testOne = new Hilbert(3);
+		testOne.solveUsingLU();
 	}
 
 }
