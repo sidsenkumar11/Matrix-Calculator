@@ -54,6 +54,7 @@ public class MCWindow {
 		// Matrix
 		// Vector
 		// MatrixCalculator - add, subtract, multiply by scalar, multiply 2 matrices, dot product, transpose
+		// Matrix - lu_fact
 
 		MCWindow x = new MCWindow();
 		LinkedList<String> fileLocations = new LinkedList<String>();
@@ -66,7 +67,7 @@ public class MCWindow {
 		double[][] matrix = {{1, -2, -2, -3}, {3, -9, 0, -9}, {-1, 2, 4, 7}, {-3, -6, 26, 2}};
 		Matrix a = new Matrix(matrix);
 		System.out.println(MatrixCalculator.lu_fact(a)[0]);
-				System.out.println(MatrixCalculator.lu_fact(a)[1]);
+		System.out.println(MatrixCalculator.lu_fact(a)[1]);
 
 	}
 
