@@ -54,22 +54,26 @@ public class MCWindow {
 		// Matrix
 		// Vector
 		// MatrixCalculator - add, subtract, multiply by scalar, multiply 2 matrices, dot product, transpose
-		// Matrix - lu_fact
+		// ... continued - lu_fact, solve_lu_b
 
-		MCWindow x = new MCWindow();
-		LinkedList<String> fileLocations = new LinkedList<String>();
-		fileLocations.add("a.dat");
+		// MCWindow x = new MCWindow();
+		// LinkedList<String> fileLocations = new LinkedList<String>();
+		// fileLocations.add("a.dat");
 		// fileLocations.add("b.dat");
-		// readMatrices passes
-		x.readMatrices(fileLocations);
+		// x.readMatrices(fileLocations);
 
 		//System.out.println(MatrixCalculator.lu_fact(x.matrices.get(0))[1]);
-		// double[][] matrix = {{1, -2, -2, -3}, {3, -9, 0, -9}, {-1, 2, 4, 7}, {-3, -6, 26, 2}};
-		double[][] matrix = {{1, .5, .333333, .25}, {.5, .333333, .25, .2}, {.333333, .25, .2, .166667}, {.25, .2, .166667, .142857}};
+		// double[][] matrix = {{1, .5, .333333, .25}, {.5, .333333, .25, .2}, {.333333, .25, .2, .166667}, {.25, .2, .166667, .142857}};
+		// Matrix a = new Matrix(matrix);
+		// System.out.println(MatrixCalculator.lu_fact(a)[0]);
+		// System.out.println(MatrixCalculator.lu_fact(a)[1]);
+
+		double[][] matrix = {{2, 4, -4}, {1, -4, 3}, {-6, -9, 10}};
 		Matrix a = new Matrix(matrix);
-		//System.out.println(a);
-		System.out.println(MatrixCalculator.lu_fact(a)[0]);
-		System.out.println(MatrixCalculator.lu_fact(a)[1]);
+		Matrix[] lu = MatrixCalculator.lu_fact(a);
+		double[] b = {12, -21, -24};
+		Vector bb = new Vector(b);
+		System.out.println((MatrixCalculator.solve_lu_b(lu[0], lu[1], bb)));
 
 	}
 

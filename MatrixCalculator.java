@@ -220,6 +220,46 @@ public class MatrixCalculator {
 		return matrices;
 	}
 
+	public static Vector solve_lu_b(Matrix l, Matrix u, Vector b) {
+		Vector x = new Vector(l.columns());
+		Vector y = new Vector(l.columns());
+
+		// Ly = b
+		// Solve for y. L is in Lower triangular with ones along diagonal
+		// y(n) = (b(n) - sum of products) / l(n)
+		// where
+		// sum of products = for (i = 0; i < n; i++) sum += l(i) * y(i)
+
+		for (int i = 0; i < y.numElements(); i++) {
+			BigDecimal sumOfProducts = BigDecimal.ZERO;
+			for (int j = 0; j < i; j++) {
+				sumOfProducts = sumOfProducts.add(l.get(i, j).multiply(y.get(j)));
+			}
+			// BigDecimal value = (b.get(i) - sumOfProducts).divide(l.get(i, i));
+			BigDecimal value = (b.get(i).subtract(sumOfProducts));
+			y.set(i, value);
+		}
+
+		// Ux = Y
+		// Solve for x, U is upper triangular
+		for (int i = y.numElements() - 1; i >= 0; i--) {
+			BigDecimal sumOfProducts = BigDecimal.ZERO;
+			for (int j = u.rows() - 1; j > i; j--) {
+				sumOfProducts = sumOfProducts.add(u.get(i, j).multiply(x.get(j)));
+			}
+			BigDecimal value = ((y.get(i).subtract(sumOfProducts))).divide(u.get(i, i));
+			x.set(i, value);
+		}
+
+		return x;
+	}
+
+	public static Vector solve_qr_b(Matrix a, Vector b) {
+		Vector x = new Vector(a.columns());
+		return x;
+
+	}
+
 	/**
 	 * Row reduces the given matrix to echelon form.
 	 * @param matrix The matrix to row reduce

@@ -28,6 +28,17 @@ public class Vector {
 	}
 
 	/**
+	 * Constructs a matrix with the double array
+	 * @param vector The vector
+	 */
+	public Vector(double[] vector) {
+		this.vector = new BigDecimal[vector.length];
+		for (int i = 0; i < vector.length; i++) {
+			this.vector[i] = new BigDecimal("" + vector[i]);
+		}
+	}
+
+	/**
 	 * Retrieves an element in the vector
 	 * @param row The row of the element
 	 * @return The element in the specified row
