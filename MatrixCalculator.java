@@ -112,6 +112,22 @@ public class MatrixCalculator {
 		}
 		return sum;
 	}
+	
+	/**
+	 * Multiplies 2 vectors together.
+	 * @param u Vector to multiply
+	 * @param v Vector to multiply
+	 * @return resulting vector of multiplying u and v together
+	 */
+	 public static Vector multiply(Vector u, Vector v) {
+		Vector product = new Vector(u.rows());
+		BigDecimal productValue;
+		for (int row = 0; row < u.rows(); row++) {
+			productValue = a.get(row).multiply(b.get(row));
+			product.set(row, productValue);
+		}
+		return product;
+	}
 
 	/**
 	 * Multiplies a matrix by a vector
@@ -327,11 +343,9 @@ public class MatrixCalculator {
 		Matrix q;
 		Matrix r;
 		
-		
-		
 		for (int i = 0; i < a.length; i++) {
 			Vector x = a.column(i);
-			Vector v = x.add();
+			Vector v = add(x, );
 			Vector u;
 		}
 	}
