@@ -4,7 +4,7 @@ import java.math.RoundingMode;
 
 /**
  * Calculates various operations on matrices and vectors
- * @author Siddarth Senthilkumar
+ * @author Siddarth Senthilkumar, Katherine Cabezas
  * @version 1.0
  */
 public class MatrixCalculator {
@@ -293,6 +293,24 @@ public class MatrixCalculator {
 
 		return x;
 	}
+	
+	/**
+	 * Computes a QR-factorization for Matrix a using HouseHolder reflections.
+	 * @param a Matrix to factorize
+	 * @return the matrices for Q and R
+	 */
+	public static Matrix[] qr_fact_househ(Matrix a) {
+		
+	}
+	
+	/**
+	 * Computes a QR-factorization for Matrix a using Givens rotations.
+	 * @param a Matrix to factorize
+	 * @return the matrices for Q and R
+	 */
+	 public static Matrix[] qr_fact_givens(Matrix a) {
+	 	
+	 }
 
 	/**
 	 * Uses QR factored matrix to solve for vector x.
