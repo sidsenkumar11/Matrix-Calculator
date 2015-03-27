@@ -300,7 +300,11 @@ public class MatrixCalculator {
 	 * @return the matrices for Q and R
 	 */
 	public static Matrix[] qr_fact_househ(Matrix a) {
-		
+		/*
+		A = (H1*H2*...*Hn) * R
+		Q = H1*H2*...*Hn
+		R = (H1*H2*...*Hn) * A^-1
+		*/
 	}
 	
 	/**
@@ -309,7 +313,11 @@ public class MatrixCalculator {
 	 * @return the matrices for Q and R
 	 */
 	 public static Matrix[] qr_fact_givens(Matrix a) {
-	 	
+	 	/*
+		A = (G1*G2*...*Gn) * R
+		Q = G1*G2*...*Gn
+		R = (G1*G2*...*Gn) * A^-1
+		*/
 	 }
 
 	/**
