@@ -96,6 +96,22 @@ public class MatrixCalculator {
 		}
 		return product;
 	}
+	
+	/**
+	 * Adds 2 vectors together.
+	 * @param u Vector to add
+	 * @param v Vector to add
+	 * @return resulting vector of adding u and v together
+	 */
+	 public static Vector add(Vector u, Vector v) {
+		Vector sum = new Vector(u.rows());
+		BigDecimal sumValue;
+		for (int row = 0; row < u.rows(); row++) {
+			sumValue = a.get(row).add(b.get(row));
+			sum.set(row, sumValue);
+		}
+		return sum;
+	}
 
 	/**
 	 * Multiplies a matrix by a vector
@@ -304,7 +320,20 @@ public class MatrixCalculator {
 		A = (H1*H2*...*Hn) * R
 		Q = H1*H2*...*Hn
 		R = (H1*H2*...*Hn) * A^-1
+		Householder reflection = I - 2uu^t
 		*/
+		
+		Matrix i;
+		Matrix q;
+		Matrix r;
+		
+		
+		
+		for (int i = 0; i < a.length; i++) {
+			Vector x = a.column(i);
+			Vector v = x.add();
+			Vector u;
+		}
 	}
 	
 	/**
