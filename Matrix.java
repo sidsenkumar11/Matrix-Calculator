@@ -163,11 +163,20 @@ public class Matrix {
 
 	@Override
 	public String toString() {
+		int longestLength = matrix[0][0].toString().length();
+		for (BigDecimal[] x : matrix) {
+			for (BigDecimal y : x) {
+				if (y.toString().length() > longestLength) {
+					longestLength = y.toString().length();
+				}
+			}
+		}
+		String formatString = "%" + longestLength + "s";
 		String returnString = "";
 		for (BigDecimal[] x : matrix) {
 			returnString += "|";
 			for (BigDecimal y : x) {
-				returnString += String.format("%15s", y) + " |";
+				returnString += String.format(formatString, y) + " |";
 			}
 			returnString += "\t\n";
 		}

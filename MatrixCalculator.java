@@ -336,22 +336,17 @@ public class MatrixCalculator {
 		}
 		return x;
 	}
-	/**
-	 * Row reduces the given matrix to echelon form.
-	 * @param matrix The matrix to row reduce
-	 * @return The echelon form of the matrix
-	 */
-	public static Matrix rowReduce(Matrix matrix) {
-		/*
-			1) Begin with the leftmost nonzero column. This is a pivot column. The pivot position is at the top.
-			2) Select a nonzero entry in the pivot column as a pivot.
-			   If necessary, interchange rows to move this entry into the pivot position.
-			3) Use row addition operations to create zeros in all positions below the pivot.
-			4) Cover (or ignore) the row containing the pivot position and cover all rows, if any, above it.
-			   Apply steps 1-3 to the submatrix that remains.
-			   Repeat the process until there are no more nonzero rows to modify.
-		*/
 
-		return matrix;
+	/**
+	 * Implements power method to find approximation
+	 * of largest eigenvalue and corresponding eigenvector
+	 * @param a The nxn matrix
+	 * @param tol The error tolerance
+	 * @param u An initial approximation vector
+	 * @return The approximated eigenvalue, eigenvector,
+	 *		   and number of iterations for desired tolerance
+	 */
+	public static Object[] power_method(Matrix a, BigDecimal tol, Vector u) {
+		return new Object[0];
 	}
 }

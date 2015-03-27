@@ -88,8 +88,8 @@ public class MCWindow {
 		// System.out.println((MatrixCalculator.solve_qr_b(q, r, bb)));
 
 		// Testing Hilbert class
-		Hilbert testOne = new Hilbert(3);
-		testOne.solveUsingLU();
+		// Hilbert testOne = new Hilbert(3);
+		// testOne.solveUsingLU();
 	}
 
 }

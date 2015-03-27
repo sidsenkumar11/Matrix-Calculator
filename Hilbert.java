@@ -1,9 +1,7 @@
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.math.BigDecimal;
 
 /**
- * Hilbert Matrix Procedures using the Matrix Package
+ * Hilbert Matrix Procedures using the MatrixCalculator classes
  * 
  * @author Ashika Ganesh and Siddarth Senthilkumar
  * @version 1.0
