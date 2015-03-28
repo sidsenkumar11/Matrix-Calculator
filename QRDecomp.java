@@ -13,7 +13,7 @@ public class QRDecomp {
 		int dim = matrix.getRowDimension();
 		Matrix Q = identity(dim);
 		Matrix R = matrix;
-		for (int n = 0; n < 3; n++) {
+		for (int n = 0; n < 4; n++) {
 			Matrix Hn = calculateH(R, n);
 			int diff = dim - Hn.getRowDimension();
 			if (diff != 0) {
@@ -105,6 +105,16 @@ public class QRDecomp {
 	public static void main(String[] args) {
 		double[][] m = {{1, .5, .333333, .25}, {.5, .333333, .25, .2}, {.333333, .25, .2, .166667}, {.25, .2, .166667, .142857}};
 		Matrix test = new Matrix(m);
+		Matrix[] one = qr_fact_househ(test);
+		for(Matrix x: one) {
+			x.print(5,5);
+		}
+
+		Matrix[] two = qr_fact_givens(test);
+		for(Matrix x: two) {
+			x.print(5,5);
+		}
+
 
 		}
 	}
