@@ -458,66 +458,7 @@ public class MatrixCalculator {
 		return power_method(a, tol, u, prev);
 	}
 
-/////////////////////////////
 
-	public void householderQR(Matrix QR)
-	{		
-		double[] Rdiag = new double[QR.length];
-		for(int k=0;k<size;k++)
-		{
-			double norm = 0;
-			for(int i=k;i<size;i++)
-				norm=Maths.hypot(norm,QR[i][k]);
-			if(norm!=0.0) 
-			{
-				if(QR[k][k]<0) 
-					norm=-norm;
-				for(int i=k;i<size;i++) 
-					QR[i][k]/=norm;
-				QR[k][k]+=1.0;
-				for(int j=k+1;j<size;j++) 
-				{
-					double scale = 0.0;
-					for(int i=k;i<size;i++) 
-						scale+=QR[i][k]*QR[i][j];
-					scale=-scale/QR[k][k];
-					for(int i=k;i<size;i++) 
-						QR[i][j]+=scale*QR[i][k];
-				}
-			}
-			Rdiag[k]=-norm;
-		}
-		double[][] R=new double[size][size];
-		for (int i=0;i<size;i++) 
-			for (int j=0;j<size;j++) 
-			{
-				if (i<j)
-					R[i][j]=QR[i][j];
-				else if(i==j)
-					R[i][j]=Rdiag[i];
-				else
-					R[i][j]=0.0;
-			}
-		r = new Matrix(R);
-		double[][] Q = new double[size][size];
-		for (int k=size-1;k>=0;k--)
-		{
-			for(int i=0;i<size;i++)
-				Q[i][k]=0.0;
-			Q[k][k]=1.0;
-			for(int j=k;j<size;j++)
-				if(QR[k][k]!=0)
-				{
-					double temp=0.0;
-					for(int i=k;i<size;i++)
-						temp+=QR[i][k]*Q[i][j];
-					temp=-temp/QR[k][k];
-					for(int i=k;i<size;i++)
-						Q[i][j]+=temp*QR[i][k];
-				}
-		}
-		q= new Matrix(Q);
-	}
 
 
 }
