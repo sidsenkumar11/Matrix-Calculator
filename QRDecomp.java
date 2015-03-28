@@ -1,6 +1,11 @@
 import Jama.Matrix;
 //used jama package
-
+/**
+ * Representation of a QR Factorization
+ *
+ * @author Ashika Ganesh 
+ * @version 2.3
+ */
 public class QRDecomp {
 
 	public static Matrix[] qr_fact_househ(Matrix matrix) {
