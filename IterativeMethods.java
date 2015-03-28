@@ -1,13 +1,13 @@
 /**
- * (Part 2 - work in progress)
+ * Iterative methods for Ax = b.
  *
  * @author Katherine Cabezas
  * @version 1.0
  */
-public class Part2 {
+public class IterativeMethods {
 
     /**
-     * Method for jacobi iteration.
+     * Method for Jacobi iteration.
      * @param a Matrix n x n
      * @param y Vector n x 1
      * @param x Initial guess vector
@@ -19,7 +19,7 @@ public class Part2 {
     }
 
     /**
-     * Method for jacobi iteration.
+     * Method for Gauss-Seidel iteration.
      * @param a Matrix n x n
      * @param y Vector n x 1
      * @param x Initial guess vector
