@@ -107,7 +107,7 @@ public class MatrixCalculator {
 		Vector sum = new Vector(u.rows());
 		BigDecimal sumValue;
 		for (int row = 0; row < u.rows(); row++) {
-			sumValue = a.get(row).add(b.get(row));
+			sumValue = u.get(row).add(v.get(row));
 			sum.set(row, sumValue);
 		}
 		return sum;
@@ -123,7 +123,7 @@ public class MatrixCalculator {
 		Vector product = new Vector(u.rows());
 		BigDecimal productValue;
 		for (int row = 0; row < u.rows(); row++) {
-			productValue = a.get(row).multiply(b.get(row));
+			productValue = u.get(row).multiply(v.get(row));
 			product.set(row, productValue);
 		}
 		return product;
@@ -342,42 +342,42 @@ public class MatrixCalculator {
 		return x;
 	}
 	
-	/**
-	 * Computes a QR-factorization for Matrix a using HouseHolder reflections.
-	 * @param a Matrix to factorize
-	 * @return the matrices for Q and R
-	 */
-	public static Matrix[] qr_fact_househ(Matrix a) {
-		/*
-		A = (H1*H2*...*Hn) * R
-		Q = H1*H2*...*Hn
-		R = (H1*H2*...*Hn) * A^-1
-		Householder reflection = I - 2uu^t
-		*/
+	// /**
+	//  * Computes a QR-factorization for Matrix a using HouseHolder reflections.
+	//  * @param a Matrix to factorize
+	//  * @return the matrices for Q and R
+	//  */
+	// public static Matrix[] qr_fact_househ(Matrix a) {
+	// 	/*
+	// 	A = (H1*H2*...*Hn) * R
+	// 	Q = H1*H2*...*Hn
+	// 	R = (H1*H2*...*Hn) * A^-1
+	// 	Householder reflection = I - 2uu^t
+	// 	*/
 		
-		Matrix i;
-		Matrix q;
-		Matrix r;
+	// 	Matrix i;
+	// 	Matrix q;
+	// 	Matrix r;
 		
-		for (int i = 0; i < a.length; i++) {
-			Vector x = a.column(i);
-			Vector v = add(x, );
-			Vector u;
-		}
-	}
+	// 	for (int i = 0; i < a.length; i++) {
+	// 		Vector x = a.column(i);
+	// 		Vector v = add(x, );
+	// 		Vector u;
+	// 	}
+	// }
 	
-	/**
-	 * Computes a QR-factorization for Matrix a using Givens rotations.
-	 * @param a Matrix to factorize
-	 * @return the matrices for Q and R
-	 */
-	 public static Matrix[] qr_fact_givens(Matrix a) {
-	 	/*
-		A = (G1*G2*...*Gn) * R
-		Q = G1*G2*...*Gn
-		R = (G1*G2*...*Gn) * A^-1
-		*/
-	 }
+	// /**
+	//  * Computes a QR-factorization for Matrix a using Givens rotations.
+	//  * @param a Matrix to factorize
+	//  * @return the matrices for Q and R
+	//  */
+	//  public static Matrix[] qr_fact_givens(Matrix a) {
+	//  	/*
+	// 	A = (G1*G2*...*Gn) * R
+	// 	Q = G1*G2*...*Gn
+	// 	R = (G1*G2*...*Gn) * A^-1
+	// 	*/
+	//  }
 
 	/**
 	 * Uses QR factored matrix to solve for vector x.
