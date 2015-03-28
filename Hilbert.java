@@ -25,8 +25,7 @@ public class Hilbert {
 
 		b = new Vector(n);
 		for (int i = 0; i < n; i++) {
-			//b.set(i, new BigDecimal("" + Math.pow(.1, n / 3)));
-			b.set(i, new BigDecimal("" + 0.0464159));
+			b.set(i, new BigDecimal("" + Math.pow(.1, n / 3.0)));
 		}
 	}
 
