@@ -58,4 +58,5 @@ public class Hilbert {
 		System.out.println("||Hx - b||: " + MatrixCalculator.subtract(MatrixCalculator.multiply(h, x), b).norm());
 	}
 
+
 }
