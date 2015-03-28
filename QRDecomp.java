@@ -102,6 +102,8 @@ public class QRDecomp {
 	}
 
 	public static void main(String[] args) {
-		
+		double[][] m = {{1, .5, .333333, .25}, {.5, .333333, .25, .2}, {.333333, .25, .2, .166667}, {.25, .2, .166667, .142857}};
+		Matrix test = new Matrix(m);
+		System.out.println(qr_fact_househ(test));
 	}
 }
