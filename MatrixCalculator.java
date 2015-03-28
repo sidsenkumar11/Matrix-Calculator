@@ -457,4 +457,8 @@ public class MatrixCalculator {
 		u = multiply(multiply(a, u), BigDecimal.ONE.divide(u.get(0), 2, RoundingMode.HALF_UP));
 		return power_method(a, tol, u, prev);
 	}
+
+
+
+
 }
