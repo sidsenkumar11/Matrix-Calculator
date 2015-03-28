@@ -457,4 +457,13 @@ public class MatrixCalculator {
 		u = multiply(multiply(a, u), BigDecimal.ONE.divide(u.get(0), 2, RoundingMode.HALF_UP));
 		return power_method(a, tol, u, prev);
 	}
+
+
+	public QRDecompHouseHolder qrHouseHolder(Matrix m) {
+		return new QRDecompHouseHolder(m);
+	}
+
+	public QRDecompGivens qrGivens(Matrix m) {
+		return new QRDecompGivens(m);
+	}
 }
