@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 /**
  * Iterative methods for Ax = b.
  *
@@ -15,7 +16,7 @@ public class IterativeMethods {
      * @return number of iterations required to reach tolerance
      */
     public static int jacobi(Matrix a, Vector y, Vector x, double tol) {
-
+        return 0;
     }
 
     /**
@@ -27,7 +28,7 @@ public class IterativeMethods {
      * @return number of iterations required to reach tolerance
      */
     public static int gauss_seidel(Matrix a, Vector y, Vector x, double tol) {
-
+        return 0;
     }
 
 }
