@@ -36,13 +36,14 @@ public class Hilbert {
 	public void solveUsingLU() {
 		Matrix[] lu = MatrixCalculator.lu_fact(h);
 		Vector x = MatrixCalculator.solve_lu_b(lu[0], lu[1], b);
-		System.out.println("-----------------------");
-		System.out.println("HILBERT SOLVED USING LU");
-		System.out.println("-----------------------");
-		System.out.println("n = " + h.rows());
-		System.out.println("Vector x: " + x);
-		System.out.println("||LU - H||: " + (MatrixCalculator.subtract(MatrixCalculator.multiply(lu[0], lu[1]), h)).norm());
-		System.out.println("||Hx - b||: " + MatrixCalculator.subtract(MatrixCalculator.multiply(h, x), b).norm());
+		System.out.println(lu[1]);
+		// System.out.println("-----------------------");
+		// System.out.println("HILBERT SOLVED USING LU");
+		// System.out.println("-----------------------");
+		// System.out.println("n = " + h.rows());
+		// System.out.println("Vector x: " + x);
+		// System.out.println("||LU - H||: " + (MatrixCalculator.subtract(MatrixCalculator.multiply(lu[0], lu[1]), h)).norm());
+		// System.out.println("||Hx - b||: " + MatrixCalculator.subtract(MatrixCalculator.multiply(h, x), b).norm());
 	}
 
 }

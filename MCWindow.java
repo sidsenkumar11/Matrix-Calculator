@@ -2,6 +2,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 /**
  * Creates the interface for displaying.
@@ -88,8 +89,17 @@ public class MCWindow {
 		// System.out.println((MatrixCalculator.solve_qr_b(q, r, bb)));
 
 		// Testing Hilbert class
-		// Hilbert testOne = new Hilbert(3);
-		// testOne.solveUsingLU();
+		Hilbert testOne = new Hilbert(4);
+		testOne.solveUsingLU();
+
+		// Testing power method
+		// double[][] matrix = {{2, 7}, {-1, -6}};
+		// double[] guessVector = {-7, 1};
+
+		// Matrix eigenMatrix = new Matrix(matrix);
+		// Vector vector = new Vector(guessVector);
+
+		// System.out.println(MatrixCalculator.power_method(eigenMatrix, new BigDecimal("" + .00001), vector));
 	}
 
 }

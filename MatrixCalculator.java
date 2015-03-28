@@ -146,6 +146,23 @@ public class MatrixCalculator {
 	}
 
 	/**
+	 * Multiplies a vector by a scalar
+	 * @param a The vector
+	 * @param scalar The constant to multiply by
+	 * @return The vector containing the product
+	 */
+	public static Vector multiply(Vector a, BigDecimal scalar) {
+
+		Vector product = new Vector(a.numElements());
+
+		for (int i = 0; i < a.numElements(); i++) {
+			product.set(i, new BigDecimal("" + scalar).multiply(a.get(i)));
+		}
+
+		return product;
+	}
+
+	/**
 	 * Calculates the dot product of two vectors.
 	 * @param one The first vector
 	 * @param two The second vector
@@ -239,8 +256,7 @@ public class MatrixCalculator {
 					for (int k = 0; k <= j - 1; k++) {
 						sum = sum.add(u.get(k, j).multiply(l.get(i, k)));
 					}
-					MathContext mc = new MathContext(2, RoundingMode.HALF_UP);
-					l.set(i, j, (a.get(i, j).subtract(sum)).divide(u.get(j, j), mc));
+					l.set(i, j, (a.get(i, j).subtract(sum)).divide(u.get(j, j), 6, RoundingMode.HALF_UP));
 				}
 			}
 		}
@@ -346,7 +362,30 @@ public class MatrixCalculator {
 	 * @return The approximated eigenvalue, eigenvector,
 	 *		   and number of iterations for desired tolerance
 	 */
-	public static Object[] power_method(Matrix a, BigDecimal tol, Vector u) {
-		return new Object[0];
+	public static Vector power_method(Matrix a, BigDecimal tol, Vector u) {
+		BigDecimal firstPrevious = u.get(0);
+
+		u = multiply(multiply(a, u), BigDecimal.ONE.divide(u.get(0), 2, RoundingMode.HALF_UP));
+		u = power_method(a, tol, u, firstPrevious);
+		return u;
+	}
+
+	/**
+	 * Recursively calculates new eigenvector with power method
+	 * @param a The nxn matrix
+	 * @param tol The error tolerance
+	 * @param u An initial approximation vector
+	 * @param prev The previous eigenvalue
+	 * @return The approximated eigenvalue, eigenvector,
+	 *		   and number of iterations for desired tolerance
+	 */
+	private static Vector power_method(Matrix a, BigDecimal tol, Vector u, BigDecimal prev) {
+		// Sets u to be 1/alpha * Au
+		if ((u.get(0).abs().subtract(prev.abs())).abs().compareTo(tol) <= 0) {
+			return u;
+		}
+		prev = u.get(0);
+		u = multiply(multiply(a, u), BigDecimal.ONE.divide(u.get(0), 2, RoundingMode.HALF_UP));
+		return power_method(a, tol, u, prev);
 	}
 }

@@ -161,24 +161,99 @@ public class Matrix {
 		return largest;
 	}
 
+	private int getNumberOfDecimalPlaces(BigDecimal bigDecimal) {
+	    String string = bigDecimal.stripTrailingZeros().toPlainString();
+	    int index = string.indexOf(".");
+	    // If no ".", no digits to right of decimal
+	    if (index < 0) {
+	    	return 0;
+	    }
+
+	    // If only 6 digits after decimal place,
+	    // then that's fine
+    	int numAfterDecimal = string.length() - index - 1;
+    	if (numAfterDecimal <= 6) {
+    		return numAfterDecimal;
+    	}
+
+    	// If more than 6 digits after decimal place,
+    	// find number of relevant digits
+    	// i.e. number of zeros then 6 digits
+
+    	// Start at the decimal point
+    	// Increment numRelevant and index until we stop getting zeros
+	    int numRelevant = 0;
+		while (index < string.length() && string.charAt(index) == '0') {
+			index++;
+			numRelevant++;
+		}
+		return numRelevant;
+	}
+
+	private int getNumberOfWholeNumbers(BigDecimal bigDecimal) {
+		String string = bigDecimal.stripTrailingZeros().toPlainString();
+		// Always at least 1 for zero
+	    int count = 1;
+	    for (char x : string.toCharArray()) {
+	    	if (x == '.') {
+	    		return count;
+	    	} else {
+	    		count++;
+	    	}
+	    }
+	    return count;
+	}
+
 	@Override
 	public String toString() {
-		int longestLength = matrix[0][0].toString().length();
+		// Find longest length string length of a number in the matrix
+		// Find the largest number of numbers to the right of the decimal point in the matrix
+		int largestNumDecimalPlaces = getNumberOfDecimalPlaces(matrix[0][0]);
+		int largestNumWholeNumbers = getNumberOfWholeNumbers(matrix[0][0]);
 		for (BigDecimal[] x : matrix) {
 			for (BigDecimal y : x) {
-				if (y.toString().length() > longestLength) {
-					longestLength = y.toString().length();
+				if (largestNumWholeNumbers < getNumberOfWholeNumbers(y)) {
+					largestNumWholeNumbers = getNumberOfWholeNumbers(y);
+				}
+				if (largestNumDecimalPlaces < getNumberOfDecimalPlaces(y)) {
+					largestNumDecimalPlaces = getNumberOfDecimalPlaces(y);
 				}
 			}
 		}
-		String formatString = "%" + longestLength + "s";
+
+		String formatString = null;
+		int totalSpace = largestNumWholeNumbers;
+		if (largestNumDecimalPlaces <= 6) {
+			formatString = "%" + 10 + "s";
+		}
+
 		String returnString = "";
 		for (BigDecimal[] x : matrix) {
 			returnString += "|";
 			for (BigDecimal y : x) {
-				returnString += String.format(formatString, y) + " |";
+				if (formatString != null) {
+					returnString += String.format(formatString, y) + " |";
+				} else {
+					String num = y.stripTrailingZeros().toPlainString();
+					int indexOfFirstNonZeroAfterDecimal = num.indexOf(".") + 1;
+					String relevantPortion;
+
+					if (indexOfFirstNonZeroAfterDecimal != -1) {
+						while (num.charAt(indexOfFirstNonZeroAfterDecimal) == '0') {
+							indexOfFirstNonZeroAfterDecimal++;
+						}
+						if (indexOfFirstNonZeroAfterDecimal + 5 >= num.length()) {
+							relevantPortion = num;
+						} else {
+							relevantPortion = num.substring(0, indexOfFirstNonZeroAfterDecimal + 6);
+						}
+					} else {
+						relevantPortion = num;
+					}
+					returnString += String.format("%10s", relevantPortion);
+				}
 			}
-			returnString += "\t\n";
+			returnString += "\n";
 		}
 
 		String border = "";
