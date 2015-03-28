@@ -103,8 +103,8 @@ public class MCWindow {
 	
 		// Testing QR factorization of A
 		 double[][] matrix = {{1, .5, .333333, .25}, {.5, .333333, .25, .2}, {.333333, .25, .2, .166667}, {.25, .2, .166667, .142857}};
-		 System.out.println(qr_fact_househ(a)[0]);
-		 System.out.println(qr_fact_househ(a)[1]);
+		 System.out.println(qr_fact_househ(matrix)[0]);
+		 System.out.println(qr_fact_househ(matrix)[1]);
 	}
 
 }
