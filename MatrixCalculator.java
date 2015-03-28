@@ -4,7 +4,7 @@ import java.math.RoundingMode;
 
 /**
  * Calculates various operations on matrices and vectors
- * @author Siddarth Senthilkumar
+ * @author Siddarth Senthilkumar, Katherine Cabezas
  * @version 1.0
  */
 public class MatrixCalculator {
@@ -93,6 +93,38 @@ public class MatrixCalculator {
 				}
 				product.set(rowA, colB, sum);
 			}
+		}
+		return product;
+	}
+	
+	/**
+	 * Adds 2 vectors together.
+	 * @param u Vector to add
+	 * @param v Vector to add
+	 * @return resulting vector of adding u and v together
+	 */
+	 public static Vector add(Vector u, Vector v) {
+		Vector sum = new Vector(u.rows());
+		BigDecimal sumValue;
+		for (int row = 0; row < u.rows(); row++) {
+			sumValue = a.get(row).add(b.get(row));
+			sum.set(row, sumValue);
+		}
+		return sum;
+	}
+	
+	/**
+	 * Multiplies 2 vectors together.
+	 * @param u Vector to multiply
+	 * @param v Vector to multiply
+	 * @return resulting vector of multiplying u and v together
+	 */
+	 public static Vector multiply(Vector u, Vector v) {
+		Vector product = new Vector(u.rows());
+		BigDecimal productValue;
+		for (int row = 0; row < u.rows(); row++) {
+			productValue = a.get(row).multiply(b.get(row));
+			product.set(row, productValue);
 		}
 		return product;
 	}
@@ -309,6 +341,43 @@ public class MatrixCalculator {
 
 		return x;
 	}
+	
+	/**
+	 * Computes a QR-factorization for Matrix a using HouseHolder reflections.
+	 * @param a Matrix to factorize
+	 * @return the matrices for Q and R
+	 */
+	public static Matrix[] qr_fact_househ(Matrix a) {
+		/*
+		A = (H1*H2*...*Hn) * R
+		Q = H1*H2*...*Hn
+		R = (H1*H2*...*Hn) * A^-1
+		Householder reflection = I - 2uu^t
+		*/
+		
+		Matrix i;
+		Matrix q;
+		Matrix r;
+		
+		for (int i = 0; i < a.length; i++) {
+			Vector x = a.column(i);
+			Vector v = add(x, );
+			Vector u;
+		}
+	}
+	
+	/**
+	 * Computes a QR-factorization for Matrix a using Givens rotations.
+	 * @param a Matrix to factorize
+	 * @return the matrices for Q and R
+	 */
+	 public static Matrix[] qr_fact_givens(Matrix a) {
+	 	/*
+		A = (G1*G2*...*Gn) * R
+		Q = G1*G2*...*Gn
+		R = (G1*G2*...*Gn) * A^-1
+		*/
+	 }
 
 	/**
 	 * Uses QR factored matrix to solve for vector x.
