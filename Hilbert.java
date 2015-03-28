@@ -4,7 +4,7 @@ import java.math.BigDecimal;
  * Hilbert Matrix Procedures using the MatrixCalculator classes
  * 
  * @author Ashika Ganesh and Siddarth Senthilkumar
- * @version 1.0
+ * @version 2.0
  */
 public class Hilbert {
 	private Matrix h;
