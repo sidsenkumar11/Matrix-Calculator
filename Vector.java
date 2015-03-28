@@ -96,13 +96,117 @@ public class Vector {
 		return largest;
 	}
 
+	private static int getNumberOfDecimalPlaces(BigDecimal bigDecimal) {
+	    String string = bigDecimal.stripTrailingZeros().toPlainString();
+	    int index = string.indexOf(".");
+	    // If no ".", no digits to right of decimal
+	    if (index < 0) {
+	    	return 0;
+	    }
+
+	    // If only 6 digits or less after decimal place,
+	    // then that's fine
+    	int numAfterDecimal = string.length() - index - 1;
+    	if (numAfterDecimal <= 6) {
+    		return numAfterDecimal;
+    	}
+
+    	// If more than 6 digits after decimal place,
+    	// find number of relevant digits
+    	// i.e. number of zeros then 6 digits
+
+    	// Start at the decimal point
+    	// Increment numRelevant and index until we stop getting zeros
+    	index += 1; // Start after the decimal point
+	    int numRelevant = 0;
+		while (index < string.length() && string.charAt(index) == '0') {
+			index++;
+			numRelevant++;
+		}
+
+		// If index >= string.length(), that means there were only zeros after the decimal point
+		// Shouldn't be possible, but if it is, then no significant figures after decimal point.
+		if (index >= string.length()) {
+			return 0;
+		}
+
+		// Otherwise, we hit a nonzero number.
+		// Index is pointing to that number
+		numRelevant++;
+
+		// Can we hit 5 more numbers?
+		// For each one we can hit, increment numRelevant.
+		for (int i = 1; i < 6; i++) {
+			if (index + i < string.length()) {
+				numRelevant++;
+			}
+		}
+		return numRelevant;
+	}
+
+	private static int getNumberOfWholeNumbers(BigDecimal bigDecimal) {
+		String string = bigDecimal.stripTrailingZeros().toPlainString();
+	    int count = 0;
+	    for (int i = 0; i < string.length(); i++) {
+	    	char x = string.charAt(i);
+	    	if (x == '.') {
+	    		return count;
+	    	} else {
+	    		count++;
+	    	}
+	    }
+	    return count;
+	}
+
+	private static String getRelevantPortion(BigDecimal y, int numSpaces) {
+		String string = y.stripTrailingZeros().toPlainString();
+		String relevantPortion = "";
+
+		int index = 0;
+
+		while (index < numSpaces) {
+			if (index >= string.length()) {
+				index = numSpaces;
+			} else {
+				relevantPortion += string.substring(index, index + 1);
+				index++;
+			}
+		}
+
+		// Rounding the last digit
+		if (index < string.length()) {
+			int lastDigit = Integer.parseInt(relevantPortion.substring(relevantPortion.length() - 1));
+			int digitAfterLast = Integer.parseInt(string.substring(index, index + 1));
+			if (digitAfterLast >= 5) {
+				lastDigit++;
+			}
+			relevantPortion = relevantPortion.substring(0, relevantPortion.length() - 1) + "" + lastDigit;
+		}
+		return relevantPortion;
+	}
+
 	public String toString() {
+
+		int largestRelevantRightDecimal = getNumberOfDecimalPlaces(vector[0]);
+		int largestNumWholeNumbers = getNumberOfWholeNumbers(vector[0]);
+		for (BigDecimal y : vector) {
+			if (largestNumWholeNumbers < getNumberOfWholeNumbers(y)) {
+				largestNumWholeNumbers = getNumberOfWholeNumbers(y);
+			}
+			if (largestRelevantRightDecimal < getNumberOfDecimalPlaces(y)) {
+				largestRelevantRightDecimal = getNumberOfDecimalPlaces(y);
+			}
+		}
+
+		int totalSpace = largestNumWholeNumbers + 1 + largestRelevantRightDecimal;
+		String formatString = "%" + totalSpace + "s";
 		String returnString = "[";
 		for (BigDecimal x : vector) {
-			returnString += x + ", ";
+			String relevantPortion = getRelevantPortion(x, totalSpace);
+			returnString += String.format(formatString, relevantPortion) + ", ";
 		}
 		returnString = returnString.substring(0, returnString.length() - 2);
-		returnString += "]";
+		returnString += "] tranpose";
 		return returnString;
 	}
 }

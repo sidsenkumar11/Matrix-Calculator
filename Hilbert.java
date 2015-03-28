@@ -25,7 +25,8 @@ public class Hilbert {
 
 		b = new Vector(n);
 		for (int i = 0; i < n; i++) {
-			b.set(i, new BigDecimal("" + Math.pow(.1, n / 3)));
+			//b.set(i, new BigDecimal("" + Math.pow(.1, n / 3)));
+			b.set(i, new BigDecimal("" + 0.0464159));
 		}
 	}
 
@@ -34,16 +35,27 @@ public class Hilbert {
 	 * b associated with it by this class.
 	 */
 	public void solveUsingLU() {
+		System.out.println("n = " + h.rows());
+		System.out.println("--------------------------");
+		System.out.println("Original Hilbert Matrix");
+		System.out.println("--------------------------");
+		System.out.println(h);
+		System.out.println("--------------------------");
+		System.out.println("B vector in Ax = b");
+		System.out.println("--------------------------");
+		System.out.println(b);
 		Matrix[] lu = MatrixCalculator.lu_fact(h);
 		Vector x = MatrixCalculator.solve_lu_b(lu[0], lu[1], b);
+		System.out.println("--------------------------");
+		System.out.println("HILBERT SOLVED USING LU");
+		System.out.println("--------------------------");
+		System.out.println("1) Lower Triangular Matrix");
+		System.out.println(lu[0]);
+		System.out.println("2) Upper Triangular Matrix");
 		System.out.println(lu[1]);
-		// System.out.println("-----------------------");
-		// System.out.println("HILBERT SOLVED USING LU");
-		// System.out.println("-----------------------");
-		// System.out.println("n = " + h.rows());
-		// System.out.println("Vector x: " + x);
-		// System.out.println("||LU - H||: " + (MatrixCalculator.subtract(MatrixCalculator.multiply(lu[0], lu[1]), h)).norm());
-		// System.out.println("||Hx - b||: " + MatrixCalculator.subtract(MatrixCalculator.multiply(h, x), b).norm());
+		System.out.println("Vector x: " + x);
+		System.out.println("||LU - H||: " + (MatrixCalculator.subtract(MatrixCalculator.multiply(lu[0], lu[1]), h)).norm());
+		System.out.println("||Hx - b||: " + MatrixCalculator.subtract(MatrixCalculator.multiply(h, x), b).norm());
 	}
 
 }

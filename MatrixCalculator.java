@@ -295,7 +295,7 @@ public class MatrixCalculator {
 
 		Matrix[] matrices = {l, u};
 
-		System.out.println(subtract(multiply(l, u), a).norm());
+		// System.out.println("||LU - A||: " + subtract(multiply(l, u), a).norm());
 		return matrices;
 	}
 
