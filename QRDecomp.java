@@ -100,4 +100,8 @@ public class QRDecomp {
 		Matrix[] QR = { Q, R };
 		return QR;
 	}
+
+	public static void main(String[] args) {
+		
+	}
 }
