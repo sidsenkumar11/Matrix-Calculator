@@ -8,8 +8,6 @@ import java.math.RoundingMode;
  */
 public class MatrixCalculator {
 
-	public static final int MAX_ITERATIONS = 100;
-
 	/**
 	 * Adds two matrices' values together
 	 * @param a The first matrix
@@ -273,36 +271,7 @@ public class MatrixCalculator {
 	 * @return The solution vector
 	 */
 	public static Vector solve_lu_b(Matrix l, Matrix u, Vector b) {
-		Vector x = new Vector(l.columns());
-		Vector y = new Vector(l.columns());
-
-		// Ly = b
-		// Solve for y. L is in Lower triangular with ones along diagonal
-		// y(n) = (b(n) - sum of products) / l(n)
-		// where
-		// sum of products = for (i = 0; i < n; i++) sum += l(i) * y(i)
-
-		for (int i = 0; i < y.numElements(); i++) {
-			BigDecimal sumOfProducts = BigDecimal.ZERO;
-			for (int j = 0; j < i; j++) {
-				sumOfProducts = sumOfProducts.add(l.get(i, j).multiply(y.get(j)));
-			}
-			// BigDecimal value = (b.get(i) - sumOfProducts).divide(l.get(i, i));
-			BigDecimal value = (b.get(i).subtract(sumOfProducts));
-			y.set(i, value);
-		}
-
-		// Ux = Y
-		// Solve for x, U is upper triangular
-		for (int i = y.numElements() - 1; i >= 0; i--) {
-			BigDecimal sumOfProducts = BigDecimal.ZERO;
-			for (int j = u.rows() - 1; j > i; j--) {
-				sumOfProducts = sumOfProducts.add(u.get(i, j).multiply(x.get(j)));
-			}
-			BigDecimal value = ((y.get(i).subtract(sumOfProducts))).divide(u.get(i, i), 10, RoundingMode.HALF_UP);
-			x.set(i, value);
-		}
-		return x;
+		return Factorizations.solve_lu_b(l, u, b);
 	}
 
 	/**
@@ -314,18 +283,7 @@ public class MatrixCalculator {
 	 * @return The solution vector
 	 */
 	public static Vector solve_qr_b(Matrix q, Matrix r, Vector b) {
-		Vector x = new Vector(q.columns());
-		Vector d = multiply(q.transpose(), b);
-
-		for (int i = d.numElements() - 1; i >= 0; i--) {
-			BigDecimal sumOfProducts = BigDecimal.ZERO;
-			for (int j = r.rows() - 1; j > i; j--) {
-				sumOfProducts = sumOfProducts.add(r.get(i, j).multiply(x.get(j)));
-			}
-			BigDecimal value = ((d.get(i).subtract(sumOfProducts))).divide(r.get(i, i), 10, RoundingMode.HALF_UP);
-			x.set(i, value);
-		}
-		return x;
+		return Factorizations.solve_qr_b(q, r, b);
 	}
 
 	/**
@@ -344,94 +302,7 @@ public class MatrixCalculator {
 	 *		   and number of iterations for desired tolerance
 	 */
 	public static PowerObject power_method(Matrix a, BigDecimal tol, Vector u) {
-
-		// Get largest value from u - initial eigenvalue guess
-		BigDecimal largest = u.get(0);
-		for (int i = 1; i < u.numElements(); i++) {
-			if (u.get(i).abs().compareTo(largest.abs()) > 0) {
-				largest = u.get(i);
-			}
-		}
-
-		BigDecimal previous = largest;
-
-		// Factor out that value from u
-		u = MatrixCalculator.multiply(u, BigDecimal.ONE.divide(largest, 20, RoundingMode.HALF_UP));
-		PowerObject powerInfo = new PowerObject(largest, u, 0, true);
-
-		// Do one iteration - necessary for recursive method to do check on previous eigenvalue
-
-		// Get Au
-		Vector au = multiply(a, u);
-
-		// Get largest in Au
-		largest = au.get(0);
-		for (int i = 1; i < au.numElements(); i++) {
-			if (au.get(i).abs().compareTo(largest.abs()) > 0) {
-				largest = au.get(i);
-			}
-		}
-
-		// u = Au / ||largest in Au||
-		u = multiply(au, BigDecimal.ONE.divide(largest, 20, RoundingMode.HALF_UP));
-
-		// Update values in powerInfo
-		powerInfo.setEigenvalue(largest);
-		powerInfo.setEigenvector(u);
-		powerInfo.incrementIterations();
-
-		// Keep updating powerInfo and u until tolerance is fine
-		u = power_method(a, tol, u, previous, powerInfo);
-		return powerInfo;
-	}
-
-	/**
-	 * Recursively calculates new eigenvector with power method
-	 * @param a The nxn matrix
-	 * @param tol The error tolerance
-	 * @param u An initial approximation vector
-	 * @param prev The previous eigenvalue
-	 * @param powerInfo The PowerObject containing return data
-	 * @return The approximated eigenvalue, eigenvector,
-	 *		   and number of iterations for desired tolerance
-	 */
-	private static Vector power_method(Matrix a, BigDecimal tol, Vector u, BigDecimal prev, PowerObject powerInfo) {
-
-		if (powerInfo.getIterations() >= MAX_ITERATIONS) {
-			// If after MAX_ITERATIONS iterations, the error has not been reduced to tol or less,
-			// this matrix does not converge.
-			powerInfo.setConverges(false);
-			return u;
-		}
-
-		BigDecimal thisPrevious = powerInfo.getEigenvalue();
-		if (thisPrevious.abs().subtract(prev.abs()).abs().compareTo(tol) <= 0) {
-			// Difference between current largest eigenvalue and previous eigenvalue is less than or equal to tolerance
-			// We are done iterating.
-			return u;
-		}
-
-		// Tolerance not enough. need another iteration
-		Vector au = multiply(a, u);
-
-		// Get au's largest
-		BigDecimal largest = au.get(0);
-		for (int i = 1; i < au.numElements(); i++) {
-			if (au.get(i).abs().compareTo(largest.abs()) > 0) {
-				largest = au.get(i);
-			}
-		}
-
-		// Divide au by its largest and set it to u
-		u = multiply(au, BigDecimal.ONE.divide(largest, 20, RoundingMode.HALF_UP));
-
-		// Update powerInfo
-		powerInfo.setEigenvalue(largest);
-		powerInfo.setEigenvector(u);
-		powerInfo.incrementIterations();
-
-		// Check again if tolerance is fine
-		return power_method(a, tol, u, thisPrevious, powerInfo);
+		return PowerObject.power_method(a, tol, u);
 	}
 
 	/**
