@@ -4,7 +4,7 @@ import java.math.RoundingMode;
 /**
  * Representation of a QR Factorization
  *
- * @author Ashika Ganesh 
+ * @author Ashika Ganesh and Siddarth Senthilkumar
  * @version 2.3
  */
 public class QRDecomp {
