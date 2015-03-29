@@ -17,6 +17,9 @@ public class Vector {
 	 */
 	public Vector(int rows) {
 		this.vector = new BigDecimal[rows];
+		for (int i = 0; i < rows; i++) {
+			vector[i] = BigDecimal.ZERO;
+		}
 	}
 
 	/**
@@ -87,7 +90,7 @@ public class Vector {
 	 * @return The transpose of the original vector
 	 */
 	public Matrix transpose() {
-		Matrix transpose = new Matrix(numElements(), 0);
+		Matrix transpose = new Matrix(1, numElements());
 
 		for (int column = 0; column < rows(); column++) {
 			transpose.set(0, column, get(column));

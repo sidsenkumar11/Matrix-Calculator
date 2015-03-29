@@ -16,18 +16,31 @@ public class QRDecomp {
 		for (int n = 0; n < matrix.columns() - 1; n++) {
 			// Calculates H for this column
 			Matrix Hn = calculateH(R, n);
+
+			// If H's dimensions are not that of the original matrix,
+			// insert it into the identity matrix so that it is.
 			int diff = matrix.rows() - Hn.rows();
 			if (diff != 0) {
+				// Create necessary portion of identity matrix
 				Matrix temp = new Matrix(matrix.rows(), matrix.rows());
 				for (int i = 0; i < diff; i++) {
 					temp.set(i, i, BigDecimal.ONE);
 				}
-				Hn = temp.getMatrix(diff, matrix.rows() - 1, diff, matrix.rows() - 1);
+				// Insert Hn into relevant areas
+				temp.setMatrix(diff, matrix.rows() - 1, diff, matrix.rows() - 1, Hn);
+				Hn = temp;
 			}
 			Q = MatrixCalculator.multiply(Q, MatrixCalculator.transpose(Hn));
 			R = MatrixCalculator.multiply(Hn, R);
 		}
-
+		// Make R Upper triangular to account for errors
+		for (int row = 0; row < R.rows(); row++) {
+			for (int column = 0; column < R.columns(); column++) {
+				if (row > column) {
+					R.set(row, column, BigDecimal.ZERO);
+				}
+			}
+		}
 		Matrix[] A = { Q, R };
 		return A;
 	}

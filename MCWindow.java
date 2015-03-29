@@ -103,9 +103,10 @@ public class MCWindow {
 		// System.out.println(MatrixCalculator.power_method(eigenMatrix, new BigDecimal("" + .00001), vector));
 	
 		// Testing QR factorization of A
-		 // double[][] matrix = {{1, .5, .333333, .25}, {.5, .333333, .25, .2}, {.333333, .25, .2, .166667}, {.25, .2, .166667, .142857}};
-		 // System.out.println(QRDecomp.qr_fact_househ(matrix)[0]);
-		 // System.out.println(QRDecomp.qr_fact_househ(matrix)[1]);
+		// double[][] matrixQR = {{1, 0, 1}, {0, 1, 1}, {1, 1, 0}};
+		// Matrix matrix = new Matrix(matrixQR);
+		// System.out.println(QRDecomp.qr_fact_househ(matrix)[0]);
+		// System.out.println(QRDecomp.qr_fact_househ(matrix)[1]);
 	}
 
 }

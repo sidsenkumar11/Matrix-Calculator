@@ -66,7 +66,7 @@ public class Matrix {
 	 * @param vector The vector to be represented as a matrix
 	 */
 	public Matrix(Vector vector) {
-		this.matrix = new BigDecimal[vector.rows()][0];
+		this.matrix = new BigDecimal[vector.rows()][1];
 		for (int i = 0; i < vector.rows(); i++) {
 			matrix[i][0] = vector.get(i);
 		}
@@ -189,23 +189,35 @@ public class Matrix {
 	}
 
 	public Matrix getMatrix(int rowStart, int rowEnd, int colStart, int colEnd) {
-		Matrix subMatrix = new Matrix(rowEnd - rowStart, colEnd - colStart);
+		Matrix subMatrix = new Matrix(rowEnd - rowStart + 1, colEnd - colStart + 1);
 		int subRow = 0;
 		int subColumn = 0;
 		for (int i = rowStart; i <= rowEnd; i++) {
 			subColumn = 0;
 			for (int j = colStart; j <= colEnd; j++) {
 				subMatrix.set(subRow, subColumn, get(i, j));
-				subRow++;
+				subColumn++;
 			}
-			subColumn++;
+			subRow++;
 		}
-
 		return subMatrix;
 	}
 
+	public void setMatrix(int rowStart, int rowEnd, int colStart, int colEnd, Matrix subMatrix) {
+		int subRow = 0;
+		int subColumn = 0;
+		for (int i = rowStart; i <= rowEnd; i++) {
+			subColumn = 0;
+			for (int j = colStart; j <= colEnd; j++) {
+				set(i, j, get(subRow, subColumn));
+				subColumn++;
+			}
+			subRow++;
+		}
+	}
+
 	public Vector getSubVector(int rowStart, int rowEnd, int column) {
-		Vector subVector = new Vector(rowEnd - rowStart);
+		Vector subVector = new Vector(rowEnd + 1 - rowStart);
 		int subRow = 0;
 		for (int i = rowStart; i <= rowEnd; i++) {
 			subVector.set(subRow, get(i, column));
