@@ -26,18 +26,29 @@ public class IterativeMethods {
         Steps:
         1) iterate through y and add each element to new xVector
            x.i = y.i
-        2) iterate through each element in
+        2) iterate through each element in a
            x.i = y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
            x.i = (1/a.ii) * x.i
         */
 
         int index = 0;
-        Vector xv;
+        Vector xVector;
 
         while(!(difference < tol)) {
-            xv = new Vector(y.rows())
-            xVectors.add(xv);
-            for (int i = 0; i < )
+            xVector = new Vector(y.rows());
+            for (int i = 0; i < y.rows(); i++) {
+                xVector.set(i, y.get(i));
+            }
+            BigDecimal sum;
+            for (int i = 0; i < a.rows(); i++) {
+                sum = xVector.get(i);
+                for (int j = 0; j < a.columns(); j++) {
+                    if (i == j) {
+                        j++;
+                    }
+                    sum.add(a.get(i, j).multiply(x.get(i)));
+                }
+            }
         }
 
         return iterations;
