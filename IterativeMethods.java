@@ -22,8 +22,13 @@ public class IterativeMethods {
         ArrayList<Vector> xVectors;
 
         /*
-        Find a way to:
-        1) x.i = (1/a.ii)(y.i - a.i2*x.2 - ... - a.ii-1*x.n-1)
+        x.i = (1/a.ii)(y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
+        Steps:
+        1) iterate through y and add each element to new xVector
+           x.i = y.i
+        2) iterate through each element in
+           x.i = y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
+           x.i = (1/a.ii) * x.i
         */
 
         int index = 0;
