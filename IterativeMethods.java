@@ -16,7 +16,21 @@ public class IterativeMethods {
      * @return number of iterations required to reach tolerance
      */
     public static int jacobi(Matrix a, Vector y, Vector x, double tol) {
-        return 0;
+        int iterations = 0;
+        int difference = 1;
+        Matrix aXEqualsY = new Matrix(a.rows(), a.columns() + 1);
+
+        for (int i = 0; i < aXEqualsY.rows() - 1; i++) {
+            for (int j = 0; j < aXEqualsY.columns(); j++) {
+                aXEqualsY.set(i, j, a.get(i, j));
+            }
+        }
+
+        // while(!(difference < tol)) {
+        //
+        // }
+
+        return iterations;
     }
 
     /**
@@ -28,7 +42,9 @@ public class IterativeMethods {
      * @return number of iterations required to reach tolerance
      */
     public static int gauss_seidel(Matrix a, Vector y, Vector x, double tol) {
-        return 0;
+        int iterations = 0;
+
+        return iterations;
     }
 
 }
