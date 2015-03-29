@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+import java.util.ArrayList;
 /**
  * Iterative methods for Ax = b.
  *
@@ -17,21 +18,27 @@ public class IterativeMethods {
      */
     public static int jacobi(Matrix a, Vector y, Vector x, double tol) {
         int iterations = 0;
-        int difference = 1;
-        Matrix aXEqualsY = new Matrix(a.rows(), a.columns() + 1);
+        int difference = tol + 1;
+        Matrix yMinusA = new Matrix(a.rows(), a.columns() + 1);
+        ArrayList<Vector> xVectors;
 
-        for (int i = 0; i < aXEqualsY.rows(); i++) {
-            for (int j = 0; j < aXEqualsY.columns() - 1; j++) {
-                aXEqualsY.set(i, j, a.get(i, j));
+        /*
+        Still working on translating the concept to code.
+        */
+        for (int i = 0; i < yMinusA.rows(); i++) {
+            aXEqualsY.set(i, 0, y.get(i));
+        }
+        for (int i = 0; i < yMinusA.rows(); i++) {
+            for (int j = 1; j < yMinusA.columns(); j++) {
+                yMinusA.set(i, j, a.get(i, j).multiply(-1));
             }
         }
-        for (int i = 0; i < aXEqualsY.rows(); i++) {
-            aXEqualsY.set(i, aXEqualsY.columns() - 1, y.get(i));
-        }
 
-        // while(!(difference < tol)) {
-        //
-        // }
+        int index = 0;
+        Vector xVec = new Vector(yMinusA.rows());
+        while(!(difference < tol)) {
+
+        }
 
         return iterations;
     }
