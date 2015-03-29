@@ -161,6 +161,41 @@ public class Matrix {
 		return largest;
 	}
 
+	/**
+	 *  Returns the frobenius norm of the matrix
+	 * (i.e. square root of sum of squares of elements)
+	 * @return The largest value in the matrix
+	 */
+	public BigDecimal normF() {
+		BigDecimal sum = BigDecimal.ZERO;
+		for (int i = 0; i < rows(); i++) {
+			for (int j = 0; j < columns(); j++) {
+				sum = sum.add(get(i, j).pow(2));
+			}
+		}
+		return sum.pow(1/2);
+	}
+
+	public Matrix getMatrix(int rowStart, int rowEnd, int colStart, int colEnd) {
+		Matrix subMatrix = new Matrix(rowEnd - rowStart, colEnd - colStart);
+		int subRow = 0;
+		int subColumn = 0;
+		for (int i = rowStart; i <= rowEnd; i++) {
+			subColumn = 0;
+			for (int j = colStart; j <= colEnd; j++) {
+				subMatrix.set(subRow, subColumn, get(i, j));
+				subColumn++;
+			}
+			subColumn++;
+		}
+
+		return subMatrix;
+	}
+
+	public BigDecimal[][] getArray() {
+		return matrix;
+	}
+
 	private static int getNumberOfDecimalPlaces(BigDecimal bigDecimal) {
 	    String string = bigDecimal.stripTrailingZeros().toPlainString();
 	    int index = string.indexOf(".");

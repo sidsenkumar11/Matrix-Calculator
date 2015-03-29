@@ -112,7 +112,7 @@ public class MatrixCalculator {
 		}
 		return sum;
 	}
-	
+
 	/**
 	 * Multiplies 2 vectors together.
 	 * @param u Vector to multiply
@@ -342,42 +342,45 @@ public class MatrixCalculator {
 		return x;
 	}
 	
-	// /**
-	//  * Computes a QR-factorization for Matrix a using HouseHolder reflections.
-	//  * @param a Matrix to factorize
-	//  * @return the matrices for Q and R
-	//  */
-	// public static Matrix[] qr_fact_househ(Matrix a) {
-	// 	/*
-	// 	A = (H1*H2*...*Hn) * R
-	// 	Q = H1*H2*...*Hn
-	// 	R = (H1*H2*...*Hn) * A^-1
-	// 	Householder reflection = I - 2uu^t
-	// 	*/
+	/**
+	 * Computes a QR-factorization for Matrix a using HouseHolder reflections.
+	 * @param a Matrix to factor
+	 * @return the matrices for Q and R
+	 */
+	public static Matrix[] qr_fact_househ(Matrix a) {
+		/*
+		A = (H1*H2*...*Hn) * R
+		Q = H1*H2*...*Hn
+		R = (H1*H2*...*Hn) * A^-1
+		Householder reflection = I - 2uu^t
+		*/
+
+		// Matrix i;
+		// Matrix q;
+		// Matrix r;
 		
-	// 	Matrix i;
-	// 	Matrix q;
-	// 	Matrix r;
-		
-	// 	for (int i = 0; i < a.length; i++) {
-	// 		Vector x = a.column(i);
-	// 		Vector v = add(x, );
-	// 		Vector u;
-	// 	}
-	// }
+		// for (int i = 0; i < a.length; i++) {
+		// 	Vector x = a.column(i);
+		// 	Vector v = add(x, );
+		// 	Vector u;
+		// }
+
+		return QRDecomp.qr_fact_househ(a);
+	}
 	
-	// /**
-	//  * Computes a QR-factorization for Matrix a using Givens rotations.
-	//  * @param a Matrix to factorize
-	//  * @return the matrices for Q and R
-	//  */
-	//  public static Matrix[] qr_fact_givens(Matrix a) {
-	//  	/*
-	// 	A = (G1*G2*...*Gn) * R
-	// 	Q = G1*G2*...*Gn
-	// 	R = (G1*G2*...*Gn) * A^-1
-	// 	*/
-	//  }
+	/**
+	 * Computes a QR-factorization for Matrix a using Givens rotations.
+	 * @param a Matrix to factorize
+	 * @return the matrices for Q and R
+	 */
+	 public static Matrix[] qr_fact_givens(Matrix a) {
+	 	/*
+		A = (G1*G2*...*Gn) * R
+		Q = G1*G2*...*Gn
+		R = (G1*G2*...*Gn) * A^-1
+		*/
+		return QRDecomp.qr_fact_givens(a);
+	 }
 
 	/**
 	 * Uses QR factored matrix to solve for vector x.
@@ -457,6 +460,9 @@ public class MatrixCalculator {
 		u = multiply(multiply(a, u), BigDecimal.ONE.divide(u.get(0), 2, RoundingMode.HALF_UP));
 		return power_method(a, tol, u, prev);
 	}
-	
 
+	public static BigDecimal sqrt(BigDecimal value) {
+    	BigDecimal x = new BigDecimal(Math.sqrt(value.doubleValue()));
+    	return x.add(new BigDecimal(value.subtract(x.multiply(x)).doubleValue() / (x.doubleValue() * 2.0)));
+	}
 }

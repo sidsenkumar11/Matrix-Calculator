@@ -91,6 +91,7 @@ public class MCWindow {
 		// Testing Hilbert class
 		Hilbert testOne = new Hilbert(4);
 		testOne.solveUsingLU();
+		testOne.solveUsingQR();
 
 		// Testing power method
 		// double[][] matrix = {{2, 7}, {-1, -6}};

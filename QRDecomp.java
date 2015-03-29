@@ -1,5 +1,5 @@
-import Jama.Matrix;
-//used jama package
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Representation of a QR Factorization
@@ -10,44 +10,44 @@ import Jama.Matrix;
 public class QRDecomp {
 
 	public static Matrix[] qr_fact_househ(Matrix matrix) {
-		int dim = matrix.getRowDimension();
+		int dim = matrix.rows();
 		Matrix Q = identity(dim);
 		Matrix R = matrix;
 		for (int n = 0; n < 3; n++) {
 			Matrix Hn = calculateH(R, n);
-			int diff = dim - Hn.getRowDimension();
+			int diff = dim - Hn.rows();
 			if (diff != 0) {
 				Matrix temp = new Matrix(dim, dim);
 				for (int i = 0; i < diff; i++) {
-					temp.set(i, i, 1);
+					temp.set(i, i, BigDecimal.ONE);
 				}
-				temp.setMatrix(diff, dim - 1, diff, dim - 1, Hn);
-				Hn = temp;
+				Hn = temp.getMatrix(diff, dim - 1, diff, dim - 1);
 			}
-			Q = Q.times(Hn.transpose());
-			R = Hn.times(R);
+			Q = MatrixCalculator.multiply(Q, MatrixCalculator.transpose(Hn));
+			R = MatrixCalculator.multiply(Hn, R);
 		}
+
 		Matrix[] A = { Q, R };
 		return A;
 	}
 
 	private static Matrix calculateH(Matrix matrix, int i) {
-		int n = matrix.getRowDimension();
+		int n = matrix.rows();
 		Matrix x = matrix.getMatrix(i, n - 1, i, i);
-		double xNorm = x.normF();
+		BigDecimal xNorm = x.normF();
 		Matrix e = new Matrix(n - i, 1);
-		e.set(0, 0, 1);
-		Matrix v = x.plus(e.times(xNorm));
-		Matrix u = v.times(1 / (v.normF()));
+		e.set(0, 0, BigDecimal.ONE);
+		Matrix v = MatrixCalculator.add(x, MatrixCalculator.multiply(e, xNorm));
+		Matrix u = MatrixCalculator.multiply(v, BigDecimal.ONE.divide(v.normF(), 10, RoundingMode.HALF_UP));
 		Matrix I = identity(n - i);
-		Matrix H = I.minus((u.times(u.transpose())).times(2));
+		Matrix H = MatrixCalculator.subtract(I, MatrixCalculator.multiply(MatrixCalculator.multiply(u, MatrixCalculator.transpose(u)), new BigDecimal("2")));
 		return H;
 	}
 
 	private static Matrix identity(int n) {
 		Matrix identity = new Matrix(n, n);
 		for (int i = 0; i < n; i++) {
-			identity.set(i, i, 1);
+			identity.set(i, i, BigDecimal.ONE);
 		}
 		return identity;
 	}
@@ -57,54 +57,57 @@ public class QRDecomp {
 		return QR;
 	}
 
-	public static Matrix[] calculateGivens(double[][] A) {
+	public static Matrix[] calculateGivens(BigDecimal[][] A) {
 		Matrix R = new Matrix(A);
-		double[][] Gn = new double[A.length][A.length];
+		BigDecimal[][] Gn = new BigDecimal[A.length][A.length];
 		Matrix Q = new Matrix(A.length, A.length);
 		for (int i = 0; i < A.length; i++) {
 			for (int j = 0; j < A.length; j++) {
 				if (i == j) {
-					Gn[i][j] = 1;
-					Q.set(i, j, 1);
+					Gn[i][j] = BigDecimal.ONE;
+					Q.set(i, j, BigDecimal.ONE);
 				} else {
-					Gn[i][j] = 0;
-					Q.set(i, j, 0);
+					Gn[i][j] = BigDecimal.ZERO;
+					Q.set(i, j, BigDecimal.ZERO);
 				}
 			}
 		}
 
 		for (int i = 0; i < A[0].length; i++) {
 			for (int j = i + 1; j < A.length; j++) {
-				double x = R.get(i, i);
-				double y = R.get(j, i);
-				double cos = x / (Math.sqrt(x * x + y * y));
-				double sin = -(y) / (Math.sqrt(x * x + y * y));
+				BigDecimal x = R.get(i, i);
+				BigDecimal y = R.get(j, i);
+				BigDecimal cos = x.divide(MatrixCalculator.sqrt(x.pow(2).add(y.pow(2))), 10, RoundingMode.HALF_UP);
+				y = y.multiply(new BigDecimal("" + -1));
+				BigDecimal sin = y.divide(MatrixCalculator.sqrt(x.pow(2).add(y.pow(2))), 10, RoundingMode.HALF_UP);
 				Gn[i][i] = cos;
 				Gn[j][i] = sin;
-				Gn[i][j] = -sin;
+				Gn[i][j] = sin.multiply(new BigDecimal("" + -1));
 				Gn[j][j] = cos;
 				Matrix GnMatrix = new Matrix(Gn);
-				R = GnMatrix.times(R);
-				Q = GnMatrix.times(Q);
+				R = MatrixCalculator.multiply(GnMatrix, R);
+				Q = MatrixCalculator.multiply(GnMatrix, Q);
 				for (int a = 0; a < A.length; a++) {
 					for (int b = 0; b < A.length; b++) {
 						if (a == b) {
-							Gn[a][b] = 1;
+							Gn[a][b] = BigDecimal.ONE;
 						} else {
-							Gn[a][b] = 0;
+							Gn[a][b] = BigDecimal.ZERO;
 						}
 					}
 				}
 			}
 		}
-		Q = Q.transpose();
+		// Make R Upper triangular to account for errors
+		for (int row = 0; row < R.rows(); row++) {
+			for (int column = 0; column < R.columns(); column++) {
+				if (row > column) {
+					R.set(row, column, BigDecimal.ZERO);
+				}
+			}
+		}
+		Q = MatrixCalculator.transpose(Q);
 		Matrix[] QR = { Q, R };
 		return QR;
 	}
-
-	public static void main(String[] args) {
-		double[][] m = {{1, .5, .333333, .25}, {.5, .333333, .25, .2}, {.333333, .25, .2, .166667}, {.25, .2, .166667, .142857}};
-		Matrix test = new Matrix(m);
-
-		}
-	}
+}

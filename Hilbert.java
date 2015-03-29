@@ -4,7 +4,7 @@ import java.math.BigDecimal;
  * Hilbert Matrix Procedures using the MatrixCalculator classes
  * 
  * @author Ashika Ganesh and Siddarth Senthilkumar
- * @version 2.0
+ * @version 1.0
  */
 public class Hilbert {
 	private Matrix h;
@@ -32,6 +32,7 @@ public class Hilbert {
 	/**
 	 * Solves the Hilbert Matrix for the special vector
 	 * b associated with it by this class.
+	 * Uses LU Decomposition
 	 */
 	public void solveUsingLU() {
 		System.out.println("n = " + h.rows());
@@ -57,5 +58,70 @@ public class Hilbert {
 		System.out.println("||Hx - b||: " + MatrixCalculator.subtract(MatrixCalculator.multiply(h, x), b).norm());
 	}
 
+	/**
+	 * Shows solutions to QR
+	 */
+	public void solveUsingQR() {
+		// solveUsingQRHouseHolder();
+		solveUsingQRGivens();
+	}
+
+	/**
+	 * Solves the Hilbert Matrix for the special vector
+	 * b associated with it by this class.
+	 * Uses QR Decomposition with Givens
+	 */
+	public void solveUsingQRGivens() {
+		System.out.println("n = " + h.rows());
+		System.out.println("--------------------------");
+		System.out.println("Original Hilbert Matrix");
+		System.out.println("--------------------------");
+		System.out.println(h);
+		System.out.println("--------------------------");
+		System.out.println("B vector in Ax = b");
+		System.out.println("--------------------------");
+		System.out.println(b);
+		Matrix[] qr = MatrixCalculator.qr_fact_givens(h);
+		Vector x = MatrixCalculator.solve_qr_b(qr[0], qr[1], b);
+		System.out.println("------------------------------------");
+		System.out.println("HILBERT SOLVED USING QR USING GIVENS");
+		System.out.println("------------------------------------");
+		System.out.println("1) Q Matrix");
+		System.out.println(qr[0]);
+		System.out.println("2) R Matrix");
+		System.out.println(qr[1]);
+		System.out.println("Vector x: " + x);
+		System.out.println("||QR - H||: " + (MatrixCalculator.subtract(MatrixCalculator.multiply(qr[0], qr[1]), h)).norm());
+		System.out.println("||Hx - b||: " + MatrixCalculator.subtract(MatrixCalculator.multiply(h, x), b).norm());
+	}
+
+	/**
+	 * Solves the Hilbert Matrix for the special vector
+	 * b associated with it by this class.
+	 * Uses QR Decomposition with HouseHolder
+	 */
+	public void solveUsingQRHouseHolder() {
+		System.out.println("n = " + h.rows());
+		System.out.println("--------------------------");
+		System.out.println("Original Hilbert Matrix");
+		System.out.println("--------------------------");
+		System.out.println(h);
+		System.out.println("--------------------------");
+		System.out.println("B vector in Ax = b");
+		System.out.println("--------------------------");
+		System.out.println(b);
+		Matrix[] qr = MatrixCalculator.qr_fact_househ(h);
+		Vector x = MatrixCalculator.solve_qr_b(qr[0], qr[1], b);
+		System.out.println("-----------------------------------------------------");
+		System.out.println("HILBERT SOLVED USING QR USING HOUSEHOLDER REFLECTIONS");
+		System.out.println("-----------------------------------------------------");
+		System.out.println("1) Q Matrix");
+		System.out.println(qr[0]);
+		System.out.println("2) R Matrix");
+		System.out.println(qr[1]);
+		System.out.println("Vector x: " + x);
+		System.out.println("||QR - H||: " + (MatrixCalculator.subtract(MatrixCalculator.multiply(qr[0], qr[1]), h)).norm());
+		System.out.println("||Hx - b||: " + MatrixCalculator.subtract(MatrixCalculator.multiply(h, x), b).norm());
+	}
 
 }
