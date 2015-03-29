@@ -1,10 +1,9 @@
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 
 /**
  * Calculates various operations on matrices and vectors
- * @author Siddarth Senthilkumar, Katherine Cabezas
+ * @author Siddarth Senthilkumar
  * @version 1.0
  */
 public class MatrixCalculator {
@@ -111,22 +110,6 @@ public class MatrixCalculator {
 			sum.set(row, sumValue);
 		}
 		return sum;
-	}
-
-	/**
-	 * Multiplies 2 vectors together.
-	 * @param u Vector to multiply
-	 * @param v Vector to multiply
-	 * @return resulting vector of multiplying u and v together
-	 */
-	 public static Vector multiply(Vector u, Vector v) {
-		Vector product = new Vector(u.rows());
-		BigDecimal productValue;
-		for (int row = 0; row < u.rows(); row++) {
-			productValue = u.get(row).multiply(v.get(row));
-			product.set(row, productValue);
-		}
-		return product;
 	}
 
 	/**
