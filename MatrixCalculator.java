@@ -4,7 +4,7 @@ import java.math.RoundingMode;
 /**
  * Calculates various operations on matrices and vectors
  * @author Siddarth Senthilkumar
- * @version 1.0
+ * @version 2.0
  */
 public class MatrixCalculator {
 
@@ -97,6 +97,22 @@ public class MatrixCalculator {
 	}
 
 	/**
+	 * Multiplies a matrix by a scalar
+	 * @param a The matrix
+	 * @param scalar The constant to multiply by
+	 * @return The matrix containing the product
+	 */
+	public static Matrix multiply(Matrix a, BigDecimal scalar) {
+		Matrix product = new Matrix(a.rows(), a.columns());
+		for (int i = 0; i < a.rows(); i++) {
+			for (int j = 0; j < a.columns(); j++) {
+				product.set(i, j, new BigDecimal("" + scalar).multiply(a.get(i, j)));
+			}
+		}
+		return product;
+	}
+
+	/**
 	 * Adds 2 vectors together.
 	 * @param u Vector to add
 	 * @param v Vector to add
@@ -113,6 +129,39 @@ public class MatrixCalculator {
 	}
 
 	/**
+	 * Subtracts two vectors
+	 * @param a The first vector
+	 * @param b The second vector
+	 * @return The difference vector
+	 * @throws IllegalArgumentException Vectors' lengths do not match
+	 */
+	public static Vector subtract(Vector a, Vector b) {
+		if (a.numElements() != b.numElements()) {
+			throw new IllegalArgumentException("Vectors' number of elements are not equal");
+		}
+
+		Vector x = new Vector(a.numElements());
+		for (int i = 0; i < a.numElements(); i++) {
+			x.set(i, a.get(i).subtract(b.get(i)));
+		}
+		return x;
+	}
+
+	/**
+	 * Multiplies a vector by a scalar
+	 * @param a The vector
+	 * @param scalar The constant to multiply by
+	 * @return The vector containing the product
+	 */
+	public static Vector multiply(Vector a, BigDecimal scalar) {
+		Vector product = new Vector(a.numElements());
+		for (int i = 0; i < a.numElements(); i++) {
+			product.set(i, new BigDecimal("" + scalar).multiply(a.get(i)));
+		}
+		return product;
+	}
+
+	/**
 	 * Multiplies a matrix by a vector
 	 * @param a The matrix
 	 * @param x The vector
@@ -121,11 +170,9 @@ public class MatrixCalculator {
 	 *		   matrix's and vector's dimensions cannot be multiplied
 	 */
 	public static Vector multiply(Matrix a, Vector x) {
-
 		if (a.columns() != x.rows()) {
 			throw new IllegalArgumentException("A's columns must be the same as B's rows");
 		}
-
 		Vector product = new Vector(a.rows());
 		BigDecimal sum;
 		BigDecimal[] row;
@@ -138,42 +185,6 @@ public class MatrixCalculator {
 			}
 			product.set(rowA, sum);
 		}
-		return product;
-	}
-
-	/**
-	 * Multiplies a matrix by a scalar
-	 * @param a The matrix
-	 * @param scalar The constant to multiply by
-	 * @return The matrix containing the product
-	 */
-	public static Matrix multiply(Matrix a, BigDecimal scalar) {
-
-		Matrix product = new Matrix(a.rows(), a.columns());
-
-		for (int i = 0; i < a.rows(); i++) {
-			for (int j = 0; j < a.columns(); j++) {
-				product.set(i, j, new BigDecimal("" + scalar).multiply(a.get(i, j)));
-			}
-		}
-
-		return product;
-	}
-
-	/**
-	 * Multiplies a vector by a scalar
-	 * @param a The vector
-	 * @param scalar The constant to multiply by
-	 * @return The vector containing the product
-	 */
-	public static Vector multiply(Vector a, BigDecimal scalar) {
-
-		Vector product = new Vector(a.numElements());
-
-		for (int i = 0; i < a.numElements(); i++) {
-			product.set(i, new BigDecimal("" + scalar).multiply(a.get(i)));
-		}
-
 		return product;
 	}
 
@@ -199,7 +210,6 @@ public class MatrixCalculator {
 		if (one.rows() != two.rows()) {
 			throw new IllegalArgumentException("Vectors not same length");
 		}
-
 		BigDecimal sum = BigDecimal.ZERO;
 		for (int i = 0; i < one.rows(); i++) {
 			sum = sum.add(one.get(i).multiply(two.get(i)));
@@ -208,26 +218,13 @@ public class MatrixCalculator {
 	}
 
 	/**
-	 * Returns the transpose of the given matrix.
-	 * @param matrix The original matrix
-	 * @return The transpose of the original matrix
+	 * ---------------------------------------------------------------------------
+	 * FACTORIZATIONS:
+	 * 		LU_FACT
+	 *		QR_FACT_HOUSH
+	 *		QR_FACT_GIVENS
+	 * ---------------------------------------------------------------------------
 	 */
-	public static Matrix transpose(Matrix matrix) {
-		Matrix transpose = new Matrix(matrix.columns(), matrix.rows());
-		int newRow = 0;
-		int newColumn = 0;
-
-		for (int row = 0; row < matrix.rows(); row++) {
-			newRow = 0;
-			for (int column = 0; column < matrix.columns(); column++) {
-				transpose.set(newRow, newColumn, matrix.get(row, column));
-				newRow++;
-			}
-			newColumn++;
-		}
-
-		return transpose;
-	}
 
 	/**
 	 * Computes the LU factorization of a square matrix
@@ -236,62 +233,34 @@ public class MatrixCalculator {
 	 * @return The matrices and error
 	 */
 	public static Matrix[] lu_fact(Matrix a) {
-		Matrix l = new Matrix(a.rows(), a.columns());
-		Matrix u = new Matrix(a.rows(), a.columns());
-
-		// Put 1s into L's diagonal so that there is a unique solution
-
-		for (int i = 0; i < a.rows(); i++) {
-			for (int j = 0; j < a.columns(); j++) {
-				if (i == j) {
-					l.set(i, j, BigDecimal.ONE);
-				}
-			}
-		}
-
-		// U's top row is the same as A's top row
-		for (int i = 0; i < a.columns(); i++) {
-			u.set(0, i, a.get(0, i));
-		}
-
-		// A's leftmost column = l(i, 0) * u(0, 0)
-		// a(i, 0) = l(i, 0) * u(0, 0)
-		// Therefore l(i, 0) = a(i, 0) / u(0, 0)
-
-		for (int i = 1; i < a.rows(); i++) {
-			BigDecimal value = a.get(i, 0).divide(u.get(0, 0));
-			l.set(i, 0, value);
-		}
-
-
-		// We now have the first row for U and the first column for L
-		// Apply formulas u(i, j) = a(i, j) - sum of k = 0 to i - 1 of u(k, j)*l(i, k)
-		// and l(i, j) = 1 / u(j, j) * (a(i, j) - sum of k = 0 to j - 1 of u(k, j)*l(i, k))
-		for (int i = 1; i < a.rows(); i++) {
-			for (int j = 1; j < a.columns(); j++) {
-				if (i <= j) {
-					// Only U should be affected
-					BigDecimal sum = BigDecimal.ZERO;
-					for (int k = 0; k <= i - 1; k++) {
-						sum = sum.add(u.get(k, j).multiply(l.get(i, k)));
-					}
-					u.set(i, j, a.get(i, j).subtract(sum));
-				} else {
-					// Lower Triangle, only L affected
-					BigDecimal sum = BigDecimal.ZERO;
-					for (int k = 0; k <= j - 1; k++) {
-						sum = sum.add(u.get(k, j).multiply(l.get(i, k)));
-					}
-					l.set(i, j, (a.get(i, j).subtract(sum)).divide(u.get(j, j), 6, RoundingMode.HALF_UP));
-				}
-			}
-		}
-
-		Matrix[] matrices = {l, u};
-
-		// System.out.println("||LU - A||: " + subtract(multiply(l, u), a).norm());
-		return matrices;
+		return Factorizations.lu_fact(a);
 	}
+	
+	/**
+	 * Computes a QR-factorization for Matrix a using HouseHolder reflections.
+	 * @param a Matrix to factor
+	 * @return the matrices for Q and R
+	 */
+	public static Matrix[] qr_fact_househ(Matrix a) {
+		return Factorizations.qr_fact_househ(a);
+	}
+	
+	/**
+	 * Computes a QR-factorization for Matrix a using Givens rotations.
+	 * @param a Matrix to factor
+	 * @return the matrices for Q and R
+	 */
+	 public static Matrix[] qr_fact_givens(Matrix a) {
+		return Factorizations.qr_fact_givens(a);
+	 }
+
+	/**
+	 * ------------------------------------------------------
+	 * SOLVING A MATRIX SYSTEM GIVEN A VECTOR B USING:
+	 * 		LU FACTORIZATION
+	 *		QR FACTORIZATION
+	 * ------------------------------------------------------
+	 */
 
 	/**
 	 * Uses LU factored matrix to solve for vector x.
@@ -331,40 +300,20 @@ public class MatrixCalculator {
 			BigDecimal value = ((y.get(i).subtract(sumOfProducts))).divide(u.get(i, i), 10, RoundingMode.HALF_UP);
 			x.set(i, value);
 		}
-
 		return x;
 	}
-
-	
-	/**
-	 * Computes a QR-factorization for Matrix a using HouseHolder reflections.
-	 * @param a Matrix to factor
-	 * @return the matrices for Q and R
-	 */
-	public static Matrix[] qr_fact_househ(Matrix a) {
-		return QRDecomp.qr_fact_househ(a);
-	}
-	
-	/**
-	 * Computes a QR-factorization for Matrix a using Givens rotations.
-	 * @param a Matrix to factorize
-	 * @return the matrices for Q and R
-	 */
-	 public static Matrix[] qr_fact_givens(Matrix a) {
-		return QRDecomp.qr_fact_givens(a);
-	 }
 
 	/**
 	 * Uses QR factored matrix to solve for vector x.
 	 * Assumes there is a solution.
-	 * @param q The orthonormal matrix
+	 * @param q The orthogonal matrix
 	 * @param r The upper triangular matrix
 	 * @param b The vector b in Ax = b
 	 * @return The solution vector
 	 */
 	public static Vector solve_qr_b(Matrix q, Matrix r, Vector b) {
 		Vector x = new Vector(q.columns());
-		Vector d = multiply(transpose(q), b);
+		Vector d = multiply(q.transpose(), b);
 
 		for (int i = d.numElements() - 1; i >= 0; i--) {
 			BigDecimal sumOfProducts = BigDecimal.ZERO;
@@ -378,23 +327,10 @@ public class MatrixCalculator {
 	}
 
 	/**
-	 * Subtracts two vectors
-	 * @param a The first vector
-	 * @param b The second vector
-	 * @return The difference vector
-	 * @throws IllegalArgumentException Vectors' lengths do not match
+	 * ------------------------------------------------------------
+	 * POWER METHOD USED FOR PART 3 OF PROJECT - LESLIE MATRIX
+	 * ------------------------------------------------------------
 	 */
-	public static Vector subtract(Vector a, Vector b) {
-		if (a.numElements() != b.numElements()) {
-			throw new IllegalArgumentException("Vectors' number of elements are not equal");
-		}
-
-		Vector x = new Vector(a.numElements());
-		for (int i = 0; i < a.numElements(); i++) {
-			x.set(i, a.get(i).subtract(b.get(i)));
-		}
-		return x;
-	}
 
 	/**
 	 * Implements power method to find approximation
@@ -432,20 +368,21 @@ public class MatrixCalculator {
 		return power_method(a, tol, u, prev);
 	}
 
+	/**
+	 * -----------------------------------------------------------------
+	 * MISCELLANEOUS OPERATIONS:
+	 *		SQRT - CALCULATES THE SQUARE ROOT OF A BIGDECIMAL
+	 *
+	 * -----------------------------------------------------------------
+	 */
+
+	/**
+	 * Calculates the square root of a BigDecimal to precision 32 bits.
+	 * @param value The square root to be calculated
+	 * @return The BigDecimal containing the square root
+	 */
 	public static BigDecimal sqrt(BigDecimal value) {
     	BigDecimal x = new BigDecimal(Math.sqrt(value.doubleValue()));
     	return x.add(new BigDecimal(value.subtract(x.multiply(x)).doubleValue() / (x.doubleValue() * 2.0)));
-	}
-
-	public static BigDecimal determinant(Matrix a) {
-		BigDecimal det = BigDecimal.ZERO;
-
-		if (a.rows() == 2 && a.columns() == 2) {
-			BigDecimal crossProduct1 = a.get(0, 0).multiply(a.get(1, 1));
-			BigDecimal crossProduct2 = a.get(1, 0).multiply(a.get(0, 1));
-			det = crossProduct1.multiply(crossProduct2);
-		}
-
-		return det;
 	}
 }

@@ -11,8 +11,9 @@ public class Vector {
 	private BigDecimal[] vector;
 
 	/**
-	 * Constructs a matrix with the specified
+	 * Constructs a vector with the specified
 	 * number of rows.
+	 * Default value for vector values is zero.
 	 * @param rows The number of rows
 	 */
 	public Vector(int rows) {
@@ -23,7 +24,7 @@ public class Vector {
 	}
 
 	/**
-	 * Constructs a matrix with the BigDecimal array
+	 * Constructs a vector with the BigDecimal array's data
 	 * @param vector The vector
 	 */
 	public Vector(BigDecimal[] vector) {
@@ -31,7 +32,7 @@ public class Vector {
 	}
 
 	/**
-	 * Constructs a matrix with the double array
+	 * Constructs a vector with the double array's data
 	 * @param vector The vector
 	 */
 	public Vector(double[] vector) {
@@ -91,16 +92,15 @@ public class Vector {
 	 */
 	public Matrix transpose() {
 		Matrix transpose = new Matrix(1, numElements());
-
 		for (int column = 0; column < rows(); column++) {
 			transpose.set(0, column, get(column));
 		}
-
 		return transpose;
 	}
 
 	/**
-	 *  Returns the norm of the vector as defined in the PDF
+	 * Returns the norm of the vector as defined in the PDF
+	 * This norm is the largest value in the vector.
 	 * @return The largest value in the vector
 	 */
 	public BigDecimal norm() {
@@ -114,8 +114,8 @@ public class Vector {
 	}
 
 	/**
-	 *  Returns the frobenius norm of the vector
-	 * (i.e. square root of sum of squares of elements)
+	 * Returns the frobenius norm of the vector
+	 * This norm is the square root of sum of squares of the elements in the vector.
 	 * @return The norm of the matrix
 	 */
 	public BigDecimal normF() {
@@ -126,6 +126,21 @@ public class Vector {
 		return MatrixCalculator.sqrt(sum);
 	}
 
+	/**
+	 * THE FOLLOWING CODE IS USED FOR REPRESENTING THE VECTOR IN STANDARD OUTPUT
+	 * RULES HAVE BEEN IMPLEMENTED AS FOLLOWS:
+	 *
+	 * 1) THE VECTOR WILL BE REPRESENTED AS ITS TRANSPOSE
+	 * 2) EACH ELEMENT IN THE ROW HAS THE SAME WIDTH
+	 * 3) THE LARGEST WIDTH OF ANY INDIVIDUAL ELEMENT IS USED AS THE WIDTH FOR EACH ELEMENT
+	 * 4) A) IF THE NUMBER OF DECIMAL PLACES EXCEEDS 6, THE WIDTH IS FIXED TO A CERTAIN NUMBER "NUMSPACE"
+	 *    B) NUMSPACES IS DEFINED AS:
+	 *		 1) THE NUMBER OF DIGITS IN THE WHOLE NUMBER PORTION OF THE BIGDECIMAL +
+	 *		 2) THE DECIMAL POINT (1 SPACE) +
+	 *		 3) THE NUMBER OF DIGITS AFTER THE DECIMAL POINT. EXCLUDING INTIAL ZEROS, IF THIS NUMBER EXCEEDS 6,
+	 *			WE SET THE RIGHT SIDE PORTION TO BE #LEADING ZEROS + UP TO 6 DIGITS
+	 *			IN THIS WAY, WE ALWAYS END UP WITH AT MOST 6 SIGNIFICANT FIGURES AFTER THE DECIMAL POINT
+	 */
 	private static int getNumberOfDecimalPlaces(BigDecimal bigDecimal) {
 	    String string = bigDecimal.stripTrailingZeros().toPlainString();
 	    int index = string.indexOf(".");
@@ -236,7 +251,7 @@ public class Vector {
 			returnString += String.format(formatString, relevantPortion) + ", ";
 		}
 		returnString = returnString.substring(0, returnString.length() - 2);
-		returnString += "] tranpose";
+		returnString += "]^t";
 		return returnString;
 	}
 }

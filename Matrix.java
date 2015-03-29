@@ -48,6 +48,7 @@ public class Matrix {
 	/**
 	 * Constructs a matrix with the specified
 	 * number of rows and columns.
+	 * Default value for matrix values is zero.
 	 * @param rows The number of rows
 	 * @param columns The number of columns
 	 */
@@ -158,7 +159,43 @@ public class Matrix {
 	}
 
 	/**
-	 *  Returns the norm of the matrix as defined in the PDF
+	 * Returns the transpose of this matrix.
+	 * @return The transpose of the original matrix
+	 */
+	public Matrix transpose() {
+		Matrix transpose = new Matrix(columns(), rows());
+		int newRow = 0;
+		int newColumn = 0;
+		for (int row = 0; row < rows(); row++) {
+			newRow = 0;
+			for (int column = 0; column < columns(); column++) {
+				transpose.set(newRow, newColumn, get(row, column));
+				newRow++;
+			}
+			newColumn++;
+		}
+		return transpose;
+	}
+
+	/**
+	 * Calculates the determinant of the matrix.
+	 * TODO: CHECK IF THIS IS THE CORRECT FORMULA.
+	 * @return The BigDecimal containing the determinant
+	 */
+	public BigDecimal determinant() {
+		BigDecimal det = BigDecimal.ZERO;
+
+		if (rows() == 2 && columns() == 2) {
+			BigDecimal crossProduct1 = get(0, 0).multiply(get(1, 1));
+			BigDecimal crossProduct2 = get(1, 0).multiply(get(0, 1));
+			det = crossProduct1.multiply(crossProduct2);
+		}
+		return det;
+	}
+
+	/**
+	 * Returns the norm of the matrix as defined in the PDF
+	 * This norm is the largest of the elements in the matrix.
 	 * @return The norm of the matrix
 	 */
 	public BigDecimal norm() {
@@ -174,8 +211,8 @@ public class Matrix {
 	}
 
 	/**
-	 *  Returns the frobenius norm of the matrix
-	 * (i.e. square root of sum of squares of elements)
+	 * Returns the frobenius norm of the matrix
+	 * This norm is the square root of sum of squares of elements.
 	 * @return The largest value in the matrix
 	 */
 	public BigDecimal normF() {
@@ -188,6 +225,14 @@ public class Matrix {
 		return MatrixCalculator.sqrt(sum);
 	}
 
+	/**
+	 * Returns a sub-matrix from this matrix
+	 * @param rowStart The row to start at
+	 * @param rowEnd The row to end at (inclusive)
+	 * @param colStart The column to start at
+	 * @param colEnd The column to end at (inclusive)
+	 * @return The sub-matrix
+	 */
 	public Matrix getMatrix(int rowStart, int rowEnd, int colStart, int colEnd) {
 		Matrix subMatrix = new Matrix(rowEnd - rowStart + 1, colEnd - colStart + 1);
 		int subRow = 0;
@@ -195,42 +240,84 @@ public class Matrix {
 		for (int i = rowStart; i <= rowEnd; i++) {
 			subColumn = 0;
 			for (int j = colStart; j <= colEnd; j++) {
-				subMatrix.set(subRow, subColumn, get(i, j));
-				subColumn++;
+				subMatrix.set(subRow, subColumn++, get(i, j));
 			}
 			subRow++;
 		}
 		return subMatrix;
 	}
 
+	/**
+	 * Sets data from a matrix to a sub-matrix in this matrix
+	 * @param rowStart The row to start at
+	 * @param rowEnd The row to end at (inclusive)
+	 * @param colStart The column to start at
+	 * @param colEnd The column to end at (inclusive)
+	 */
 	public void setMatrix(int rowStart, int rowEnd, int colStart, int colEnd, Matrix subMatrix) {
 		int subRow = 0;
 		int subColumn = 0;
 		for (int i = rowStart; i <= rowEnd; i++) {
 			subColumn = 0;
 			for (int j = colStart; j <= colEnd; j++) {
-				set(i, j, subMatrix.get(subRow, subColumn));
-				subColumn++;
+				set(i, j, subMatrix.get(subRow, subColumn++));
 			}
 			subRow++;
 		}
 	}
 
+	/**
+	 * Returns a sub-vector from this matrix
+	 * @param rowStart The row to start at
+	 * @param rowEnd The row to end at (inclusive)
+	 * @param column The column this sub-vector is in
+	 * @return The sub-vector
+	 */
 	public Vector getSubVector(int rowStart, int rowEnd, int column) {
 		Vector subVector = new Vector(rowEnd + 1 - rowStart);
 		int subRow = 0;
 		for (int i = rowStart; i <= rowEnd; i++) {
-			subVector.set(subRow, get(i, column));
-			subRow++;
+			subVector.set(subRow++, get(i, column));
 		}
-
 		return subVector;
 	}
 
+	/**
+	 * Returns the backing array for this matrix
+	 * @return matrix The backing array for this matrix
+	 */
 	public BigDecimal[][] getArray() {
 		return matrix;
 	}
 
+	/**
+	 * Returns an identity matrix with n rows and n columns
+	 * @param n The number of rows/columns
+	 * @return The identity matrix
+	 */
+	public static Matrix identity(int n) {
+		Matrix identity = new Matrix(n, n);
+		for (int i = 0; i < n; i++) {
+			identity.set(i, i, BigDecimal.ONE);
+		}
+		return identity;
+	}
+
+	/**
+	 * THE FOLLOWING CODE IS USED FOR REPRESENTING THE MATRIX IN STANDARD OUTPUT
+	 * RULES HAVE BEEN IMPLEMENTED AS FOLLOWS:
+	 *
+	 * 1) THE MATRIX BEGINS AND ENDS WITH A LINE OF DASHES (---------------------)
+	 * 2) EACH ROW HAS THE SAME WIDTH AND EACH ELEMENT IN EACH ROW HAS THE SAME WIDTH
+	 * 3) THE LARGEST WIDTH OF ANY INDIVIDUAL ELEMENT IS USED AS THE WIDTH FOR EACH ELEMENT
+	 * 4) A) IF THE NUMBER OF DECIMAL PLACES EXCEEDS 6, THE WIDTH IS FIXED TO A CERTAIN NUMBER "NUMSPACE"
+	 *    B) NUMSPACES IS DEFINED AS:
+	 *		 1) THE NUMBER OF DIGITS IN THE WHOLE NUMBER PORTION OF THE BIGDECIMAL +
+	 *		 2) THE DECIMAL POINT (1 SPACE) +
+	 *		 3) THE NUMBER OF DIGITS AFTER THE DECIMAL POINT. EXCLUDING INTIAL ZEROS, IF THIS NUMBER EXCEEDS 6,
+	 *			WE SET THE RIGHT SIDE PORTION TO BE #LEADING ZEROS + UP TO 6 DIGITS
+	 *			IN THIS WAY, WE ALWAYS END UP WITH AT MOST 6 SIGNIFICANT FIGURES AFTER THE DECIMAL POINT
+	 */
 	private static int getNumberOfDecimalPlaces(BigDecimal bigDecimal) {
 	    String string = bigDecimal.stripTrailingZeros().toPlainString();
 	    int index = string.indexOf(".");
