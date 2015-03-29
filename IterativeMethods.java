@@ -19,25 +19,20 @@ public class IterativeMethods {
     public static int jacobi(Matrix a, Vector y, Vector x, double tol) {
         int iterations = 0;
         int difference = tol + 1;
-        Matrix yMinusA = new Matrix(a.rows(), a.columns() + 1);
         ArrayList<Vector> xVectors;
 
         /*
-        Still working on translating the concept to code.
+        Find a way to:
+        1) x.i = (1/a.ii)(y.i - a.i2*x.2 - ... - a.ii-1*x.n-1)
         */
-        for (int i = 0; i < yMinusA.rows(); i++) {
-            aXEqualsY.set(i, 0, y.get(i));
-        }
-        for (int i = 0; i < yMinusA.rows(); i++) {
-            for (int j = 1; j < yMinusA.columns(); j++) {
-                yMinusA.set(i, j, a.get(i, j).multiply(-1));
-            }
-        }
 
         int index = 0;
-        Vector xVec = new Vector(yMinusA.rows());
-        while(!(difference < tol)) {
+        Vector xv;
 
+        while(!(difference < tol)) {
+            xv = new Vector(y.rows())
+            xVectors.add(xv);
+            for (int i = 0; i < )
         }
 
         return iterations;
