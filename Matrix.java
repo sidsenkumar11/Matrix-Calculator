@@ -209,7 +209,7 @@ public class Matrix {
 		for (int i = rowStart; i <= rowEnd; i++) {
 			subColumn = 0;
 			for (int j = colStart; j <= colEnd; j++) {
-				set(i, j, get(subRow, subColumn));
+				set(i, j, subMatrix.get(subRow, subColumn));
 				subColumn++;
 			}
 			subRow++;

@@ -30,6 +30,7 @@ public class QRDecomp {
 				temp.setMatrix(diff, matrix.rows() - 1, diff, matrix.rows() - 1, Hn);
 				Hn = temp;
 			}
+			// Q = H1 H2 H3 H4 .... Hm-1
 			Q = MatrixCalculator.multiply(Q, MatrixCalculator.transpose(Hn));
 			R = MatrixCalculator.multiply(Hn, R);
 		}
@@ -41,6 +42,20 @@ public class QRDecomp {
 				}
 			}
 		}
+
+		// We can factor out -1 from both Q and R
+		for (int i = 0; i < Q.rows(); i++) {
+			for (int j = 0; j < Q.columns(); j++) {
+				Q.set(i, j, Q.get(i, j).multiply(new BigDecimal("-1")));
+			}
+		}
+
+		for (int i = 0; i < R.rows(); i++) {
+			for (int j = 0; j < R.columns(); j++) {
+				R.set(i, j, R.get(i, j).multiply(new BigDecimal("-1")));
+			}
+		}
+
 		Matrix[] A = { Q, R };
 		return A;
 	}

@@ -345,8 +345,7 @@ public class MatrixCalculator {
 			for (int j = u.rows() - 1; j > i; j--) {
 				sumOfProducts = sumOfProducts.add(u.get(i, j).multiply(x.get(j)));
 			}
-			MathContext mc = new MathContext(2, RoundingMode.HALF_UP);
-			BigDecimal value = ((y.get(i).subtract(sumOfProducts))).divide(u.get(i, i), mc);
+			BigDecimal value = ((y.get(i).subtract(sumOfProducts))).divide(u.get(i, i), 10, RoundingMode.HALF_UP);
 			x.set(i, value);
 		}
 
@@ -389,8 +388,7 @@ public class MatrixCalculator {
 			for (int j = r.rows() - 1; j > i; j--) {
 				sumOfProducts = sumOfProducts.add(r.get(i, j).multiply(x.get(j)));
 			}
-			MathContext mc = new MathContext(2, RoundingMode.HALF_UP);
-			BigDecimal value = ((d.get(i).subtract(sumOfProducts))).divide(r.get(i, i), mc);
+			BigDecimal value = ((d.get(i).subtract(sumOfProducts))).divide(r.get(i, i), 10, RoundingMode.HALF_UP);
 			x.set(i, value);
 		}
 		return x;
