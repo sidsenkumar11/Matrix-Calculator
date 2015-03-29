@@ -110,7 +110,16 @@ public class MCWindow {
 
 		// Testing Leslie class
 
-		Leslie leslie = new Leslie();
+		// Leslie leslie = new Leslie();
+		
+		// Testing power_method
+
+		double[][] initMatrix = {{2, 2}, {2, 5}};
+		double[] guessVector = {1, 1};
+		Matrix matrix = new Matrix(initMatrix);
+		Vector vector = new Vector(guessVector);
+
+		System.out.println(MatrixCalculator.power_method(matrix, new BigDecimal(".01"), vector));
 		
 	}
 

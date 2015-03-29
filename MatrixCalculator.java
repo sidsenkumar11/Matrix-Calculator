@@ -342,10 +342,44 @@ public class MatrixCalculator {
 	 *		   and number of iterations for desired tolerance
 	 */
 	public static PowerObject power_method(Matrix a, BigDecimal tol, Vector u) {
-		BigDecimal firstPrevious = u.get(0);
-		PowerObject powerInfo = new PowerObject(firstPrevious, u, 0, true);
-		u = multiply(multiply(a, u), BigDecimal.ONE.divide(u.get(0), 10, RoundingMode.HALF_UP));
-		u = power_method(a, tol, u, firstPrevious, powerInfo);
+
+		// Get largest value from u - initial eigenvalue guess
+		BigDecimal largest = u.get(0);
+		for (int i = 1; i < u.numElements(); i++) {
+			if (u.get(i).compareTo(largest) > 0) {
+				largest = u.get(i);
+			}
+		}
+
+		BigDecimal previous = largest;
+
+		// Factor out that value from u
+		u = MatrixCalculator.multiply(u, BigDecimal.ONE.divide(largest, 20, RoundingMode.HALF_UP));
+		PowerObject powerInfo = new PowerObject(largest, u, 0, true);
+
+		// Do one iteration
+
+		// Get Au
+		Vector au = multiply(a, u);
+
+		// Get largest in Au
+		largest = au.get(0);
+		for (int i = 1; i < au.numElements(); i++) {
+			if (au.get(i).compareTo(largest) > 0) {
+				largest = au.get(i);
+			}
+		}
+
+		// u = Au / ||largest in Au||
+		u = multiply(au, BigDecimal.ONE.divide(largest, 20, RoundingMode.HALF_UP));
+
+		// Update values in powerInfo
+		powerInfo.setEigenvalue(largest);
+		powerInfo.setEigenvector(u);
+		powerInfo.incrementIterations();
+
+		// Keep updating powerInfo and u until tolerance is fine
+		u = power_method(a, tol, u, previous, powerInfo);
 		return powerInfo;
 	}
 
@@ -360,17 +394,35 @@ public class MatrixCalculator {
 	 *		   and number of iterations for desired tolerance
 	 */
 	private static Vector power_method(Matrix a, BigDecimal tol, Vector u, BigDecimal prev, PowerObject powerInfo) {
-		// Sets u to be 1/alpha * Au
-		if ((u.get(0).abs().subtract(prev.abs())).abs().compareTo(tol) <= 0) {
+
+		BigDecimal thisPrevious = powerInfo.getEigenvalue();
+		if (thisPrevious.abs().subtract(prev.abs()).abs().compareTo(tol) <= 0) {
+			// Difference between current largest eigenvalue and previous eigenvalue is less than or equal to tolerance
+			// We are done iterating.
 			return u;
 		}
-		prev = u.get(0);
-		u = multiply(multiply(a, u), BigDecimal.ONE.divide(u.get(0), 2, RoundingMode.HALF_UP));
 
-		powerInfo.setEigenvalue(u.get(0));
+		// Tolerance not enough. need another iteration
+		Vector au = multiply(a, u);
+
+		// Get au's largest
+		BigDecimal largest = au.get(0);
+		for (int i = 1; i < au.numElements(); i++) {
+			if (au.get(i).compareTo(largest) > 0) {
+				largest = au.get(i);
+			}
+		}
+
+		// Divide au by its largest and set it to u
+		u = multiply(au, BigDecimal.ONE.divide(largest, 20, RoundingMode.HALF_UP));
+
+		// Update powerInfo
+		powerInfo.setEigenvalue(largest);
 		powerInfo.setEigenvector(u);
 		powerInfo.incrementIterations();
-		return power_method(a, tol, u, prev, powerInfo);
+
+		// Check again if tolerance is fine
+		return power_method(a, tol, u, thisPrevious, powerInfo);
 	}
 
 	/**
