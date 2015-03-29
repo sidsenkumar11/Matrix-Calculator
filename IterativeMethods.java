@@ -20,10 +20,13 @@ public class IterativeMethods {
         int difference = 1;
         Matrix aXEqualsY = new Matrix(a.rows(), a.columns() + 1);
 
-        for (int i = 0; i < aXEqualsY.rows() - 1; i++) {
-            for (int j = 0; j < aXEqualsY.columns(); j++) {
+        for (int i = 0; i < aXEqualsY.rows(); i++) {
+            for (int j = 0; j < aXEqualsY.columns() - 1; j++) {
                 aXEqualsY.set(i, j, a.get(i, j));
             }
+        }
+        for (int i = 0; i < aXEqualsY.rows(); i++) {
+            aXEqualsY.set(i, aXEqualsY.columns() - 1, y.get(i));
         }
 
         // while(!(difference < tol)) {

@@ -1,5 +1,10 @@
-import java.util.Random; 
-
+import java.util.Random;
+/**
+ * Program to create convolutional code word for
+ * binary data streams.
+ * @author Katherine Cabezas
+ * @version 1.0
+ */
 public class Encoder {
 
     private int[] x;
