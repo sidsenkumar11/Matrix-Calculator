@@ -400,6 +400,11 @@ public class MatrixCalculator {
 			// Difference between current largest eigenvalue and previous eigenvalue is less than or equal to tolerance
 			// We are done iterating.
 			return u;
+		} else if (thisPrevious.abs().divide(prev.abs(), 10, RoundingMode.HALF_UP).compareTo(BigDecimal.ONE) > 1) {
+			// The eigenvalue is not converging as each successive iteration's eigenvalue is getting larger.
+			// In our power method, the eigenvalue should be getting smaller (converging from above)
+			powerInfo.setConverges(false);
+			return u;
 		}
 
 		// Tolerance not enough. need another iteration

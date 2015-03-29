@@ -60,18 +60,20 @@ public class PowerObject {
 
 	@Override
 	public String toString() {
+		if (converges) {
+			// At most keep 20 characters worth of eigenvalue
+			String originalEigenvalueToString = approximatedEigenvalue.stripTrailingZeros().toString();
+			String desiredPortionEigenvalueToString = "";
+			for (int i = 0; i < originalEigenvalueToString.length() && i <= 20; i++) {
+				desiredPortionEigenvalueToString += originalEigenvalueToString.substring(i, i+1);
+			}
 
-		// At most keep 20 characters worth of eigenvalue
-		String originalEigenvalueToString = approximatedEigenvalue.stripTrailingZeros().toString();
-		String desiredPortionEigenvalueToString = "";
-		for (int i = 0; i < originalEigenvalueToString.length() && i <= 20; i++) {
-			desiredPortionEigenvalueToString += originalEigenvalueToString.substring(i, i+1);
+			String returnString = "";
+			returnString += "Eigenvalue:  " + desiredPortionEigenvalueToString + "\n";
+			returnString += "Eigenvector: " + approximatedEigenvector.toString() + "\n";
+			returnString += "Iterations:  " + numIterations;
+			return returnString;
 		}
-
-		String returnString = "";
-		returnString += "Eigenvalue:  " + desiredPortionEigenvalueToString + "\n";
-		returnString += "Eigenvector: " + approximatedEigenvector.toString() + "\n";
-		returnString += "Iterations:  " + numIterations;
-		return returnString;
+		return "This matrix does not converge.";
 	}
 }

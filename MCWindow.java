@@ -114,8 +114,8 @@ public class MCWindow {
 		
 		// Testing power_method
 
-		double[][] initMatrix = {{2, 2}, {2, 5}};
-		double[] guessVector = {1, 1};
+		double[][] initMatrix = {{1, 0}, {0, -1}};
+		double[] guessVector = {1000, 0};
 		Matrix matrix = new Matrix(initMatrix);
 		Vector vector = new Vector(guessVector);
 
