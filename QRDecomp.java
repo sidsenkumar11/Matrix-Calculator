@@ -13,7 +13,7 @@ public class QRDecomp {
 		int dim = matrix.rows();
 		Matrix Q = identity(dim);
 		Matrix R = matrix;
-		for (int n = 0; n < 3; n++) {
+		for (int n = 0; n < 4; n++) {
 			Matrix Hn = calculateH(R, n);
 			int diff = dim - Hn.rows();
 			if (diff != 0) {

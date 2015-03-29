@@ -71,7 +71,7 @@ public class MatrixCalculator {
 		/*
 			For two matrices to be multiplied, if
 			a is m x n, b must be n x y where y
-			is a positive integer.		
+			is a positive integer.
 		*/
 
 		if (a.columns() != b.rows()) {
@@ -96,7 +96,7 @@ public class MatrixCalculator {
 		}
 		return product;
 	}
-	
+
 	/**
 	 * Adds 2 vectors together.
 	 * @param u Vector to add
@@ -341,6 +341,7 @@ public class MatrixCalculator {
 
 		return x;
 	}
+
 	
 	/**
 	 * Computes a QR-factorization for Matrix a using HouseHolder reflections.
@@ -464,5 +465,17 @@ public class MatrixCalculator {
 	public static BigDecimal sqrt(BigDecimal value) {
     	BigDecimal x = new BigDecimal(Math.sqrt(value.doubleValue()));
     	return x.add(new BigDecimal(value.subtract(x.multiply(x)).doubleValue() / (x.doubleValue() * 2.0)));
+	}
+
+	public static BigDecimal determinant(Matrix a) {
+		BigDecimal det = BigDecimal.ZERO;
+
+		if (a.rows() == 2 && a.columns() == 2) {
+			BigDecimal crossProduct1 = a.get(0, 0).multiply(a.get(1, 1));
+			BigDecimal crossProduct2 = a.get(1, 0).multiply(a.get(0, 1));
+			det = crossProduct1.multiply(crossProduct2);
+		}
+
+		return det;
 	}
 }
