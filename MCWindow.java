@@ -90,7 +90,7 @@ public class MCWindow {
 
 		// Testing Hilbert class
 		Hilbert testOne = new Hilbert(4);
-		testOne.solveUsingLU();
+		// testOne.solveUsingLU();
 		testOne.solveUsingQR();
 
 		// Testing power method

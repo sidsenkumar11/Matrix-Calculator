@@ -10,18 +10,19 @@ import java.math.RoundingMode;
 public class QRDecomp {
 
 	public static Matrix[] qr_fact_househ(Matrix matrix) {
-		int dim = matrix.rows();
-		Matrix Q = identity(dim);
+		// Make identity matrix
+		Matrix Q = identity(matrix.rows());
 		Matrix R = matrix;
-		for (int n = 0; n < 4; n++) {
+		for (int n = 0; n < matrix.columns() - 1; n++) {
+			// Calculates H for this column
 			Matrix Hn = calculateH(R, n);
-			int diff = dim - Hn.rows();
+			int diff = matrix.rows() - Hn.rows();
 			if (diff != 0) {
-				Matrix temp = new Matrix(dim, dim);
+				Matrix temp = new Matrix(matrix.rows(), matrix.rows());
 				for (int i = 0; i < diff; i++) {
 					temp.set(i, i, BigDecimal.ONE);
 				}
-				Hn = temp.getMatrix(diff, dim - 1, diff, dim - 1);
+				Hn = temp.getMatrix(diff, matrix.rows() - 1, diff, matrix.rows() - 1);
 			}
 			Q = MatrixCalculator.multiply(Q, MatrixCalculator.transpose(Hn));
 			R = MatrixCalculator.multiply(Hn, R);
@@ -31,16 +32,28 @@ public class QRDecomp {
 		return A;
 	}
 
-	private static Matrix calculateH(Matrix matrix, int i) {
-		int n = matrix.rows();
-		Matrix x = matrix.getMatrix(i, n - 1, i, i);
-		BigDecimal xNorm = x.normF();
-		Matrix e = new Matrix(n - i, 1);
-		e.set(0, 0, BigDecimal.ONE);
-		Matrix v = MatrixCalculator.add(x, MatrixCalculator.multiply(e, xNorm));
-		Matrix u = MatrixCalculator.multiply(v, BigDecimal.ONE.divide(v.normF(), 10, RoundingMode.HALF_UP));
-		Matrix I = identity(n - i);
-		Matrix H = MatrixCalculator.subtract(I, MatrixCalculator.multiply(MatrixCalculator.multiply(u, MatrixCalculator.transpose(u)), new BigDecimal("2")));
+	private static Matrix calculateH(Matrix matrix, int rowStart) {
+		// The column of the matrix including the diagonal and below
+		// We want zeros below the diagonal
+		Vector a = matrix.getSubVector(rowStart, matrix.rows() - 1, rowStart);
+		// Get the magnitude of the subvector
+		BigDecimal magnitudeA = a.normF();
+
+		// Create vector e1
+		Vector e = new Vector(matrix.rows() - rowStart);
+		e.set(0, BigDecimal.ONE);
+
+		// V = a + e1 * ||a1|| where ||a1|| is magnitudeA
+		Vector v = MatrixCalculator.add(a, MatrixCalculator.multiply(e, magnitudeA));
+
+		// U = V normalized
+		Vector u = MatrixCalculator.multiply(v, BigDecimal.ONE.divide(v.normF(), 10, RoundingMode.HALF_UP));
+
+		// Create Identity matrix
+		Matrix I = identity(matrix.rows() - rowStart);
+
+		// H = I - 2uu^t
+		Matrix H = MatrixCalculator.subtract(I, MatrixCalculator.multiply(MatrixCalculator.multiply(u, u.transpose()), new BigDecimal("2")));
 		return H;
 	}
 

@@ -83,6 +83,20 @@ public class Vector {
 	}
 
 	/**
+	 * Returns the transpose of the given vector.
+	 * @return The transpose of the original vector
+	 */
+	public Matrix transpose() {
+		Matrix transpose = new Matrix(numElements(), 0);
+
+		for (int column = 0; column < rows(); column++) {
+			transpose.set(0, column, get(column));
+		}
+
+		return transpose;
+	}
+
+	/**
 	 *  Returns the norm of the vector as defined in the PDF
 	 * @return The largest value in the vector
 	 */
@@ -94,6 +108,19 @@ public class Vector {
 			}
 		}
 		return largest;
+	}
+
+	/**
+	 *  Returns the frobenius norm of the vector
+	 * (i.e. square root of sum of squares of elements)
+	 * @return The norm of the matrix
+	 */
+	public BigDecimal normF() {
+		BigDecimal sum = BigDecimal.ZERO;
+		for (int i = 0; i < rows(); i++) {
+			sum = sum.add(get(i).pow(2));
+		}
+		return MatrixCalculator.sqrt(sum);
 	}
 
 	private static int getNumberOfDecimalPlaces(BigDecimal bigDecimal) {

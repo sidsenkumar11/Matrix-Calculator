@@ -195,6 +195,17 @@ public class MatrixCalculator {
 	}
 
 	/**
+	 * Multiplies a vector by a matrix.
+	 * @param u The vector
+	 * @param uTranspose The matrix
+	 * @return The matrix containing the product between a vector and matrix
+	 */
+	public static Matrix multiply(Vector u, Matrix uTranspose) {
+		Matrix vector = new Matrix(u);
+		return multiply(vector, uTranspose);
+	}
+
+	/**
 	 * Calculates the dot product of two vectors.
 	 * @param one The first vector
 	 * @param two The second vector
@@ -349,23 +360,6 @@ public class MatrixCalculator {
 	 * @return the matrices for Q and R
 	 */
 	public static Matrix[] qr_fact_househ(Matrix a) {
-		/*
-		A = (H1*H2*...*Hn) * R
-		Q = H1*H2*...*Hn
-		R = (H1*H2*...*Hn) * A^-1
-		Householder reflection = I - 2uu^t
-		*/
-
-		// Matrix i;
-		// Matrix q;
-		// Matrix r;
-		
-		// for (int i = 0; i < a.length; i++) {
-		// 	Vector x = a.column(i);
-		// 	Vector v = add(x, );
-		// 	Vector u;
-		// }
-
 		return QRDecomp.qr_fact_househ(a);
 	}
 	
@@ -375,11 +369,6 @@ public class MatrixCalculator {
 	 * @return the matrices for Q and R
 	 */
 	 public static Matrix[] qr_fact_givens(Matrix a) {
-	 	/*
-		A = (G1*G2*...*Gn) * R
-		Q = G1*G2*...*Gn
-		R = (G1*G2*...*Gn) * A^-1
-		*/
 		return QRDecomp.qr_fact_givens(a);
 	 }
 

@@ -61,6 +61,18 @@ public class Matrix {
 	}
 
 	/**
+	 * Constructs a matrix with the specified
+	 * vector.
+	 * @param vector The vector to be represented as a matrix
+	 */
+	public Matrix(Vector vector) {
+		this.matrix = new BigDecimal[vector.rows()][0];
+		for (int i = 0; i < vector.rows(); i++) {
+			matrix[i][0] = vector.get(i);
+		}
+	}
+
+	/**
 	 * Retrieves an element in the matrix
 	 * @param row The row of the element
 	 * @param column The column of the element
@@ -147,7 +159,7 @@ public class Matrix {
 
 	/**
 	 *  Returns the norm of the matrix as defined in the PDF
-	 * @return The largest value in the matrix
+	 * @return The norm of the matrix
 	 */
 	public BigDecimal norm() {
 		BigDecimal largest = get(0, 0);
@@ -173,7 +185,7 @@ public class Matrix {
 				sum = sum.add(get(i, j).pow(2));
 			}
 		}
-		return sum.pow(1/2);
+		return MatrixCalculator.sqrt(sum);
 	}
 
 	public Matrix getMatrix(int rowStart, int rowEnd, int colStart, int colEnd) {
@@ -184,12 +196,23 @@ public class Matrix {
 			subColumn = 0;
 			for (int j = colStart; j <= colEnd; j++) {
 				subMatrix.set(subRow, subColumn, get(i, j));
-				subColumn++;
+				subRow++;
 			}
 			subColumn++;
 		}
 
 		return subMatrix;
+	}
+
+	public Vector getSubVector(int rowStart, int rowEnd, int column) {
+		Vector subVector = new Vector(rowEnd - rowStart);
+		int subRow = 0;
+		for (int i = rowStart; i <= rowEnd; i++) {
+			subVector.set(subRow, get(i, column));
+			subRow++;
+		}
+
+		return subVector;
 	}
 
 	public BigDecimal[][] getArray() {
