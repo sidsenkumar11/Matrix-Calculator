@@ -346,7 +346,7 @@ public class MatrixCalculator {
 		// Get largest value from u - initial eigenvalue guess
 		BigDecimal largest = u.get(0);
 		for (int i = 1; i < u.numElements(); i++) {
-			if (u.get(i).compareTo(largest) > 0) {
+			if (u.get(i).abs().compareTo(largest.abs()) > 0) {
 				largest = u.get(i);
 			}
 		}
@@ -365,7 +365,7 @@ public class MatrixCalculator {
 		// Get largest in Au
 		largest = au.get(0);
 		for (int i = 1; i < au.numElements(); i++) {
-			if (au.get(i).compareTo(largest) > 0) {
+			if (au.get(i).abs().compareTo(largest.abs()) > 0) {
 				largest = au.get(i);
 			}
 		}
@@ -413,7 +413,7 @@ public class MatrixCalculator {
 		// Get au's largest
 		BigDecimal largest = au.get(0);
 		for (int i = 1; i < au.numElements(); i++) {
-			if (au.get(i).compareTo(largest) > 0) {
+			if (au.get(i).abs().compareTo(largest.abs()) > 0) {
 				largest = au.get(i);
 			}
 		}
