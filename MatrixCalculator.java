@@ -8,6 +8,8 @@ import java.math.RoundingMode;
  */
 public class MatrixCalculator {
 
+	public static final int MAX_ITERATIONS = 100;
+
 	/**
 	 * Adds two matrices' values together
 	 * @param a The first matrix
@@ -357,7 +359,7 @@ public class MatrixCalculator {
 		u = MatrixCalculator.multiply(u, BigDecimal.ONE.divide(largest, 20, RoundingMode.HALF_UP));
 		PowerObject powerInfo = new PowerObject(largest, u, 0, true);
 
-		// Do one iteration
+		// Do one iteration - necessary for recursive method to do check on previous eigenvalue
 
 		// Get Au
 		Vector au = multiply(a, u);
@@ -394,6 +396,13 @@ public class MatrixCalculator {
 	 *		   and number of iterations for desired tolerance
 	 */
 	private static Vector power_method(Matrix a, BigDecimal tol, Vector u, BigDecimal prev, PowerObject powerInfo) {
+
+		if (powerInfo.getIterations() >= MAX_ITERATIONS) {
+			// If after MAX_ITERATIONS iterations, the error has not been reduced to tol or less,
+			// this matrix does not converge.
+			powerInfo.setConverges(false);
+			return u;
+		}
 
 		BigDecimal thisPrevious = powerInfo.getEigenvalue();
 		if (thisPrevious.abs().subtract(prev.abs()).abs().compareTo(tol) <= 0) {
