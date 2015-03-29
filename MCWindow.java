@@ -89,9 +89,9 @@ public class MCWindow {
 		// System.out.println((MatrixCalculator.solve_qr_b(q, r, bb)));
 
 		// Testing Hilbert class
-		Hilbert testOne = new Hilbert(4);
-		testOne.solveUsingLU();
-		testOne.solveUsingQR();
+		// Hilbert testOne = new Hilbert(4);
+		// testOne.solveUsingLU();
+		// testOne.solveUsingQR();
 
 		// Testing power method
 		// double[][] matrix = {{2, 7}, {-1, -6}};
@@ -105,8 +105,13 @@ public class MCWindow {
 		// Testing QR factorization of A
 		// double[][] matrixQR = {{1, 0, 1}, {0, 1, 1}, {1, 1, 0}};
 		// Matrix matrix = new Matrix(matrixQR);
-		// System.out.println(QRDecomp.qr_fact_househ(matrix)[0]);
-		// System.out.println(QRDecomp.qr_fact_househ(matrix)[1]);
+		// System.out.println(Factorizations.qr_fact_househ(matrix)[0]);
+		// System.out.println(Factorizations.qr_fact_househ(matrix)[1]);
+
+		// Testing Leslie class
+
+		Leslie leslie = new Leslie();
+		
 	}
 
 }

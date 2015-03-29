@@ -244,7 +244,7 @@ public class MatrixCalculator {
 	public static Matrix[] qr_fact_househ(Matrix a) {
 		return Factorizations.qr_fact_househ(a);
 	}
-	
+
 	/**
 	 * Computes a QR-factorization for Matrix a using Givens rotations.
 	 * @param a Matrix to factor
@@ -341,12 +341,12 @@ public class MatrixCalculator {
 	 * @return The approximated eigenvalue, eigenvector,
 	 *		   and number of iterations for desired tolerance
 	 */
-	public static Vector power_method(Matrix a, BigDecimal tol, Vector u) {
+	public static PowerObject power_method(Matrix a, BigDecimal tol, Vector u) {
 		BigDecimal firstPrevious = u.get(0);
-
-		u = multiply(multiply(a, u), BigDecimal.ONE.divide(u.get(0), 2, RoundingMode.HALF_UP));
-		u = power_method(a, tol, u, firstPrevious);
-		return u;
+		PowerObject powerInfo = new PowerObject(firstPrevious, u, 0, true);
+		u = multiply(multiply(a, u), BigDecimal.ONE.divide(u.get(0), 10, RoundingMode.HALF_UP));
+		u = power_method(a, tol, u, firstPrevious, powerInfo);
+		return powerInfo;
 	}
 
 	/**
@@ -355,17 +355,22 @@ public class MatrixCalculator {
 	 * @param tol The error tolerance
 	 * @param u An initial approximation vector
 	 * @param prev The previous eigenvalue
+	 * @param powerInfo The PowerObject containing return data
 	 * @return The approximated eigenvalue, eigenvector,
 	 *		   and number of iterations for desired tolerance
 	 */
-	private static Vector power_method(Matrix a, BigDecimal tol, Vector u, BigDecimal prev) {
+	private static Vector power_method(Matrix a, BigDecimal tol, Vector u, BigDecimal prev, PowerObject powerInfo) {
 		// Sets u to be 1/alpha * Au
 		if ((u.get(0).abs().subtract(prev.abs())).abs().compareTo(tol) <= 0) {
 			return u;
 		}
 		prev = u.get(0);
 		u = multiply(multiply(a, u), BigDecimal.ONE.divide(u.get(0), 2, RoundingMode.HALF_UP));
-		return power_method(a, tol, u, prev);
+
+		powerInfo.setEigenvalue(u.get(0));
+		powerInfo.setEigenvector(u);
+		powerInfo.incrementIterations();
+		return power_method(a, tol, u, prev, powerInfo);
 	}
 
 	/**
