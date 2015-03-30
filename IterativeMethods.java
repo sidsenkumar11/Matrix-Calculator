@@ -18,21 +18,21 @@ public class IterativeMethods {
      */
     public static int jacobi(Matrix a, Vector y, Vector x, double tol) {
         int iterations = 0;
-        int difference = tol + 1;
-        ArrayList<Vector> xVectors;
+        double difference = tol + 1;
+        ArrayList<Vector> xVectors = new ArrayList<Vector>();
+        Vector xVector;
 
         /*
-        x.i = (1/a.ii)(y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
+        xVector.i = (1/a.ii)(y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
         Steps:
         1) iterate through y and add each element to new xVector
-           x.i = y.i
+           xVector.i = y.i
         2) iterate through each element in a
-           x.i = y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
-           x.i = (1/a.ii) * x.i
+           xVector.i = y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
+           xVector.i = (1/a.ii) * x.i
+        3) add xVector to ArrayList of xVectors
+        4)
         */
-
-        int index = 0;
-        Vector xVector;
 
         while(!(difference < tol)) {
             xVector = new Vector(y.rows());
@@ -48,6 +48,12 @@ public class IterativeMethods {
                     }
                     sum.add(a.get(i, j).multiply(x.get(i)));
                 }
+                sum.multiply(BigDecimal.ONE.divide(a.get(i, i)));
+                xVector.set(i, sum);
+                x.set(i, sum);
+                xVectors.add(xVector);
+            }
+            if (xVectors.size() > 1) {
             }
         }
 
