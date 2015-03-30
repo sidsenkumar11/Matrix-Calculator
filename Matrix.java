@@ -423,8 +423,9 @@ public class Matrix {
 		}
 
 		int totalSpace = largestNumWholeNumbers + 1 + largestRelevantRightDecimal;
+
 		String formatString = "%" + totalSpace + "s";
-		
+
 		String returnString = "";
 		for (BigDecimal[] x : matrix) {
 			returnString += "|";
