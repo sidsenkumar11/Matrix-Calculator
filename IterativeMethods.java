@@ -16,11 +16,13 @@ public class IterativeMethods {
      * @param tol Error tolerance number
      * @return number of iterations required to reach tolerance
      */
-    public static int jacobi(Matrix a, Vector y, Vector x, double tol) {
+    public static int jacobi(Matrix a, Vector y, Vector x, BigDecimal tol) {
         int iterations = 0;
-        double difference = tol + 1;
+        BigDecimal difference = tol.add(BigDecimal.ONE);
         ArrayList<Vector> xVectors = new ArrayList<Vector>();
         Vector xVector;
+        int oldIndex = 0;
+        int newIndex = 1;
 
         /*
         xVector.i = (1/a.ii)(y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
@@ -34,11 +36,12 @@ public class IterativeMethods {
         4)
         */
 
-        while(!(difference < tol)) {
+        while(!(difference.compareTo(tol) < 0)) {
             xVector = new Vector(y.rows());
             for (int i = 0; i < y.rows(); i++) {
                 xVector.set(i, y.get(i));
             }
+
             BigDecimal sum;
             for (int i = 0; i < a.rows(); i++) {
                 sum = xVector.get(i);
@@ -49,12 +52,20 @@ public class IterativeMethods {
                     sum.add(a.get(i, j).multiply(x.get(i)));
                 }
                 sum.multiply(BigDecimal.ONE.divide(a.get(i, i)));
+
                 xVector.set(i, sum);
                 x.set(i, sum);
                 xVectors.add(xVector);
             }
+
             if (xVectors.size() > 1) {
+                difference = xVectors.get(oldIndex).get(0).subtract(xVectors.get(newIndex).get(0));
+                difference = difference.abs();
             }
+
+            iterations++;
+            oldIndex++;
+            newIndex++;
         }
 
         return iterations;
