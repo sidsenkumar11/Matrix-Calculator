@@ -55,8 +55,10 @@ public class IterativeMethods {
                 sum.multiply(BigDecimal.ONE.divide(a.get(i, i)));
 
                 xVector.set(i, sum);
-                x.set(i, sum);
                 xVectors.add(xVector);
+            }
+            for (int i = 0; i < x.rows(); i++) {
+                x.set(i, xVector.get(i));
             }
 
             if (xVectors.size() > 1) {
@@ -80,13 +82,27 @@ public class IterativeMethods {
      * @param tol Error tolerance number
      * @return number of iterations required to reach tolerance
      */
-    public static int gauss_seidel(Matrix a, Vector y, Vector x, double tol) {
+    public static int gauss_seidel(Matrix a, Vector y, Vector x, BigDecimal tol) {
         int iterations = 0;
         BigDecimal difference = tol.add(BigDecimal.ONE);
         ArrayList<Vector> xVectors = new ArrayList<Vector>();
         Vector xVector;
         int oldIndex = 0;
         int newIndex = 1;
+
+        /*
+        xVector.i = (1/a.ii)(y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
+        Steps:
+        1) iterate through y and add each element to new xVector
+           xVector.i = y.i
+        2) iterate through each element in A. Each time you iterate,
+           use the new found x.i from the last iteration.
+           xVector.i = y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
+           xVector.i = (1/a.ii) * x.i
+        3) add xVector to ArrayList of xVectors
+        4) see if xVector.get(i + 1) - xVector.get(i) is less than tol
+           **if not, do it again
+        */
 
         //still need to change this from being for jacobi to gauss-seidel
         while(!(difference.compareTo(tol) < 0)) {
@@ -122,6 +138,11 @@ public class IterativeMethods {
         }
 
         return iterations;
+    }
+
+    //for testing purposes
+    public static void main(String[] args) {
+
     }
 
 }
