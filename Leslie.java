@@ -38,6 +38,14 @@ public class Leslie {
 	 * Applies the power method
 	 */
 	public void passOneIteration() {
+		this.population = MatrixCalculator.multiply(a, population);
+	}
 
+	public Matrix getLeslieMatrix() {
+		return a;
+	}
+
+	public Vector getPopulationVector() {
+		return population;
 	}
 }
