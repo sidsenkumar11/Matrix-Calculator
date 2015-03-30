@@ -142,6 +142,7 @@ public class MCWindow {
 		System.out.println("(1) View current population vector");
 		System.out.println("(2) View Leslie Matrix");
 		System.out.println("(3) Pass one iteration and view population vector");
+		System.out.println("(4) Use power method to find dominant eigenvalue");
 		System.out.println("--------------------------------------------------------------------------------");
 		String input = "";
 		int n = -1;
@@ -150,13 +151,13 @@ public class MCWindow {
 			input = scan.next();
 			try {
 				n = Integer.parseInt(input);
-				while (n < 0 || n > 3) {
-					System.out.println("Please enter a valid integer greater than or equal to 0 and less than four.");
+				while (n < 0 || n > 4) {
+					System.out.println("Please enter a valid integer greater than or equal to 0 and less than five.");
 					n = -1;
 					break;
 				}
 			} catch (Exception e) {
-				System.out.println("Please enter a valid integer greater than or equal to 0 and less than four.");
+				System.out.println("Please enter a valid integer greater than or equal to 0 and less than five.");
 			}
 		}
 		System.out.println("--------------------------------------------------------------------------------");
@@ -180,6 +181,10 @@ public class MCWindow {
 					System.out.println(leslie.getLeslieMatrix());
 				} else if (n == 1) {
 					System.out.println(leslie.getPopulationVector());
+				} else if (n == 4) {
+					System.out.print("The dominant eigenvalue is: ");
+					PowerObject power = leslie.getDominantEigenvalue();
+					System.out.println(power);
 				}
 			}
 		}

@@ -76,7 +76,7 @@ public class Factorizations {
 	 * done using HouseHolder reflections.
 	 * Assumes the matrix is factorable.
 	 * @param matrix The matrix to factor
-	 * @return A matrix array, where Q = array[0] and R = array[1]
+	 * @return matrix array, where Q = array[0] and R = array[1]
 	 */
 	public static Matrix[] qr_fact_househ(Matrix matrix) {
 		// Make identity matrix

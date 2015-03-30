@@ -48,4 +48,8 @@ public class Leslie {
 	public Vector getPopulationVector() {
 		return population;
 	}
+
+	public PowerObject getDominantEigenvalue() {
+		return MatrixCalculator.power_method(a, new BigDecimal(".00000001"), population);
+	}
 }
