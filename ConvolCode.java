@@ -10,19 +10,37 @@ public class ConvolCode {
     private int[] x;
     private Matrix matrixA0;
     private Matrix matrixA1;
+    private Vector yZero;
+    private Vector yOne;
 
     /**
-     * Constructor for Encoder.
+     * Constructor for Encoder. Randomly generates
+     * binary stream x.
+     * @param length Desired length for binary stream x
      */
     public ConvolCode(int length) {
         matrixA0 = new Matrix(length, 3);
         matrixA1 = new Matrix(length, 3);
+        yZero = new Vector(length);
+        yOne = new Vector(length);
         x = new int[length];
         Random randNumList = new Random();
 
         for (int i = 0; i < length; i++) {
             x[i] = randNumList.nextInt(2);
         }
+    }
+
+    /**
+     * Constructor for Encoder.
+     * @param stream Assigns this array of integers to x
+     */
+    public ConvolCode(int[] stream) {
+        matrixA0 = new Matrix(stream.length, 3);
+        matrixA1 = new Matrix(stream.length, 3);
+        yZero = new Vector(stream.length);
+        yOne = new Vector(stream.length);
+        x = stream;
     }
 
     /**
@@ -35,60 +53,66 @@ public class ConvolCode {
 
     /**
      * Calculates the ouput stream y0.
-     * @param stream Binary data stream to use for calculations
      * @return output stream y0
      */
-    public int[] calculateY0(int[] stream) {
-        int[] y0 = new int[stream.length];
+    public void calculateY0() {
+        int[] y0 = new int[x.length];
         for (int i = 0; i < y0.length; i++) {
             if ((i - 2) < 0) {
-                y0[i] = stream[i];
-                matrixA0.set(i, 0, stream[i]);
+                y0[i] = x[i];
+                matrixA0.set(i, 0, x[i]);
                 matrixA0.set(i, 1, 0);
                 matrixA0.set(i, 2, 0);
             } else if ((i - 3) < 0) {
-                y0[i] = stream[i] + stream[i - 2];
-                matrixA0.set(i, 0, stream[i]);
-                matrixA0.set(i, 1, stream[i - 2]);
+                y0[i] = x[i] + x[i - 2];
+                matrixA0.set(i, 0, x[i]);
+                matrixA0.set(i, 1, x[i - 2]);
                 matrixA0.set(i, 2, 0);
             } else {
-                y0[i] = stream[i] + stream[i - 2] + stream[i - 3];
-                matrixA0.set(i, 0, stream[i]);
-                matrixA0.set(i, 1, stream[i - 2]);
-                matrixA0.set(i, 2, stream[i - 3]);
+                y0[i] = x[i] + x[i - 2] + x[i - 3];
+                matrixA0.set(i, 0, x[i]);
+                matrixA0.set(i, 1, x[i - 2]);
+                matrixA0.set(i, 2, x[i - 3]);
             }
             y0[i] = y0[i] % 2;
         }
-        return y0;
+        yZero = new Vector(y0);
     }
 
     /**
      * Calculates the output stream y1.
-     * @param stream Binary data stream to use for calculations
      * @return output stream y1
      */
-    public int[] calculateY1(int[] stream) {
-        int[] y1 = new int[stream.length];
+    public void calculateY1() {
+        int[] y1 = new int[x.length];
         for (int i = 0; i < y1.length; i++) {
             if ((i - 1) < 0) {
-                y1[i] = stream[i];
-                matrixA1.set(i, 0, stream[i]);
+                y1[i] = x[i];
+                matrixA1.set(i, 0, x[i]);
                 matrixA1.set(i, 1, 0);
                 matrixA1.set(i, 2, 0);
             } else if ((i - 3) < 0) {
-                y1[i] = stream[i] + stream[i - 1];
-                matrixA1.set(i, 0, stream[i]);
-                matrixA1.set(i, 1, stream[i - 1]);
+                y1[i] = x[i] + x[i - 1];
+                matrixA1.set(i, 0, x[i]);
+                matrixA1.set(i, 1, x[i - 1]);
                 matrixA1.set(i, 2, 0);
             } else {
-                y1[i] = stream[i] + stream[i - 1] + stream[i - 3];
-                matrixA1.set(i, 0, stream[i]);
-                matrixA1.set(i, 1, stream[i - 1]);
-                matrixA1.set(i, 2, stream[i - 3]);
+                y1[i] = x[i] + x[i - 1] + x[i - 3];
+                matrixA1.set(i, 0, x[i]);
+                matrixA1.set(i, 1, x[i - 1]);
+                matrixA1.set(i, 2, x[i - 3]);
             }
             y1[i] = y1[i] % 2;
         }
-        return y1;
+        yOne = new Vector(y1);
+    }
+
+    public Vector getY0() {
+        return yZero;
+    }
+
+    public Vector getY1() {
+        return yOne;
     }
 
     public Matrix getMatrixA0() {
@@ -104,12 +128,12 @@ public class ConvolCode {
      * @param stream Binary data stream
      * @return convolutional code word y
      */
-    public String[] encode(int[] stream) {
-        int[] y0 = calculateY0(stream);
-        int[] y1 = calculateY1(stream);
-        String[] y = new String[stream.length];
+    public String[] encode() {
+        int[] y0 = calculateY0();
+        int[] y1 = calculateY1();
+        String[] y = new String[x.length];
 
-        for (int i = 0; i < stream.length; i++) {
+        for (int i = 0; i < x.length; i++) {
             if (y0[i] == 1 && y1[i] == 1) {
                 y[i] = "11";
             } else if (y0[i] == 0 && y1[i] == 1) {
@@ -126,34 +150,17 @@ public class ConvolCode {
 
     //for testing purposes
     public static void main(String[] args) {
-        ConvolCode coder = new ConvolCode(8);
-        int[] stream = coder.getX();
+        int[] stream = { 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0 };
+        ConvolCode coder = new ConvolCode(stream);
+        String[] y = coder.encode();
 
-        for (int i : stream) {
-            System.out.print(i+ " ");
-        }
-
-        System.out.println();
-
-        int[] y0 = coder.calculateY0(stream);
-        for (int i: y0) {
-            System.out.print(i + " ");
-        }
-
-        System.out.println();
-
-        int[] y1 = coder.calculateY1(stream);
-        for (int i: y1) {
-            System.out.print(i + " ");
-        }
-
-        System.out.println();
-
-        String[] y = coder.encode(stream);
-        for (String s: y) {
+        System.out.println("Convolutional code word: ");
+        for (String s : y) {
             System.out.print(s + " ");
         }
-
         System.out.println();
+
+        Vector x_guess = new Vector({0, 0, 0})
+        Vector x = jacobi.jacobi(coder.getMatrixA0(), coder.getY0(), x_guess)
     }
 }
