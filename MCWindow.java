@@ -247,6 +247,7 @@ public class MCWindow {
 		System.out.println("(3) Pass one iteration and view population vector");
 		System.out.println("(4) Use power method to find dominant eigenvalue");
 		System.out.println("(5) Input Leslie Matrix and initial population vector");
+		System.out.println("(6) Get next 5 generations, total populations, and % change");
 		System.out.println("--------------------------------------------------------------------------------");
 		String input = "";
 		int n = -1;
@@ -255,16 +256,16 @@ public class MCWindow {
 			input = scan.next();
 			try {
 				n = Integer.parseInt(input);
-				while (n < 0 || n > 5) {
+				while (n < 0 || n > 6) {
 					System.out.println("--------------------------------------------------------------------------------");
-					System.out.println("Please enter a valid integer greater than or equal to 0 and less than six.");
+					System.out.println("Please enter a valid integer greater than or equal to 0 and less than seven.");
 					System.out.println("--------------------------------------------------------------------------------");
 					n = -1;
 					break;
 				}
 			} catch (Exception e) {
 				System.out.println("--------------------------------------------------------------------------------");
-				System.out.println("Please enter a valid integer greater than or equal to 0 and less than six.");
+				System.out.println("Please enter a valid integer greater than or equal to 0 and less than seven.");
 				System.out.println("--------------------------------------------------------------------------------");
 			}
 		}
@@ -335,14 +336,17 @@ public class MCWindow {
 				if (n == 3) {
 					System.out.print("Before iteration: ");
 					System.out.println(leslie.getPopulationVector());
+					System.out.println("Total population: " + leslie.getTotalPopulation());
 					leslie.passOneIteration();
 					System.out.print("After iteration: ");
 					System.out.println(leslie.getPopulationVector());
+					System.out.println("Total population: " + leslie.getTotalPopulation());
 				} else if (n == 2) {
 					System.out.println("Leslie Matrix");
 					System.out.println(leslie.getLeslieMatrix());
 				} else if (n == 1) {
 					System.out.println(leslie.getPopulationVector());
+					System.out.println("Total population: " + leslie.getTotalPopulation());
 				} else if (n == 4) {
 					PowerObject power = leslie.getDominantEigenvalue();
 					System.out.println(power);
@@ -353,6 +357,8 @@ public class MCWindow {
 					System.out.println(leslie.getLeslieMatrix());
 					System.out.println("Population Vector");
 					System.out.println(leslie.getPopulationVector());
+				} else if (n == 6) {
+					leslie.runFive();
 				}
 			}
 		}
