@@ -196,6 +196,13 @@ public class Vector {
 
 		int index = 0;
 
+		String remainder = "";
+		if (string.indexOf('E') != -1) {
+			// String is in scientific notation
+			remainder = string.substring(string.indexOf('E'));
+			numSpaces -= remainder.length();
+		}
+
 		while (index < numSpaces) {
 			if (index >= string.length()) {
 				index = numSpaces;
@@ -214,7 +221,7 @@ public class Vector {
 			}
 			relevantPortion = relevantPortion.substring(0, relevantPortion.length() - 1) + "" + lastDigit;
 		}
-		return relevantPortion;
+		return relevantPortion + remainder;
 	}
 
 	public String toString() {

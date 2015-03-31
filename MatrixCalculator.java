@@ -1,9 +1,117 @@
 /**
  * Calculates various operations on matrices and vectors
+ *
  * @author Siddarth Senthilkumar
  * @version 2.0
  */
 public class MatrixCalculator {
+
+	/**
+	 * ---------------------------------------------------------------------------
+	 * FACTORIZATIONS FOR PART 1:
+	 * 		LU_FACT
+	 *		QR_FACT_HOUSH
+	 *		QR_FACT_GIVENS
+	 * ---------------------------------------------------------------------------
+	 */
+
+	/**
+	 * Computes the LU factorization of a square matrix
+	 * Algorithm learned from http://rosettacode.org/wiki/LU_decomposition
+	 * @param matrix The nxn matrix to be factored
+	 * @return The matrices and error
+	 */
+	public static Matrix[] lu_fact(Matrix a) {
+		return Factorizations.lu_fact(a);
+	}
+	
+	/**
+	 * Computes a QR-factorization for Matrix a using HouseHolder reflections.
+	 * @param a Matrix to factor
+	 * @return the matrices for Q and R
+	 */
+	public static Matrix[] qr_fact_househ(Matrix a) {
+		return Factorizations.qr_fact_househ(a);
+	}
+
+	/**
+	 * Computes a QR-factorization for Matrix a using Givens rotations.
+	 * @param a Matrix to factor
+	 * @return the matrices for Q and R
+	 */
+	 public static Matrix[] qr_fact_givens(Matrix a) {
+		return Factorizations.qr_fact_givens(a);
+	 }
+
+	/**
+	 * ------------------------------------------------------
+	 * SOLVING A MATRIX SYSTEM GIVEN A VECTOR B USING:
+	 * 		LU FACTORIZATION
+	 *		QR FACTORIZATION
+	 * ------------------------------------------------------
+	 */
+
+	/**
+	 * Uses LU factored matrix to solve for vector x.
+	 * Assumes there is a solution.
+	 * @param l The lower triangular matrix
+	 * @param u The upper triangular matrix
+	 * @param b The vector b in Ax = b
+	 * @return The solution vector
+	 */
+	public static Vector solve_lu_b(Matrix l, Matrix u, Vector b) {
+		return Factorizations.solve_lu_b(l, u, b);
+	}
+
+	/**
+	 * Uses QR factored matrix to solve for vector x.
+	 * Assumes there is a solution.
+	 * @param q The orthogonal matrix
+	 * @param r The upper triangular matrix
+	 * @param b The vector b in Ax = b
+	 * @return The solution vector
+	 */
+	public static Vector solve_qr_b(Matrix q, Matrix r, Vector b) {
+		return Factorizations.solve_qr_b(q, r, b);
+	}
+
+	/**
+	 * ------------------------------------------------------------
+	 * POWER METHOD USED FOR PART 3 OF PROJECT - LESLIE MATRIX
+	 * ------------------------------------------------------------
+	 */
+
+	/**
+	 * Implements power method to find approximation
+	 * of largest eigenvalue and corresponding eigenvector
+	 * @param a The nxn matrix
+	 * @param tol The error tolerance
+	 * @param u An initial approximation vector
+	 * @return The approximated eigenvalue, eigenvector,
+	 *		   and number of iterations for desired tolerance
+	 */
+	public static PowerObject power_method(Matrix a, double tol, Vector u) {
+		return PowerObject.power_method(a, tol, u);
+	}
+
+	/**
+	 * -----------------------------------------------------------------
+	 * MISCELLANEOUS OPERATIONS:
+	 *		add(Matrix, Matrix)
+	 *		subtract(Matrix, Matrix)
+	 *		multiply(Matrix, Matrix)
+	 *		multiply(Matrix, scalar)
+	 *
+	 *		add(Vector, Vector)
+	 *		subtract(Vector, Vector)
+	 *		multiply(Vector, scalar)
+	 *		dotProduct(Vector, Vector)
+	 *
+	 *		multiply(Matrix, Vector)
+	 *		multiply(Vector, Matrix)
+	 *
+	 * -----------------------------------------------------------------
+	 */
 
 	/**
 	 * Adds two matrices' values together
@@ -213,158 +321,4 @@ public class MatrixCalculator {
 		}
 		return sum;
 	}
-
-	/**
-	 * ---------------------------------------------------------------------------
-	 * FACTORIZATIONS:
-	 * 		LU_FACT
-	 *		QR_FACT_HOUSH
-	 *		QR_FACT_GIVENS
-	 * ---------------------------------------------------------------------------
-	 */
-
-	/**
-	 * Computes the LU factorization of a square matrix
-	 * Algorithm learned from http://rosettacode.org/wiki/LU_decomposition
-	 * @param matrix The nxn matrix to be factored
-	 * @return The matrices and error
-	 */
-	public static Matrix[] lu_fact(Matrix a) {
-		return Factorizations.lu_fact(a);
-	}
-	
-	/**
-	 * Computes a QR-factorization for Matrix a using HouseHolder reflections.
-	 * @param a Matrix to factor
-	 * @return the matrices for Q and R
-	 */
-	public static Matrix[] qr_fact_househ(Matrix a) {
-		return Factorizations.qr_fact_househ(a);
-	}
-
-	/**
-	 * Computes a QR-factorization for Matrix a using Givens rotations.
-	 * @param a Matrix to factor
-	 * @return the matrices for Q and R
-	 */
-	 public static Matrix[] qr_fact_givens(Matrix a) {
-		return Factorizations.qr_fact_givens(a);
-	 }
-
-	/**
-	 * ------------------------------------------------------
-	 * SOLVING A MATRIX SYSTEM GIVEN A VECTOR B USING:
-	 * 		LU FACTORIZATION
-	 *		QR FACTORIZATION
-	 * ------------------------------------------------------
-	 */
-
-	/**
-	 * Uses LU factored matrix to solve for vector x.
-	 * Assumes there is a solution.
-	 * @param l The lower triangular matrix
-	 * @param u The upper triangular matrix
-	 * @param b The vector b in Ax = b
-	 * @return The solution vector
-	 */
-	public static Vector solve_lu_b(Matrix l, Matrix u, Vector b) {
-		return Factorizations.solve_lu_b(l, u, b);
-	}
-
-	/**
-	 * Uses QR factored matrix to solve for vector x.
-	 * Assumes there is a solution.
-	 * @param q The orthogonal matrix
-	 * @param r The upper triangular matrix
-	 * @param b The vector b in Ax = b
-	 * @return The solution vector
-	 */
-	public static Vector solve_qr_b(Matrix q, Matrix r, Vector b) {
-		return Factorizations.solve_qr_b(q, r, b);
-	}
-
-	/**
-	 * ------------------------------------------------------------
-	 * POWER METHOD USED FOR PART 3 OF PROJECT - LESLIE MATRIX
-	 * ------------------------------------------------------------
-	 */
-
-	/**
-	 * Implements power method to find approximation
-	 * of largest eigenvalue and corresponding eigenvector
-	 * @param a The nxn matrix
-	 * @param tol The error tolerance
-	 * @param u An initial approximation vector
-	 * @return The approximated eigenvalue, eigenvector,
-	 *		   and number of iterations for desired tolerance
-	 */
-	public static PowerObject power_method(Matrix a, double tol, Vector u) {
-		return PowerObject.power_method(a, tol, u);
-	}
-
-	/**
-	 * -----------------------------------------------------------------
-	 * MISCELLANEOUS OPERATIONS:
-	 *		SQRT - CALCULATES THE SQUARE ROOT OF A BIGDECIMAL
-	 *
-	 * -----------------------------------------------------------------
-	 */
-
-	// /**
-	//  * Calculates the square root of a double to precision 32 bits.
-	//  * @param value The square root to be calculated
-	//  * @return The double containing the square root
-	//  */
-	// public static double sqrt(double value) {
- //    	double x = new double(Math.sqrt(value.doubleValue()));
- //    	return x.add(new double(value.subtract(x.multiply(x)).doubleValue() / (x.doubleValue() * 2.0)));
-	// }
-
-	// /**
-	//  * Rounds the given string to the desired number of digits for display,
-	//  * then returns string with scientific notation of number.
-	//  * Takes in a number less than 1 in magnitude
-	//  * @param number The number to be rounded
-	//  * @param numDigits The desired visible number of digits
-	//  * @return The rounded scientific notation double
-	//  */
-	// public static String sciNotLess(double original) {
-	// 	if (original.equals(double.ZERO)) {
-	// 		return (double.ZERO).toString();
-	// 	}
-	// 	int numTimesMoved = 0;
-	// 	String string = original.stripTrailingZeros().toPlainString();
-	// 	int index = string.indexOf('.') + 1;
-	// 	while (string.charAt(index) == '0') {
-	// 		index++;
-	// 		numTimesMoved++;
-	// 	}
-
-	// 	String scientific = "";
-	// 	if (original.compareTo(double.ZERO) < 0) {
-	// 		scientific += "-";
-	// 	}
-	// 	// Index points to the first nonzero character
-	// 	scientific += string.substring(index, index + 1);
-	// 	index++;
-	// 	if (index < string.length()) {
-	// 		scientific += ".";
-	// 		int nextDigit = 0;
-	// 		if (index + 1 < string.length()) {
-	// 			nextDigit = Integer.parseInt(string.substring(index + 1, index + 2));
-	// 		}
-	// 		int thisDigit = Integer.parseInt(string.substring(index, index + 1));
-	// 		if (nextDigit >= 5) {
-	// 			thisDigit++;
-	// 		}
-	// 		scientific += thisDigit;
-	// 	}
-
-	// 	scientific += "E-" + (numTimesMoved + 1);
-	// 	return scientific;
-	// }
-
-	// public static void main(String[] args) {
-	// 	System.out.println(sciNotLess(new double("-.000000000001551456452")));
-	// }
 }
