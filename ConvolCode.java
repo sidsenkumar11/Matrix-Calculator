@@ -7,7 +7,7 @@ import java.util.Random;
  */
 public class ConvolCode {
 
-    private int[] x;
+    private double[] x;
     private Matrix matrixA0;
     private Matrix matrixA1;
     private Vector yZero;
@@ -23,7 +23,7 @@ public class ConvolCode {
         matrixA1 = new Matrix(length, 3);
         yZero = new Vector(length);
         yOne = new Vector(length);
-        x = new int[length];
+        x = new double[length];
         Random randNumList = new Random();
 
         for (int i = 0; i < length; i++) {
@@ -35,9 +35,9 @@ public class ConvolCode {
      * Constructor for Encoder.
      * @param stream Assigns this array of integers to x
      */
-    public ConvolCode(int[] stream) {
-        matrixA0 = new Matrix(stream.length, 3);
-        matrixA1 = new Matrix(stream.length, 3);
+    public ConvolCode(double[] stream) {
+        matrixA0 = new Matrix(3, 3);
+        matrixA1 = new Matrix(3, 3);
         yZero = new Vector(stream.length);
         yOne = new Vector(stream.length);
         x = stream;
@@ -47,7 +47,7 @@ public class ConvolCode {
      * Returns x binary data stream.
      * @return x
      */
-    public int[] getX() {
+    public double[] getX() {
         return x;
     }
 
@@ -55,8 +55,8 @@ public class ConvolCode {
      * Calculates the ouput stream y0.
      * @return output stream y0
      */
-    public void calculateY0() {
-        int[] y0 = new int[x.length];
+    public double[] calculateY0() {
+        double[] y0 = new double[x.length];
         for (int i = 0; i < y0.length; i++) {
             if ((i - 2) < 0) {
                 y0[i] = x[i];
@@ -77,14 +77,15 @@ public class ConvolCode {
             y0[i] = y0[i] % 2;
         }
         yZero = new Vector(y0);
+        return y0;
     }
 
     /**
      * Calculates the output stream y1.
      * @return output stream y1
      */
-    public void calculateY1() {
-        int[] y1 = new int[x.length];
+    public double[] calculateY1() {
+        double[] y1 = new double[x.length];
         for (int i = 0; i < y1.length; i++) {
             if ((i - 1) < 0) {
                 y1[i] = x[i];
@@ -105,6 +106,7 @@ public class ConvolCode {
             y1[i] = y1[i] % 2;
         }
         yOne = new Vector(y1);
+        return y1;
     }
 
     public Vector getY0() {
@@ -129,8 +131,8 @@ public class ConvolCode {
      * @return convolutional code word y
      */
     public String[] encode() {
-        int[] y0 = calculateY0();
-        int[] y1 = calculateY1();
+        double[] y0 = calculateY0();
+        double[] y1 = calculateY1();
         String[] y = new String[x.length];
 
         for (int i = 0; i < x.length; i++) {
@@ -150,7 +152,7 @@ public class ConvolCode {
 
     //for testing purposes
     public static void main(String[] args) {
-        int[] stream = { 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0 };
+        double[] stream = { 1, 0, 1 };
         ConvolCode coder = new ConvolCode(stream);
         String[] y = coder.encode();
 
@@ -160,7 +162,12 @@ public class ConvolCode {
         }
         System.out.println();
 
-        Vector x_guess = new Vector({0, 0, 0})
-        Vector x = jacobi.jacobi(coder.getMatrixA0(), coder.getY0(), x_guess)
+        double[] x = {0, 0, 0};
+        Vector x_guess = new Vector(x);
+        double tol = Math.pow(10, -8);
+        System.out.println(coder.getMatrixA0());
+        System.out.println(coder.getY0());
+        Vector x_final = jacobi.jacobi(coder.getMatrixA0(), coder.getY0(), x_guess, tol);
+        System.out.println(x_final);
     }
 }

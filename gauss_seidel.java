@@ -5,13 +5,8 @@
  * @version 2.0
  */
 public class gauss_seidel {
-
-    private static final int MAX_ITER = 100;
-    private static int iterations = 0;
-
     /**
-     * Method for Gauss-Seidel iteration. Returns x vector reached
-     * after the statement ( || x.n - x.n-1 || < tolerance ) is true.
+     * Method for Gauss-Seidel iteration.
      * @param a Matrix n x n
      * @param y Vector n x 1
      * @param x Initial guess vector
@@ -19,7 +14,8 @@ public class gauss_seidel {
      * @return x vector approximation
      * @throws RuntimeException if iterations > MAX_ITER
      */
-    public static Vector gauss_seidel(Matrix a, Vector y, Vector x, double tol) {
+    public static int gauss_seidel(Matrix a, Vector y, Vector x, double tol) {
+        int iterations = 0;
         double difference = tol + 1;
         Vector xVector = new Vector(x.rows());
         Vector oldXVector = new Vector(x.rows());
@@ -67,5 +63,4 @@ public class gauss_seidel {
         System.out.println(iterations + " iterations made.");
         return xVector;
     }
-
 }

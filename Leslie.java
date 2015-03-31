@@ -32,64 +32,6 @@ public class Leslie {
 		this.population = new Vector(populationVector);
 	}
 
-	public double getTotalPopulation() {
-		double total = 0;
-		for (int i = 1; i < population.numElements(); i++) {
-			total += population.get(i);
-		}
-		return total;
-	}
-	/*
-		What will the population distribution be in 2010? 2020? 2030? 2040? 2050? Calculate
-		also the total population in those years, and by what fraction the total population
-		changed each year.
-	*/
-	public void runFive() {
-		System.out.println("\n\n");
-		System.out.println("Initial population: " + population);
-		double populationBefore = getTotalPopulation();
-		System.out.println("Total population: " + populationBefore);
-		passOneIteration();
-		double currentPopulation = getTotalPopulation();
-		double fractionalChange = (currentPopulation - populationBefore) / populationBefore * 100;
-		System.out.println("\n\n");
-		System.out.println("After iteration 1: " + population);
-		System.out.println("Total population: " + currentPopulation);
-		System.out.println("Fractional Change %: " + fractionalChange);
-		populationBefore = currentPopulation;
-		passOneIteration();
-		currentPopulation = getTotalPopulation();
-		fractionalChange = (currentPopulation - populationBefore) / populationBefore * 100;
-		System.out.println("\n\n");
-		System.out.println("After iteration 2: " + population);
-		System.out.println("Total population: " + currentPopulation);
-		System.out.println("Fractional Change %: " + fractionalChange);
-		populationBefore = currentPopulation;
-		passOneIteration();
-		currentPopulation = getTotalPopulation();
-		fractionalChange = (currentPopulation - populationBefore) / populationBefore * 100;
-		System.out.println("\n\n");
-		System.out.println("After iteration 3: " + population);
-		System.out.println("Total population: " + currentPopulation);
-		System.out.println("Fractional Change %: " + fractionalChange);
-		populationBefore = currentPopulation;
-		passOneIteration();
-		currentPopulation = getTotalPopulation();
-		fractionalChange = (currentPopulation - populationBefore) / populationBefore * 100;
-		System.out.println("\n\n");
-		System.out.println("After iteration 4: " + population);
-		System.out.println("Total population: " + currentPopulation);
-		System.out.println("Fractional Change %: " + fractionalChange);
-		populationBefore = currentPopulation;
-		passOneIteration();
-		currentPopulation = getTotalPopulation();
-		fractionalChange = (currentPopulation - populationBefore) / populationBefore * 100;
-		System.out.println("\n\n");
-		System.out.println("After iteration 5: " + population);
-		System.out.println("Total population: " + currentPopulation);
-		System.out.println("Fractional Change %: " + fractionalChange);
-	}
-
 	/**
 	 * Applies the power method
 	 */
