@@ -237,6 +237,7 @@ public class MCWindow {
 	}
 
 	public static void main(String[] args) {
+		System.out.println("***NOTE*** - If the formatting of the numbers or matrices seems off, resize your shell/terminal so that the screen is wider and so that pixels are smaller until everything fits properly as intended. As a guesstimate, this whole block of text constituting the NOTE should all appear on a single line.");
 		MCWindow runner = new MCWindow();
 		runner.run();
 	}
