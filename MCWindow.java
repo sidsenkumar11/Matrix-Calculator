@@ -247,6 +247,7 @@ public class MCWindow {
 		System.out.println("(3) Pass one iteration and view population vector");
 		System.out.println("(4) Use power method to find dominant eigenvalue");
 		System.out.println("(5) Input Leslie Matrix and initial population vector");
+		System.out.println("(6) Test power method on any matrix A with initial approximation u0");
 		System.out.println("--------------------------------------------------------------------------------");
 		String input = "";
 		int n = -1;
@@ -255,16 +256,16 @@ public class MCWindow {
 			input = scan.next();
 			try {
 				n = Integer.parseInt(input);
-				while (n < 0 || n > 5) {
+				while (n < 0 || n > 6) {
 					System.out.println("--------------------------------------------------------------------------------");
-					System.out.println("Please enter a valid integer greater than or equal to 0 and less than six.");
+					System.out.println("Please enter a valid integer greater than or equal to 0 and less than seven.");
 					System.out.println("--------------------------------------------------------------------------------");
 					n = -1;
 					break;
 				}
 			} catch (Exception e) {
 				System.out.println("--------------------------------------------------------------------------------");
-				System.out.println("Please enter a valid integer greater than or equal to 0 and less than six.");
+				System.out.println("Please enter a valid integer greater than or equal to 0 and less than seven.");
 				System.out.println("--------------------------------------------------------------------------------");
 			}
 		}
@@ -353,8 +354,36 @@ public class MCWindow {
 					System.out.println(leslie.getLeslieMatrix());
 					System.out.println("Population Vector");
 					System.out.println(leslie.getPopulationVector());
+				} else if (n == 6) {
+					String[] fileNames = solveAXBInput();
+					System.out.print("Please enter a tolerance: ");
+					double tol = scan.nextDouble();
+					powerMethodOnUserInput(fileNames, tol);
 				}
 			}
+		}
+	}
+
+	public void powerMethodOnUserInput(String[] files, double tol) {
+		LinkedList[] matricesAndVectors = readMatrices(files);
+		if (matricesAndVectors.length == 1) {
+			// Augmented matrix
+			Matrix augmented = (Matrix) matricesAndVectors[0].get(0);
+			System.out.println("\n\n");
+			System.out.println("--------------------------");
+			System.out.println("INPUTTED AUGMENTED MATRIX");
+			System.out.println("--------------------------");
+			System.out.println(augmented);
+			Matrix a = augmented.getMatrix(0, augmented.rows() - 1, 0, augmented.columns() - 2);
+			Vector b = augmented.getSubVector(0, augmented.rows() - 1, augmented.columns() - 1);
+			power_method.power_method(a, tol, b);
+		} else if (matricesAndVectors.length == 2) {
+			// Matrix and Vector
+			Matrix a = (Matrix) matricesAndVectors[0].get(0);
+			Vector b = (Vector) matricesAndVectors[1].get(0);
+			power_method.power_method(a, tol, b);
+		} else {
+			System.out.println("Fatal error");
 		}
 	}
 
