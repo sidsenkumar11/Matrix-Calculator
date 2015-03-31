@@ -34,6 +34,7 @@ public class Hilbert {
 	 * QR both Householders and Givens.
 	 */
 	public void solveAllMethods() {
+		System.out.println("\n\n\n\n");
 		System.out.println("n = " + h.rows());
 		System.out.println("--------------------------");
 		System.out.println("Original Hilbert Matrix");

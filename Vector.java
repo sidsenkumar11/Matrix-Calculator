@@ -200,6 +200,7 @@ public class Vector {
 		if (string.indexOf('E') != -1) {
 			// String is in scientific notation
 			remainder = string.substring(string.indexOf('E'));
+			string = string.substring(0, string.indexOf(remainder));
 			numSpaces -= remainder.length();
 		}
 

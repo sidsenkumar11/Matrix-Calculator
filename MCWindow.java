@@ -101,6 +101,36 @@ public class MCWindow {
 
 	public int hilbertInput() {
 		System.out.println("--------------------------------------------------------------------------------");
+		System.out.println("What would you like to do?");
+		System.out.println("(0) Quit");
+		System.out.println("(1) View and solve Hilbert Matrix for a particular n");
+		System.out.println("(2) View and solve Hilbert Matrix for n = 2 to 20");
+		System.out.println("--------------------------------------------------------------------------------");
+		String input = "";
+		int n = -1;
+		while (n == -1) {
+			System.out.print("Input: ");
+			input = scan.next();
+			try {
+				n = Integer.parseInt(input);
+				while (n < 0 || n > 2) {
+					System.out.println("--------------------------------------------------------------------------------");
+					System.out.println("Please enter a valid integer greater than or equal to 0 and less than three.");
+					System.out.println("--------------------------------------------------------------------------------");
+					n = -1;
+					break;
+				}
+			} catch (Exception e) {
+				System.out.println("--------------------------------------------------------------------------------");
+				System.out.println("Please enter a valid integer greater than or equal to 0 and less than three.");
+				System.out.println("--------------------------------------------------------------------------------");
+			}
+		}
+		return n;
+	}
+
+	public int hilbertInputIndividual() {
+		System.out.println("--------------------------------------------------------------------------------");
 		System.out.println("Enter the n value for the desired Hilbert Matrix, or 0 to quit");
 		System.out.println("--------------------------------------------------------------------------------");
 		String input = "";
@@ -163,8 +193,17 @@ public class MCWindow {
 		while (n != 0) {
 			n = hilbertInput();
 			if (n != 0) {
-				Hilbert x = new Hilbert(n);
-				x.solveAllMethods();
+				if (n == 1) {
+					n = hilbertInputIndividual();
+					Hilbert x = new Hilbert(n);
+					x.solveAllMethods();
+				} else if (n == 2) {
+					for (int i = 2; i <= 20; i++) {
+						Hilbert x = new Hilbert(i);
+						x.solveAllMethods();
+					}
+				}
+
 			}
 		}
 	}
