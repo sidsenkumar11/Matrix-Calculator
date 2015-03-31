@@ -6,7 +6,7 @@
  */
 public class IterativeMethods {
 
-    private static final int MAX_ITER = 50;
+    private static final int MAX_ITER = 100;
 
     /**
      * Method for Jacobi iteration.
@@ -15,11 +15,11 @@ public class IterativeMethods {
      * @param x Initial guess vector
      * @param tol Error tolerance number
      * @return number of iterations required to reach tolerance
+     * @throws RuntimeException if iterations > MAX_ITER
      */
     public static int jacobi(Matrix a, Vector y, Vector x, double tol) {
         int iterations = 0;
         double difference = tol + 1;
-        ArrayList<Vector> xVectors = new ArrayList<Vector>();
         Vector xVector = new Vector(x.rows());
         Vector oldXVector = new Vector(x.rows());
         double sum;
@@ -42,11 +42,12 @@ public class IterativeMethods {
         }
 
         while(!(difference < tol)) {
-            if (iterations > MAX_ITER) {
-                throw new IllegalArgumentException();
-            }
 
             iterations++;
+
+            if (iterations > MAX_ITER) {
+                throw new RuntimeException("Doesn't converge after 100 iterations.");
+            }
 
             for (int i = 0; i < oldXVector.rows(); i++) {
                 oldXVector.set(i, xVector.get(i));
@@ -81,11 +82,11 @@ public class IterativeMethods {
      * @param x Initial guess vector
      * @param tol Error tolerance number
      * @return number of iterations required to reach tolerance
+     * @throws RuntimeException if iterations > MAX_ITER
      */
     public static int gauss_seidel(Matrix a, Vector y, Vector x, double tol) {
         int iterations = 0;
         double difference = tol + 1;
-        ArrayList<Vector> xVectors = new ArrayList<Vector>();
         Vector xVector = new Vector(x.rows());
         Vector oldXVector = new Vector(x.rows());
         double sum;
@@ -109,11 +110,12 @@ public class IterativeMethods {
         }
 
         while(!(difference < tol)) {
-            if (iterations > MAX_ITER) {
-                throw new IllegalArgumentException();
-            }
 
             iterations++;
+
+            if (iterations > MAX_ITER) {
+                throw new RuntimeException("Doesn't converge after 100 iterations.");
+            }
 
             for (int i = 0; i < oldXVector.rows(); i++) {
                 oldXVector.set(i, xVector.get(i));
