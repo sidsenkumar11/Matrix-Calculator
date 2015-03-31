@@ -52,7 +52,7 @@ public class IterativeMethods {
                     }
                     sum.add(a.get(i, j).multiply(x.get(i)));
                 }
-                sum.multiply(BigDecimal.ONE.divide(a.get(i, i)));
+                sum.divide(a.get(i, i));
 
                 xVector.set(i, sum);
                 xVectors.add(xVector);
@@ -142,6 +142,39 @@ public class IterativeMethods {
 
     //for testing purposes
     public static void main(String[] args) {
+        BigDecimal[][] aMatrix = {
+            { new BigDecimal(5), new BigDecimal(-2), new BigDecimal(3) },
+            { new BigDecimal(-3), new BigDecimal(9), new BigDecimal(1) },
+            { new BigDecimal(2), new BigDecimal(-1), new BigDecimal(-7) }
+        };
+        BigDecimal[] yValues = {
+            new BigDecimal(-1),
+            new BigDecimal(2),
+            new BigDecimal(3)
+        };
+        BigDecimal[] xValues = { BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO };
+
+        Matrix a = new Matrix(3, 3);
+        Vector y = new Vector(3);
+        Vector x = new Vector(3);
+        BigDecimal tolerance = new BigDecimal(Math.pow(10, -8));
+
+        for (int i = 0; i < a.rows(); i++) {
+            for (int j = 0; j < a.columns(); j++) {
+                a.set(i, j, aMatrix[i][j]);
+            }
+        }
+
+        for (int i = 0; i < y.rows(); i++) {
+            y.set(i, yValues[i]);
+        }
+
+        for (int i = 0; i < x.rows(); i++) {
+            x.set(i, xValues[i]);
+        }
+
+        int iterations = jacobi(a, y, x, tolerance);
+        System.out.println(iterations);
 
     }
 
