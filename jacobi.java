@@ -65,4 +65,8 @@ public class jacobi {
         return xVector;
     }
 
+    public static void main(String[] args) {
+        
+    }
+
 }
