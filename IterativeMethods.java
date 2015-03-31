@@ -7,6 +7,8 @@ import java.util.ArrayList;
  */
 public class IterativeMethods {
 
+    private static final int MAX_ITER = 50;
+
     /**
      * Method for Jacobi iteration.
      * @param a Matrix n x n
@@ -16,12 +18,12 @@ public class IterativeMethods {
      * @return number of iterations required to reach tolerance
      */
     public static int jacobi(Matrix a, Vector y, Vector x, double tol) {
-        int iterations = 0;
+        int iterations = 1;
         double difference = tol + 1;
         ArrayList<Vector> xVectors = new ArrayList<Vector>();
-        Vector xVector;
-        int oldIndex = 0;
-        int newIndex = 1;
+        Vector xVector = new Vector(x.rows());
+        Vector oldXVector = x;
+        double sum;
 
         /*
         xVector.i = (1/a.ii)(y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
@@ -37,38 +39,46 @@ public class IterativeMethods {
         */
 
         while(!(difference < tol)) {
-            xVector = new Vector(y.rows());
-            for (int i = 0; i < y.rows(); i++) {
-                xVector.set(i, y.get(i));
+            if (iterations > MAX_ITER) {
+                throw new IllegalArgumentException();
             }
 
-            double sum;
+            System.out.println("\nIteration #" + iterations);
+
+            for (int i = 0; i < oldXVector.rows(); i++) {
+                oldXVector.set(i, xVector.get(i));
+            }
+
             for (int i = 0; i < a.rows(); i++) {
-                sum = xVector.get(i);
-                for (int j = 1; j < a.columns(); j++) {
-                    if (i == j) {
-                        j++;
-                    } else {
-                        sum += a.get(i, j) * x.get(i);
+                sum = y.get(i);
+                for (int j = 0; j < a.columns(); j++) {
+                    if (i != j) {
+                        sum -= a.get(i, j) * oldXVector.get(j);
                     }
                 }
-                sum *= (1 / a.get(i, i));
+                sum = sum / a.get(i, i);
+                System.out.println("sum " + i + " = " + sum);
 
                 xVector.set(i, sum);
-                xVectors.add(xVector);
             }
+
+            System.out.println("oldXVector = " + oldXVector);
+            System.out.println("xVector = " + xVector);
+
+            if (iterations > 1) {
+                difference = xVector.get(0) - oldXVector.get(0);
+                difference = Math.abs(difference);
+                System.out.println("\nDifference:\n" + xVector.get(0)
+                                    + " - " + oldXVector.get(0) + " = "
+                                    + difference);
+            }
+
             for (int i = 0; i < x.rows(); i++) {
                 x.set(i, xVector.get(i));
             }
-
-            if (xVectors.size() > 1) {
-                difference = xVectors.get(oldIndex).get(0) - xVectors.get(newIndex).get(0);
-                difference = Math.abs(difference);
-            }
+            System.out.println();
 
             iterations++;
-            oldIndex++;
-            newIndex++;
         }
 
         return iterations;
@@ -147,17 +157,13 @@ public class IterativeMethods {
             { -3, 9, 1 },
             { 2, -1, -7 }
         };
-        double[] yValues = {
-            -1,
-            2,
-            3
-        };
+        double[] yValues = { -1, 2, 3 };
         double[] xValues = { 0, 0, 0 };
 
         Matrix a = new Matrix(3, 3);
         Vector y = new Vector(3);
         Vector x = new Vector(3);
-        double tolerance = Math.pow(10, -8);
+        double tolerance = Math.pow(10, -3);
 
         for (int i = 0; i < a.rows(); i++) {
             for (int j = 0; j < a.columns(); j++) {
@@ -174,7 +180,7 @@ public class IterativeMethods {
         }
 
         int iterations = jacobi(a, y, x, tolerance);
-        System.out.println(iterations);
+        System.out.println("Number of iterations: " + iterations);
 
     }
 
