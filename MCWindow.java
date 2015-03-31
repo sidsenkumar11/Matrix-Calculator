@@ -2,7 +2,6 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
 
 /**
  * Creates the interface for displaying.
