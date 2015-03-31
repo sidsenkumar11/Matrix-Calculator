@@ -169,5 +169,39 @@ public class ConvolCode {
         // System.out.println(coder.getY0());
         // Vector x_final = jacobi.jacobi(coder.getMatrixA0(), coder.getY0(), x_guess, tol);
         // System.out.println(x_final);
+        double[][] aMatrix = {
+            { 5, -2, 3 },
+            { -3, 9, 1 },
+            { 2, -1, -7 }
+        };
+        double[] yValues = { -1, 2, 3 };
+        double[] xValues = { 0, 0, 0 };
+
+        Matrix a = new Matrix(3, 3);
+        Vector y = new Vector(3);
+        Vector x = new Vector(3);
+        double tolerance = Math.pow(10, -4);
+
+        for (int i = 0; i < a.rows(); i++) {
+            for (int j = 0; j < a.columns(); j++) {
+                a.set(i, j, aMatrix[i][j]);
+            }
+        }
+
+        for (int i = 0; i < y.rows(); i++) {
+            y.set(i, yValues[i]);
+        }
+
+        for (int i = 0; i < x.rows(); i++) {
+            x.set(i, xValues[i]);
+        }
+
+        System.out.println("Jacobi:");
+        Vector iterations = jacobi.jacobi(a, y, x, tolerance);
+        System.out.println(iterations);
+
+        System.out.println("\nGauss-Seidel:");
+        Vector iterations2 = gauss_seidel.gauss_seidel(a, y, x, tolerance);
+        System.out.println(iterations2);
     }
 }
