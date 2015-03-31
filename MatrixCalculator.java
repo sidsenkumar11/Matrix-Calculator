@@ -22,7 +22,7 @@ public class MatrixCalculator {
 	 * @return The matrices and error
 	 */
 	public static Matrix[] lu_fact(Matrix a) {
-		return Factorizations.lu_fact(a);
+		return lu_fact.lu_fact(a);
 	}
 	
 	/**
@@ -31,7 +31,7 @@ public class MatrixCalculator {
 	 * @return the matrices for Q and R
 	 */
 	public static Matrix[] qr_fact_househ(Matrix a) {
-		return Factorizations.qr_fact_househ(a);
+		return qr_fact_househ.qr_fact_househ(a);
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class MatrixCalculator {
 	 * @return the matrices for Q and R
 	 */
 	 public static Matrix[] qr_fact_givens(Matrix a) {
-		return Factorizations.qr_fact_givens(a);
+		return qr_fact_givens.qr_fact_givens(a);
 	 }
 
 	/**
@@ -60,7 +60,7 @@ public class MatrixCalculator {
 	 * @return The solution vector
 	 */
 	public static Vector solve_lu_b(Matrix l, Matrix u, Vector b) {
-		return Factorizations.solve_lu_b(l, u, b);
+		return solve_lu_b.solve_lu_b(l, u, b);
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class MatrixCalculator {
 	 * @return The solution vector
 	 */
 	public static Vector solve_qr_b(Matrix q, Matrix r, Vector b) {
-		return Factorizations.solve_qr_b(q, r, b);
+		return solve_qr_b.solve_qr_b(q, r, b);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class MatrixCalculator {
 	 *		   and number of iterations for desired tolerance
 	 */
 	public static PowerObject power_method(Matrix a, double tol, Vector u) {
-		return PowerObject.power_method(a, tol, u);
+		return power_method.power_method(a, tol, u);
 	}
 
 	/**
