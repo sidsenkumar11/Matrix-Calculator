@@ -1,5 +1,3 @@
-import java.math.BigDecimal;
-
 /**
  * A representation of a given Leslie Matrix
  * 
@@ -50,6 +48,6 @@ public class Leslie {
 	}
 
 	public PowerObject getDominantEigenvalue() {
-		return MatrixCalculator.power_method(a, new BigDecimal(".00000001"), population);
+		return MatrixCalculator.power_method(a, .00000001), population);
 	}
 }

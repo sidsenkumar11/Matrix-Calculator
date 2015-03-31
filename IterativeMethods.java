@@ -1,4 +1,3 @@
-import java.math.BigDecimal;
 import java.util.ArrayList;
 /**
  * Iterative methods for Ax = b.
@@ -16,9 +15,9 @@ public class IterativeMethods {
      * @param tol Error tolerance number
      * @return number of iterations required to reach tolerance
      */
-    public static int jacobi(Matrix a, Vector y, Vector x, BigDecimal tol) {
+    public static int jacobi(Matrix a, Vector y, Vector x, double tol) {
         int iterations = 0;
-        BigDecimal difference = tol.add(BigDecimal.ONE);
+        double difference = tol + 1;
         ArrayList<Vector> xVectors = new ArrayList<Vector>();
         Vector xVector;
         int oldIndex = 0;
@@ -37,22 +36,22 @@ public class IterativeMethods {
            **if not, do it again
         */
 
-        while(!(difference.compareTo(tol) < 0)) {
+        while(!(difference - tol < 0)) {
             xVector = new Vector(y.rows());
             for (int i = 0; i < y.rows(); i++) {
                 xVector.set(i, y.get(i));
             }
 
-            BigDecimal sum;
+            double sum;
             for (int i = 0; i < a.rows(); i++) {
                 sum = xVector.get(i);
                 for (int j = 0; j < a.columns(); j++) {
                     if (i == j) {
                         j++;
                     }
-                    sum.add(a.get(i, j).multiply(x.get(i)));
+                    sum += a.get(i, j) * x.get(i);
                 }
-                sum.multiply(BigDecimal.ONE.divide(a.get(i, i)));
+                sum *= 1 / a.get(i, i);
 
                 xVector.set(i, sum);
                 xVectors.add(xVector);
@@ -62,8 +61,8 @@ public class IterativeMethods {
             }
 
             if (xVectors.size() > 1) {
-                difference = xVectors.get(oldIndex).get(0).subtract(xVectors.get(newIndex).get(0));
-                difference = difference.abs();
+                difference = xVectors.get(oldIndex).get(0) - xVectors.get(newIndex).get(0);
+                difference = Math.abs(difference);
             }
 
             iterations++;
@@ -82,9 +81,9 @@ public class IterativeMethods {
      * @param tol Error tolerance number
      * @return number of iterations required to reach tolerance
      */
-    public static int gauss_seidel(Matrix a, Vector y, Vector x, BigDecimal tol) {
+    public static int gauss_seidel(Matrix a, Vector y, Vector x, double tol) {
         int iterations = 0;
-        BigDecimal difference = tol.add(BigDecimal.ONE);
+        double difference = tol + 1;
         ArrayList<Vector> xVectors = new ArrayList<Vector>();
         Vector xVector;
         int oldIndex = 0;
@@ -105,22 +104,22 @@ public class IterativeMethods {
         */
 
         //still need to change this from being for jacobi to gauss-seidel
-        while(!(difference.compareTo(tol) < 0)) {
+        while(!(difference - tol < 0)) {
             xVector = new Vector(y.rows());
             for (int i = 0; i < y.rows(); i++) {
                 xVector.set(i, y.get(i));
             }
 
-            BigDecimal sum;
+            double sum;
             for (int i = 0; i < a.rows(); i++) {
                 sum = xVector.get(i);
                 for (int j = 0; j < a.columns(); j++) {
                     if (i == j) {
                         j++;
                     }
-                    sum.add(a.get(i, j).multiply(x.get(i)));
+                    sum += a.get(i, j) * x.get(i);
                 }
-                sum.multiply(BigDecimal.ONE.divide(a.get(i, i)));
+                sum *= 1. / a.get(i, i);
 
                 xVector.set(i, sum);
                 x.set(i, sum);
@@ -128,8 +127,8 @@ public class IterativeMethods {
             }
 
             if (xVectors.size() > 1) {
-                difference = xVectors.get(oldIndex).get(0).subtract(xVectors.get(newIndex).get(0));
-                difference = difference.abs();
+                difference = xVectors.get(oldIndex).get(0) - xVectors.get(newIndex).get(0);
+                difference = Math.abs(difference);
             }
 
             iterations++;

@@ -1,5 +1,4 @@
 import java.util.LinkedList;
-import java.math.BigDecimal;
 
 /**
  * Representation of a matrix
@@ -9,27 +8,19 @@ import java.math.BigDecimal;
  */
 public class Matrix {
 
-	private BigDecimal[][] matrix;
+	private double[][] matrix;
 
 	/**
 	 * Constructs a matrix with the specified data
 	 * @param rows A 2D array made from a linked list and string array
 	 */
 	public Matrix(LinkedList<String[]> rows) {
-		this.matrix = new BigDecimal[rows.size()][rows.get(0).length];
+		this.matrix = new double[rows.size()][rows.get(0).length];
 		for (int row = 0; row < rows.size(); row++) {
 			for (int column = 0; column < rows.get(row).length; column++) {
-				set(row, column, new BigDecimal(rows.get(row)[column]));
+				set(row, column, Double.parseDouble(rows.get(row)[column]));
 			}
 		}
-	}
-
-	/**
-	 * Constructs a matrix with the specified data
-	 * @param matrix The matrix in 2D array form
-	 */
-	public Matrix(BigDecimal[][] matrix) {
-		this.matrix = matrix;
 	}
 
 	/**
@@ -37,12 +28,7 @@ public class Matrix {
 	 * @param matrix The matrix in 2D array form
 	 */
 	public Matrix(double[][] matrix) {
-		this.matrix = new BigDecimal[matrix.length][matrix[0].length];
-		for (int i = 0; i < matrix.length; i++) {
-			for (int j = 0; j < matrix[i].length; j++) {
-				this.matrix[i][j] = new BigDecimal("" + matrix[i][j]);
-			}
-		}
+		this.matrix = matrix;
 	}
 
 	/**
@@ -53,21 +39,20 @@ public class Matrix {
 	 * @param columns The number of columns
 	 */
 	public Matrix(int rows, int columns) {
-		this.matrix = new BigDecimal[rows][columns];
+		this.matrix = new double[rows][columns];
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[i].length; j++) {
-				matrix[i][j] = BigDecimal.ZERO;
+				matrix[i][j] = 0;
 			}
 		}
 	}
 
 	/**
-	 * Constructs a matrix with the specified
-	 * vector.
+	 * Constructs a matrix with the specified vector.
 	 * @param vector The vector to be represented as a matrix
 	 */
 	public Matrix(Vector vector) {
-		this.matrix = new BigDecimal[vector.rows()][1];
+		this.matrix = new double[vector.rows()][1];
 		for (int i = 0; i < vector.rows(); i++) {
 			matrix[i][0] = vector.get(i);
 		}
@@ -81,7 +66,7 @@ public class Matrix {
 	 * @throws IndexOutOfBoundsException if row and column
 	 * 		   are not valid in the matrix
 	 */
-	public BigDecimal get(int row, int column) {
+	public double get(int row, int column) {
 		if (row < 0 || column < 0  || row >= rows() || column >= columns()) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -96,7 +81,7 @@ public class Matrix {
 	 * @throws IndexOutOfBoundsException if row and column
 	 * 		   are not valid in the matrix
 	 */
-	public void set(int row, int column, BigDecimal value) {
+	public void set(int row, int column, double value) {
 		if (row < 0 || column < 0  || row >= rows() || column >= columns()) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -127,15 +112,11 @@ public class Matrix {
 	 * @throws IndexOutOfBoundsException if row and column
 	 * 		   are not valid in the matrix
 	 */
-	public BigDecimal[] row(int row) {
+	public double[] row(int row) {
 		if (row < 0 || row >= rows()) {
 			throw new IndexOutOfBoundsException();
 		}
-		BigDecimal[] desiredRow = new BigDecimal[columns()];
-		for (int col = 0; col < columns(); col++) {
-			desiredRow[col] = get(row, col);
-		}
-		return desiredRow;
+		return matrix[row];
 	}
 
 	/**
@@ -146,14 +127,14 @@ public class Matrix {
 	 * @throws IndexOutOfBoundsException if row and column
 	 * 		   are not valid in the matrix
 	 */
-	public BigDecimal[] column(int column) {
+	public double[] column(int column) {
 		if (column < 0  || column >= columns()) {
 			throw new IndexOutOfBoundsException();
 		}
 
-		BigDecimal[] desiredColumn = new BigDecimal[rows()];
+		double[] desiredColumn = new double[rows()];
 		for (int row = 0; row < rows(); row++) {
-			desiredColumn[row] = get(row, column);
+			desiredColumn[row] = matrix[row][column];
 		}
 		return desiredColumn;
 	}
@@ -180,15 +161,14 @@ public class Matrix {
 	/**
 	 * Calculates the determinant of the matrix.
 	 * TODO: CHECK IF THIS IS THE CORRECT FORMULA.
-	 * @return The BigDecimal containing the determinant
+	 * @return The determinant
 	 */
-	public BigDecimal determinant() {
-		BigDecimal det = BigDecimal.ZERO;
-
+	public double determinant() {
+		double det = 0;
 		if (rows() == 2 && columns() == 2) {
-			BigDecimal crossProduct1 = get(0, 0).multiply(get(1, 1));
-			BigDecimal crossProduct2 = get(1, 0).multiply(get(0, 1));
-			det = crossProduct1.multiply(crossProduct2);
+			double crossProduct1 = get(0, 0) * get(1, 1);
+			double crossProduct2 = get(1, 0) * get(0, 1);
+			det = crossProduct1 * crossProduct2;
 		}
 		return det;
 	}
@@ -198,11 +178,11 @@ public class Matrix {
 	 * This norm is the largest of the elements in the matrix.
 	 * @return The norm of the matrix
 	 */
-	public BigDecimal norm() {
-		BigDecimal largest = get(0, 0);
+	public double norm() {
+		double largest = get(0, 0);
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[i].length; j++) {
-				if (matrix[i][j].compareTo(largest) > 0) {
+				if (matrix[i][j] - largest > 0) {
 					largest = matrix[i][j];
 				}
 			}
@@ -215,14 +195,14 @@ public class Matrix {
 	 * This norm is the square root of sum of squares of elements.
 	 * @return The largest value in the matrix
 	 */
-	public BigDecimal normF() {
-		BigDecimal sum = BigDecimal.ZERO;
+	public double normF() {
+		double sum = 0;
 		for (int i = 0; i < rows(); i++) {
 			for (int j = 0; j < columns(); j++) {
-				sum = sum.add(get(i, j).pow(2));
+				sum += Math.pow(get(i, j), 2);
 			}
 		}
-		return MatrixCalculator.sqrt(sum);
+		return Math.sqrt(sum);
 	}
 
 	/**
@@ -286,7 +266,7 @@ public class Matrix {
 	 * Returns the backing array for this matrix
 	 * @return matrix The backing array for this matrix
 	 */
-	public BigDecimal[][] getArray() {
+	public double[][] getArray() {
 		return matrix;
 	}
 
@@ -298,7 +278,7 @@ public class Matrix {
 	public static Matrix identity(int n) {
 		Matrix identity = new Matrix(n, n);
 		for (int i = 0; i < n; i++) {
-			identity.set(i, i, BigDecimal.ONE);
+			identity.set(i, i, 1);
 		}
 		return identity;
 	}
@@ -318,8 +298,8 @@ public class Matrix {
 	 *			WE SET THE RIGHT SIDE PORTION TO BE #LEADING ZEROS + UP TO 6 DIGITS
 	 *			IN THIS WAY, WE ALWAYS END UP WITH AT MOST 6 SIGNIFICANT FIGURES AFTER THE DECIMAL POINT
 	 */
-	private static int getNumberOfDecimalPlaces(BigDecimal bigDecimal) {
-	    String string = bigDecimal.stripTrailingZeros().toPlainString();
+	private static int getNumberOfDecimalPlaces(double number) {
+	    String string = "" + number;
 	    int index = string.indexOf(".");
 	    // If no ".", no digits to right of decimal
 	    if (index < 0) {
@@ -366,8 +346,8 @@ public class Matrix {
 		return numRelevant;
 	}
 
-	private static int getNumberOfWholeNumbers(BigDecimal bigDecimal) {
-		String string = bigDecimal.stripTrailingZeros().toPlainString();
+	private static int getNumberOfWholeNumbers(double number) {
+		String string = "" + number;
 	    int count = 0;
 	    for (int i = 0; i < string.length(); i++) {
 	    	char x = string.charAt(i);
@@ -380,8 +360,8 @@ public class Matrix {
 	    return count;
 	}
 
-	private static String getRelevantPortion(BigDecimal y, int numSpaces) {
-		String string = y.stripTrailingZeros().toPlainString();
+	private static String getRelevantPortion(double y, int numSpaces) {
+		String string = "" + y;
 		String relevantPortion = "";
 
 		int index = 0;
@@ -411,8 +391,8 @@ public class Matrix {
 	public String toString() {
 		int largestRelevantRightDecimal = getNumberOfDecimalPlaces(matrix[0][0]);
 		int largestNumWholeNumbers = getNumberOfWholeNumbers(matrix[0][0]);
-		for (BigDecimal[] x : matrix) {
-			for (BigDecimal y : x) {
+		for (double[] x : matrix) {
+			for (double y : x) {
 				if (largestNumWholeNumbers < getNumberOfWholeNumbers(y)) {
 					largestNumWholeNumbers = getNumberOfWholeNumbers(y);
 				}
@@ -427,9 +407,9 @@ public class Matrix {
 		String formatString = "%" + totalSpace + "s";
 
 		String returnString = "";
-		for (BigDecimal[] x : matrix) {
+		for (double[] x : matrix) {
 			returnString += "|";
-			for (BigDecimal y : x) {
+			for (double y : x) {
 				String relevantPortion = getRelevantPortion(y, totalSpace);
 				returnString += String.format(formatString, relevantPortion) + " |";
 			}

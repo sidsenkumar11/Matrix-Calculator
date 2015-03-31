@@ -1,6 +1,3 @@
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 /**
  * Representation of LU and QR Factorizations of matrices
  *
@@ -24,7 +21,7 @@ public class Factorizations {
 		for (int i = 0; i < a.rows(); i++) {
 			for (int j = 0; j < a.columns(); j++) {
 				if (i == j) {
-					l.set(i, j, BigDecimal.ONE);
+					l.set(i, j, 1);
 				}
 			}
 		}
@@ -39,7 +36,7 @@ public class Factorizations {
 		// Therefore l(i, 0) = a(i, 0) / u(0, 0)
 
 		for (int i = 1; i < a.rows(); i++) {
-			BigDecimal value = a.get(i, 0).divide(u.get(0, 0));
+			double value = a.get(i, 0) / u.get(0, 0);
 			l.set(i, 0, value);
 		}
 
@@ -50,18 +47,18 @@ public class Factorizations {
 			for (int j = 1; j < a.columns(); j++) {
 				if (i <= j) {
 					// Only U should be affected
-					BigDecimal sum = BigDecimal.ZERO;
+					double sum = 0;
 					for (int k = 0; k <= i - 1; k++) {
-						sum = sum.add(u.get(k, j).multiply(l.get(i, k)));
+						sum += u.get(k, j) * l.get(i, k);
 					}
-					u.set(i, j, a.get(i, j).subtract(sum));
+					u.set(i, j, a.get(i, j) - sum);
 				} else {
 					// Lower Triangle, only L affected
-					BigDecimal sum = BigDecimal.ZERO;
+					double sum = 0;
 					for (int k = 0; k <= j - 1; k++) {
-						sum = sum.add(u.get(k, j).multiply(l.get(i, k)));
+						sum += u.get(k, j) * l.get(i, k);
 					}
-					l.set(i, j, (a.get(i, j).subtract(sum)).divide(u.get(j, j), 6, RoundingMode.HALF_UP));
+					l.set(i, j, (a.get(i, j) - sum) / u.get(j, j));
 				}
 			}
 		}
@@ -93,7 +90,7 @@ public class Factorizations {
 				// Create necessary portion of identity matrix
 				Matrix temp = new Matrix(matrix.rows(), matrix.rows());
 				for (int i = 0; i < diff; i++) {
-					temp.set(i, i, BigDecimal.ONE);
+					temp.set(i, i, 1);
 				}
 				// Insert Hn into relevant areas
 				temp.setMatrix(diff, matrix.rows() - 1, diff, matrix.rows() - 1, Hn);
@@ -107,7 +104,7 @@ public class Factorizations {
 		for (int row = 0; row < R.rows(); row++) {
 			for (int column = 0; column < R.columns(); column++) {
 				if (row > column) {
-					R.set(row, column, BigDecimal.ZERO);
+					R.set(row, column, 0);
 				}
 			}
 		}
@@ -115,13 +112,13 @@ public class Factorizations {
 		// We can factor out -1 from both Q and R
 		for (int i = 0; i < Q.rows(); i++) {
 			for (int j = 0; j < Q.columns(); j++) {
-				Q.set(i, j, Q.get(i, j).multiply(new BigDecimal("-1")));
+				Q.set(i, j, Q.get(i, j) * -1);
 			}
 		}
 
 		for (int i = 0; i < R.rows(); i++) {
 			for (int j = 0; j < R.columns(); j++) {
-				R.set(i, j, R.get(i, j).multiply(new BigDecimal("-1")));
+				R.set(i, j, R.get(i, j) * -1);
 			}
 		}
 
@@ -140,23 +137,23 @@ public class Factorizations {
 		// We want zeros below the diagonal
 		Vector a = matrix.getSubVector(rowStart, matrix.rows() - 1, rowStart);
 		// Get the magnitude of the subvector
-		BigDecimal magnitudeA = a.normF();
+		double magnitudeA = a.normF();
 
 		// Create vector e1
 		Vector e = new Vector(matrix.rows() - rowStart);
-		e.set(0, BigDecimal.ONE);
+		e.set(0, 1);
 
 		// V = a + e1 * ||a1|| where ||a1|| is magnitudeA
 		Vector v = MatrixCalculator.add(a, MatrixCalculator.multiply(e, magnitudeA));
 
 		// U = V normalized
-		Vector u = MatrixCalculator.multiply(v, BigDecimal.ONE.divide(v.normF(), 10, RoundingMode.HALF_UP));
+		Vector u = MatrixCalculator.multiply(v, 1. / v.normF());
 
 		// Create Identity matrix
 		Matrix I = Matrix.identity(matrix.rows() - rowStart);
 
 		// H = I - 2uu^t
-		Matrix H = MatrixCalculator.subtract(I, MatrixCalculator.multiply(MatrixCalculator.multiply(u, u.transpose()), new BigDecimal("2")));
+		Matrix H = MatrixCalculator.subtract(I, MatrixCalculator.multiply(MatrixCalculator.multiply(u, u.transpose()), 2));
 		return H;
 	}
 
@@ -168,32 +165,32 @@ public class Factorizations {
 	 */
 	public static Matrix[] qr_fact_givens(Matrix matrix) {
 
-		BigDecimal[][] A = matrix.getArray();
+		double[][] A = matrix.getArray();
 		Matrix R = new Matrix(A);
-		BigDecimal[][] Gn = new BigDecimal[A.length][A.length];
+		double[][] Gn = new double[A.length][A.length];
 		Matrix Q = new Matrix(A.length, A.length);
 		for (int i = 0; i < A.length; i++) {
 			for (int j = 0; j < A.length; j++) {
 				if (i == j) {
-					Gn[i][j] = BigDecimal.ONE;
-					Q.set(i, j, BigDecimal.ONE);
+					Gn[i][j] = 1;
+					Q.set(i, j, 1);
 				} else {
-					Gn[i][j] = BigDecimal.ZERO;
-					Q.set(i, j, BigDecimal.ZERO);
+					Gn[i][j] = 0;
+					Q.set(i, j, 0);
 				}
 			}
 		}
 
 		for (int i = 0; i < A[0].length; i++) {
 			for (int j = i + 1; j < A.length; j++) {
-				BigDecimal x = R.get(i, i);
-				BigDecimal y = R.get(j, i);
-				BigDecimal cos = x.divide(MatrixCalculator.sqrt(x.pow(2).add(y.pow(2))), 10, RoundingMode.HALF_UP);
-				y = y.multiply(new BigDecimal("" + -1));
-				BigDecimal sin = y.divide(MatrixCalculator.sqrt(x.pow(2).add(y.pow(2))), 10, RoundingMode.HALF_UP);
+				double x = R.get(i, i);
+				double y = R.get(j, i);
+				double cos = x / Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+				y *= -1;
+				double sin = y / Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 				Gn[i][i] = cos;
 				Gn[j][i] = sin;
-				Gn[i][j] = sin.multiply(new BigDecimal("" + -1));
+				Gn[i][j] = sin * -1;
 				Gn[j][j] = cos;
 				Matrix GnMatrix = new Matrix(Gn);
 				R = MatrixCalculator.multiply(GnMatrix, R);
@@ -201,9 +198,9 @@ public class Factorizations {
 				for (int a = 0; a < A.length; a++) {
 					for (int b = 0; b < A.length; b++) {
 						if (a == b) {
-							Gn[a][b] = BigDecimal.ONE;
+							Gn[a][b] = 1;
 						} else {
-							Gn[a][b] = BigDecimal.ZERO;
+							Gn[a][b] = 0;
 						}
 					}
 				}
@@ -213,7 +210,7 @@ public class Factorizations {
 		for (int row = 0; row < R.rows(); row++) {
 			for (int column = 0; column < R.columns(); column++) {
 				if (row > column) {
-					R.set(row, column, BigDecimal.ZERO);
+					R.set(row, column, 0);
 				}
 			}
 		}
@@ -242,23 +239,23 @@ public class Factorizations {
 		// sum of products = for (i = 0; i < n; i++) sum += l(i) * y(i)
 
 		for (int i = 0; i < y.numElements(); i++) {
-			BigDecimal sumOfProducts = BigDecimal.ZERO;
+			double sumOfProducts = 0;
 			for (int j = 0; j < i; j++) {
-				sumOfProducts = sumOfProducts.add(l.get(i, j).multiply(y.get(j)));
+				sumOfProducts += l.get(i, j) * y.get(j);
 			}
-			// BigDecimal value = (b.get(i) - sumOfProducts).divide(l.get(i, i));
-			BigDecimal value = (b.get(i).subtract(sumOfProducts));
+			// double value = (b.get(i) - sumOfProducts).divide(l.get(i, i));
+			double value = b.get(i) - sumOfProducts;
 			y.set(i, value);
 		}
 
 		// Ux = Y
 		// Solve for x, U is upper triangular
 		for (int i = y.numElements() - 1; i >= 0; i--) {
-			BigDecimal sumOfProducts = BigDecimal.ZERO;
+			double sumOfProducts = 0;
 			for (int j = u.rows() - 1; j > i; j--) {
-				sumOfProducts = sumOfProducts.add(u.get(i, j).multiply(x.get(j)));
+				sumOfProducts += u.get(i, j) * x.get(j);
 			}
-			BigDecimal value = ((y.get(i).subtract(sumOfProducts))).divide(u.get(i, i), 10, RoundingMode.HALF_UP);
+			double value = (y.get(i) - sumOfProducts) / u.get(i, i);
 			x.set(i, value);
 		}
 		return x;
@@ -277,11 +274,11 @@ public class Factorizations {
 		Vector d = MatrixCalculator.multiply(q.transpose(), b);
 
 		for (int i = d.numElements() - 1; i >= 0; i--) {
-			BigDecimal sumOfProducts = BigDecimal.ZERO;
+			double sumOfProducts = 0;
 			for (int j = r.rows() - 1; j > i; j--) {
-				sumOfProducts = sumOfProducts.add(r.get(i, j).multiply(x.get(j)));
+				sumOfProducts += r.get(i, j) * x.get(j);
 			}
-			BigDecimal value = ((d.get(i).subtract(sumOfProducts))).divide(r.get(i, i), 10, RoundingMode.HALF_UP);
+			double value = (d.get(i) - sumOfProducts) / r.get(i, i);
 			x.set(i, value);
 		}
 		return x;

@@ -1,5 +1,3 @@
-import java.math.BigDecimal;
-
 /**
  * Hilbert Matrix Procedures using the MatrixCalculator classes
  * 
@@ -19,13 +17,13 @@ public class Hilbert {
 		h = new Matrix(n, n);
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				h.set(i, j, new BigDecimal("" + (1.0 / (i + j + 1))));
+				h.set(i, j, 1. / (i + j + 1));
 			}
 		}
 
 		b = new Vector(n);
 		for (int i = 0; i < n; i++) {
-			b.set(i, new BigDecimal("" + Math.pow(.1, n / 3.0)));
+			b.set(i, Math.pow(.1, n / 3.0));
 		}
 	}
 

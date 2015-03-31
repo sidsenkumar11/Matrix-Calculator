@@ -1,5 +1,3 @@
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 /**
  * A representation of a given power_method call.
  * 
@@ -8,7 +6,7 @@ import java.math.RoundingMode;
  */
 public class PowerObject {
 
-	private BigDecimal approximatedEigenvalue;
+	private double approximatedEigenvalue;
 	private Vector approximatedEigenvector;
 	private int numIterations = 0;
 	private boolean converges = true;
@@ -23,20 +21,20 @@ public class PowerObject {
 	 * @return The approximated eigenvalue, eigenvector,
 	 *		   and number of iterations for desired tolerance
 	 */
-	public static PowerObject power_method(Matrix a, BigDecimal tol, Vector u) {
+	public static PowerObject power_method(Matrix a, double tol, Vector u) {
 
 		// Get largest value from u - initial eigenvalue guess
-		BigDecimal largest = u.get(0);
+		double largest = u.get(0);
 		for (int i = 1; i < u.numElements(); i++) {
-			if (u.get(i).abs().compareTo(largest.abs()) > 0) {
+			if (Math.abs(u.get(i)) - Math.abs(largest) > 0) {
 				largest = u.get(i);
 			}
 		}
 
-		BigDecimal previous = largest;
+		double previous = largest;
 
 		// Factor out that value from u
-		u = MatrixCalculator.multiply(u, BigDecimal.ONE.divide(largest, 20, RoundingMode.HALF_UP));
+		u = MatrixCalculator.multiply(u, 1. / largest);
 		PowerObject powerInfo = new PowerObject(largest, u);
 
 		// Do one iteration - necessary for recursive method to do check on previous eigenvalue
@@ -47,13 +45,13 @@ public class PowerObject {
 		// Get largest in Au
 		largest = au.get(0);
 		for (int i = 1; i < au.numElements(); i++) {
-			if (au.get(i).abs().compareTo(largest.abs()) > 0) {
+			if (Math.abs(au.get(i)) - Math.abs(largest) > 0) {
 				largest = au.get(i);
 			}
 		}
 
 		// u = Au / ||largest in Au||
-		u = MatrixCalculator.multiply(au, BigDecimal.ONE.divide(largest, 20, RoundingMode.HALF_UP));
+		u = MatrixCalculator.multiply(au, 1. / largest);
 
 		// Update values in powerInfo
 		powerInfo.setEigenvalue(largest);
@@ -75,7 +73,7 @@ public class PowerObject {
 	 * @return The approximated eigenvalue, eigenvector,
 	 *		   and number of iterations for desired tolerance
 	 */
-	private static Vector power_method(Matrix a, BigDecimal tol, Vector u, BigDecimal prev, PowerObject powerInfo) {
+	private static Vector power_method(Matrix a, double tol, Vector u, double prev, PowerObject powerInfo) {
 
 		if (powerInfo.getIterations() >= MAX_ITERATIONS) {
 			// If after MAX_ITERATIONS iterations, the error has not been reduced to tol or less,
@@ -84,8 +82,8 @@ public class PowerObject {
 			return u;
 		}
 
-		BigDecimal thisPrevious = powerInfo.getEigenvalue();
-		if (thisPrevious.abs().subtract(prev.abs()).abs().compareTo(tol) <= 0) {
+		double thisPrevious = powerInfo.getEigenvalue();
+		if (Math.abs(Math.abs(thisPrevious) - Math.abs(prev)) - tol <= 0) {
 			// Difference between current largest eigenvalue and previous eigenvalue is less than or equal to tolerance
 			// We are done iterating.
 			return u;
@@ -95,15 +93,15 @@ public class PowerObject {
 		Vector au = MatrixCalculator.multiply(a, u);
 
 		// Get au's largest
-		BigDecimal largest = au.get(0);
+		double largest = au.get(0);
 		for (int i = 1; i < au.numElements(); i++) {
-			if (au.get(i).abs().compareTo(largest.abs()) > 0) {
+			if (Math.abs(au.get(i)) - Math.abs(largest) > 0) {
 				largest = au.get(i);
 			}
 		}
 
 		// Divide au by its largest and set it to u
-		u = MatrixCalculator.multiply(au, BigDecimal.ONE.divide(largest, 20, RoundingMode.HALF_UP));
+		u = MatrixCalculator.multiply(au, 1. / largest);
 
 		// Update powerInfo
 		powerInfo.setEigenvalue(largest);
@@ -117,7 +115,7 @@ public class PowerObject {
 	/**
 	 * Constructs a power method object.
 	 */
-	public PowerObject(BigDecimal approximatedEigenvalue, Vector approximatedEigenvector) {
+	public PowerObject(double approximatedEigenvalue, Vector approximatedEigenvector) {
 		this.approximatedEigenvalue = approximatedEigenvalue;
 		this.approximatedEigenvector = approximatedEigenvector;
 	}
@@ -126,11 +124,11 @@ public class PowerObject {
 		return converges;
 	}
 
-	public BigDecimal getEigenvalue() {
+	public double getEigenvalue() {
 		if (converges) {
 			return approximatedEigenvalue;
 		} else {
-			return null;
+			return 0;
 		}
 	}
 
@@ -150,7 +148,7 @@ public class PowerObject {
 		this.converges = converges;
 	}
 
-	public void setEigenvalue(BigDecimal value) {
+	public void setEigenvalue(double value) {
 		this.approximatedEigenvalue = value;
 	}
 
@@ -170,7 +168,7 @@ public class PowerObject {
 	public String toString() {
 		if (converges) {
 			// At most keep 20 characters worth of eigenvalue
-			String originalEigenvalueToString = approximatedEigenvalue.stripTrailingZeros().toString();
+			String originalEigenvalueToString = "" + approximatedEigenvalue;
 			String desiredPortionEigenvalueToString = "";
 			for (int i = 0; i < originalEigenvalueToString.length() && i <= 20; i++) {
 				desiredPortionEigenvalueToString += originalEigenvalueToString.substring(i, i+1);

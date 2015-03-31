@@ -1,5 +1,3 @@
-import java.math.BigDecimal;
-
 /**
  * Representation of a vector
  *
@@ -8,7 +6,7 @@ import java.math.BigDecimal;
  */
 public class Vector {
 	
-	private BigDecimal[] vector;
+	private double[] vector;
 
 	/**
 	 * Constructs a vector with the specified
@@ -17,18 +15,10 @@ public class Vector {
 	 * @param rows The number of rows
 	 */
 	public Vector(int rows) {
-		this.vector = new BigDecimal[rows];
+		this.vector = new double[rows];
 		for (int i = 0; i < rows; i++) {
-			vector[i] = BigDecimal.ZERO;
+			vector[i] = 0;
 		}
-	}
-
-	/**
-	 * Constructs a vector with the BigDecimal array's data
-	 * @param vector The vector
-	 */
-	public Vector(BigDecimal[] vector) {
-		this.vector = vector;
 	}
 
 	/**
@@ -36,10 +26,7 @@ public class Vector {
 	 * @param vector The vector
 	 */
 	public Vector(double[] vector) {
-		this.vector = new BigDecimal[vector.length];
-		for (int i = 0; i < vector.length; i++) {
-			this.vector[i] = new BigDecimal("" + vector[i]);
-		}
+		this.vector = vector;
 	}
 
 	/**
@@ -49,7 +36,7 @@ public class Vector {
 	 * @throws IndexOutOfBoundsException if row 
 	 * 		   is not valid in the vector
 	 */
-	public BigDecimal get(int row) {
+	public double get(int row) {
 		if (row < 0 || row >= rows()) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -63,7 +50,7 @@ public class Vector {
 	 * @throws IndexOutOfBoundsException if row
 	 * 		   is not valid in the vector
 	 */
-	public void set(int row, BigDecimal value) {
+	public void set(int row, double value) {
 		if (row < 0 || row >= rows()) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -103,10 +90,10 @@ public class Vector {
 	 * This norm is the largest value in the vector.
 	 * @return The largest value in the vector
 	 */
-	public BigDecimal norm() {
-		BigDecimal largest = get(0);
+	public double norm() {
+		double largest = get(0);
 		for (int i = 0; i < vector.length; i++) {
-			if (vector[i].compareTo(largest) > 0) {
+			if (vector[i] - largest > 0) {
 				largest = vector[i];
 			}
 		}
@@ -118,12 +105,12 @@ public class Vector {
 	 * This norm is the square root of sum of squares of the elements in the vector.
 	 * @return The norm of the matrix
 	 */
-	public BigDecimal normF() {
-		BigDecimal sum = BigDecimal.ZERO;
+	public double normF() {
+		double sum = 0;
 		for (int i = 0; i < rows(); i++) {
-			sum = sum.add(get(i).pow(2));
+			sum += Math.pow(get(i), 2);
 		}
-		return MatrixCalculator.sqrt(sum);
+		return Math.sqrt(sum);
 	}
 
 	/**
@@ -141,8 +128,8 @@ public class Vector {
 	 *			WE SET THE RIGHT SIDE PORTION TO BE #LEADING ZEROS + UP TO 6 DIGITS
 	 *			IN THIS WAY, WE ALWAYS END UP WITH AT MOST 6 SIGNIFICANT FIGURES AFTER THE DECIMAL POINT
 	 */
-	private static int getNumberOfDecimalPlaces(BigDecimal bigDecimal) {
-	    String string = bigDecimal.stripTrailingZeros().toPlainString();
+	private static int getNumberOfDecimalPlaces(double number) {
+	    String string = "" + number;
 	    int index = string.indexOf(".");
 	    // If no ".", no digits to right of decimal
 	    if (index < 0) {
@@ -189,8 +176,8 @@ public class Vector {
 		return numRelevant;
 	}
 
-	private static int getNumberOfWholeNumbers(BigDecimal bigDecimal) {
-		String string = bigDecimal.stripTrailingZeros().toPlainString();
+	private static int getNumberOfWholeNumbers(double number) {
+		String string = "" + number;
 	    int count = 0;
 	    for (int i = 0; i < string.length(); i++) {
 	    	char x = string.charAt(i);
@@ -203,8 +190,8 @@ public class Vector {
 	    return count;
 	}
 
-	private static String getRelevantPortion(BigDecimal y, int numSpaces) {
-		String string = y.stripTrailingZeros().toPlainString();
+	private static String getRelevantPortion(double y, int numSpaces) {
+		String string = "" + y;
 		String relevantPortion = "";
 
 		int index = 0;
@@ -234,7 +221,7 @@ public class Vector {
 
 		int largestRelevantRightDecimal = getNumberOfDecimalPlaces(vector[0]);
 		int largestNumWholeNumbers = getNumberOfWholeNumbers(vector[0]);
-		for (BigDecimal y : vector) {
+		for (double y : vector) {
 			if (largestNumWholeNumbers < getNumberOfWholeNumbers(y)) {
 				largestNumWholeNumbers = getNumberOfWholeNumbers(y);
 			}
@@ -246,7 +233,7 @@ public class Vector {
 		int totalSpace = largestNumWholeNumbers + 1 + largestRelevantRightDecimal;
 		String formatString = "%" + totalSpace + "s";
 		String returnString = "[";
-		for (BigDecimal x : vector) {
+		for (double x : vector) {
 			String relevantPortion = getRelevantPortion(x, totalSpace);
 			returnString += String.format(formatString, relevantPortion) + ", ";
 		}

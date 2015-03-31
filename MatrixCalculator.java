@@ -1,6 +1,3 @@
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 /**
  * Calculates various operations on matrices and vectors
  * @author Siddarth Senthilkumar
@@ -23,10 +20,10 @@ public class MatrixCalculator {
 		}
 
 		Matrix sum = new Matrix(a.rows(), a.columns());
-		BigDecimal sumValue;
+		double sumValue;
 		for (int row = 0; row < a.rows(); row++) {
 			for (int column = 0; column < a.columns(); column++) {
-				sumValue = a.get(row, column).add(b.get(row, column));
+				sumValue = a.get(row, column) + b.get(row, column);
 				sum.set(row, column, sumValue);
 			}
 		}
@@ -48,10 +45,10 @@ public class MatrixCalculator {
 		}
 
 		Matrix difference = new Matrix(a.rows(), a.columns());
-		BigDecimal differenceValue;
+		double differenceValue;
 		for (int row = 0; row < a.rows(); row++) {
 			for (int column = 0; column < a.columns(); column++) {
-				differenceValue = a.get(row, column).subtract(b.get(row, column));
+				differenceValue = a.get(row, column) - b.get(row, column);
 				difference.set(row, column, differenceValue);
 			}
 		}
@@ -78,17 +75,17 @@ public class MatrixCalculator {
 		}
 
 		Matrix product = new Matrix(a.rows(), b.columns());
-		BigDecimal sum;
-		BigDecimal[] row;
-		BigDecimal[] column;
+		double sum;
+		double[] row;
+		double[] column;
 		for (int rowA = 0; rowA < a.rows(); rowA++) {
-			sum = BigDecimal.ZERO;
+			sum = 0;
 			row = a.row(rowA);
 			for (int colB = 0; colB < b.columns(); colB++) {
-				sum = BigDecimal.ZERO;
+				sum = 0;
 				column = b.column(colB);
 				for (int i = 0; i < row.length; i++) {
-					sum = sum.add(row[i].multiply(column[i]));
+					sum += row[i] * column[i];
 				}
 				product.set(rowA, colB, sum);
 			}
@@ -102,11 +99,11 @@ public class MatrixCalculator {
 	 * @param scalar The constant to multiply by
 	 * @return The matrix containing the product
 	 */
-	public static Matrix multiply(Matrix a, BigDecimal scalar) {
+	public static Matrix multiply(Matrix a, double scalar) {
 		Matrix product = new Matrix(a.rows(), a.columns());
 		for (int i = 0; i < a.rows(); i++) {
 			for (int j = 0; j < a.columns(); j++) {
-				product.set(i, j, new BigDecimal("" + scalar).multiply(a.get(i, j)));
+				product.set(i, j, scalar * a.get(i, j));
 			}
 		}
 		return product;
@@ -120,9 +117,9 @@ public class MatrixCalculator {
 	 */
 	 public static Vector add(Vector u, Vector v) {
 		Vector sum = new Vector(u.rows());
-		BigDecimal sumValue;
+		double sumValue;
 		for (int row = 0; row < u.rows(); row++) {
-			sumValue = u.get(row).add(v.get(row));
+			sumValue = u.get(row) + v.get(row);
 			sum.set(row, sumValue);
 		}
 		return sum;
@@ -142,7 +139,7 @@ public class MatrixCalculator {
 
 		Vector x = new Vector(a.numElements());
 		for (int i = 0; i < a.numElements(); i++) {
-			x.set(i, a.get(i).subtract(b.get(i)));
+			x.set(i, a.get(i) - b.get(i));
 		}
 		return x;
 	}
@@ -153,10 +150,10 @@ public class MatrixCalculator {
 	 * @param scalar The constant to multiply by
 	 * @return The vector containing the product
 	 */
-	public static Vector multiply(Vector a, BigDecimal scalar) {
+	public static Vector multiply(Vector a, double scalar) {
 		Vector product = new Vector(a.numElements());
 		for (int i = 0; i < a.numElements(); i++) {
-			product.set(i, new BigDecimal("" + scalar).multiply(a.get(i)));
+			product.set(i, scalar * a.get(i));
 		}
 		return product;
 	}
@@ -174,14 +171,14 @@ public class MatrixCalculator {
 			throw new IllegalArgumentException("A's columns must be the same as B's rows");
 		}
 		Vector product = new Vector(a.rows());
-		BigDecimal sum;
-		BigDecimal[] row;
-		BigDecimal[] column;
+		double sum;
+		double[] row;
+		double[] column;
 		for (int rowA = 0; rowA < a.rows(); rowA++) {
-			sum = BigDecimal.ZERO;
+			sum = 0;
 			row = a.row(rowA);
 			for (int i = 0; i < row.length; i++) {
-				sum = sum.add(row[i].multiply(x.get(i)));
+				sum += row[i] * x.get(i);
 			}
 			product.set(rowA, sum);
 		}
@@ -206,13 +203,13 @@ public class MatrixCalculator {
 	 * @return The dot product of the two vectors
 	 * @throws IllegalArgumentException if the two vectors are not the same length
 	 */
-	public static BigDecimal dotProduct(Vector one, Vector two) throws IllegalArgumentException {
+	public static double dotProduct(Vector one, Vector two) throws IllegalArgumentException {
 		if (one.rows() != two.rows()) {
 			throw new IllegalArgumentException("Vectors not same length");
 		}
-		BigDecimal sum = BigDecimal.ZERO;
+		double sum = 0;
 		for (int i = 0; i < one.rows(); i++) {
-			sum = sum.add(one.get(i).multiply(two.get(i)));
+			sum += one.get(i) * two.get(i);
 		}
 		return sum;
 	}
@@ -301,7 +298,7 @@ public class MatrixCalculator {
 	 * @return The approximated eigenvalue, eigenvector,
 	 *		   and number of iterations for desired tolerance
 	 */
-	public static PowerObject power_method(Matrix a, BigDecimal tol, Vector u) {
+	public static PowerObject power_method(Matrix a, double tol, Vector u) {
 		return PowerObject.power_method(a, tol, u);
 	}
 
@@ -313,61 +310,61 @@ public class MatrixCalculator {
 	 * -----------------------------------------------------------------
 	 */
 
-	/**
-	 * Calculates the square root of a BigDecimal to precision 32 bits.
-	 * @param value The square root to be calculated
-	 * @return The BigDecimal containing the square root
-	 */
-	public static BigDecimal sqrt(BigDecimal value) {
-    	BigDecimal x = new BigDecimal(Math.sqrt(value.doubleValue()));
-    	return x.add(new BigDecimal(value.subtract(x.multiply(x)).doubleValue() / (x.doubleValue() * 2.0)));
-	}
+	// /**
+	//  * Calculates the square root of a double to precision 32 bits.
+	//  * @param value The square root to be calculated
+	//  * @return The double containing the square root
+	//  */
+	// public static double sqrt(double value) {
+ //    	double x = new double(Math.sqrt(value.doubleValue()));
+ //    	return x.add(new double(value.subtract(x.multiply(x)).doubleValue() / (x.doubleValue() * 2.0)));
+	// }
 
-	/**
-	 * Rounds the given string to the desired number of digits for display,
-	 * then returns string with scientific notation of number.
-	 * Takes in a number less than 1 in magnitude
-	 * @param number The number to be rounded
-	 * @param numDigits The desired visible number of digits
-	 * @return The rounded scientific notation BigDecimal
-	 */
-	public static String sciNotLess(BigDecimal original) {
-		if (original.equals(BigDecimal.ZERO)) {
-			return (BigDecimal.ZERO).toString();
-		}
-		int numTimesMoved = 0;
-		String string = original.stripTrailingZeros().toPlainString();
-		int index = string.indexOf('.') + 1;
-		while (string.charAt(index) == '0') {
-			index++;
-			numTimesMoved++;
-		}
+	// /**
+	//  * Rounds the given string to the desired number of digits for display,
+	//  * then returns string with scientific notation of number.
+	//  * Takes in a number less than 1 in magnitude
+	//  * @param number The number to be rounded
+	//  * @param numDigits The desired visible number of digits
+	//  * @return The rounded scientific notation double
+	//  */
+	// public static String sciNotLess(double original) {
+	// 	if (original.equals(double.ZERO)) {
+	// 		return (double.ZERO).toString();
+	// 	}
+	// 	int numTimesMoved = 0;
+	// 	String string = original.stripTrailingZeros().toPlainString();
+	// 	int index = string.indexOf('.') + 1;
+	// 	while (string.charAt(index) == '0') {
+	// 		index++;
+	// 		numTimesMoved++;
+	// 	}
 
-		String scientific = "";
-		if (original.compareTo(BigDecimal.ZERO) < 0) {
-			scientific += "-";
-		}
-		// Index points to the first nonzero character
-		scientific += string.substring(index, index + 1);
-		index++;
-		if (index < string.length()) {
-			scientific += ".";
-			int nextDigit = 0;
-			if (index + 1 < string.length()) {
-				nextDigit = Integer.parseInt(string.substring(index + 1, index + 2));
-			}
-			int thisDigit = Integer.parseInt(string.substring(index, index + 1));
-			if (nextDigit >= 5) {
-				thisDigit++;
-			}
-			scientific += thisDigit;
-		}
+	// 	String scientific = "";
+	// 	if (original.compareTo(double.ZERO) < 0) {
+	// 		scientific += "-";
+	// 	}
+	// 	// Index points to the first nonzero character
+	// 	scientific += string.substring(index, index + 1);
+	// 	index++;
+	// 	if (index < string.length()) {
+	// 		scientific += ".";
+	// 		int nextDigit = 0;
+	// 		if (index + 1 < string.length()) {
+	// 			nextDigit = Integer.parseInt(string.substring(index + 1, index + 2));
+	// 		}
+	// 		int thisDigit = Integer.parseInt(string.substring(index, index + 1));
+	// 		if (nextDigit >= 5) {
+	// 			thisDigit++;
+	// 		}
+	// 		scientific += thisDigit;
+	// 	}
 
-		scientific += "E-" + (numTimesMoved + 1);
-		return scientific;
-	}
+	// 	scientific += "E-" + (numTimesMoved + 1);
+	// 	return scientific;
+	// }
 
-	public static void main(String[] args) {
-		System.out.println(sciNotLess(new BigDecimal("-.000000000001551456452")));
-	}
+	// public static void main(String[] args) {
+	// 	System.out.println(sciNotLess(new double("-.000000000001551456452")));
+	// }
 }
