@@ -349,16 +349,20 @@ public class MCWindow {
 					System.out.println(power);
 				} else if (n == 5) {
 					String[] fileNames = solveAXBInput();
-					changeLeslieInfo(fileNames, leslie);
-					System.out.println("Leslie Matrix");
-					System.out.println(leslie.getLeslieMatrix());
-					System.out.println("Population Vector");
-					System.out.println(leslie.getPopulationVector());
+					if(!fileNames[0].equals("0")) {
+						changeLeslieInfo(fileNames, leslie);
+						System.out.println("Leslie Matrix");
+						System.out.println(leslie.getLeslieMatrix());
+						System.out.println("Population Vector");
+						System.out.println(leslie.getPopulationVector());
+					}
 				} else if (n == 6) {
 					String[] fileNames = solveAXBInput();
-					System.out.print("Please enter a tolerance: ");
-					double tol = scan.nextDouble();
-					powerMethodOnUserInput(fileNames, tol);
+					if (!fileNames[0].equals(("0"))) {
+						System.out.print("Please enter a tolerance: ");
+						double tol = scan.nextDouble();
+						powerMethodOnUserInput(fileNames, tol);
+					}
 				}
 			}
 		}
