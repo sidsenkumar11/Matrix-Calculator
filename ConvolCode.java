@@ -152,22 +152,22 @@ public class ConvolCode {
 
     //for testing purposes
     public static void main(String[] args) {
-        double[] stream = { 1, 0, 1 };
-        ConvolCode coder = new ConvolCode(stream);
-        String[] y = coder.encode();
-
-        System.out.println("Convolutional code word: ");
-        for (String s : y) {
-            System.out.print(s + " ");
-        }
-        System.out.println();
-
-        double[] x = {0, 0, 0};
-        Vector x_guess = new Vector(x);
-        double tol = Math.pow(10, -8);
-        System.out.println(coder.getMatrixA0());
-        System.out.println(coder.getY0());
-        Vector x_final = jacobi.jacobi(coder.getMatrixA0(), coder.getY0(), x_guess, tol);
-        System.out.println(x_final);
+        // double[] stream = { 1, 0, 1 };
+        // ConvolCode coder = new ConvolCode(stream);
+        // String[] y = coder.encode();
+        //
+        // System.out.println("Convolutional code word: ");
+        // for (String s : y) {
+        //     System.out.print(s + " ");
+        // }
+        // System.out.println();
+        //
+        // double[] x = {0, 0, 0};
+        // Vector x_guess = new Vector(x);
+        // double tol = Math.pow(10, -8);
+        // System.out.println(coder.getMatrixA0());
+        // System.out.println(coder.getY0());
+        // Vector x_final = jacobi.jacobi(coder.getMatrixA0(), coder.getY0(), x_guess, tol);
+        // System.out.println(x_final);
     }
 }

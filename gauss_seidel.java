@@ -14,7 +14,7 @@ public class gauss_seidel {
      * @return x vector approximation
      * @throws RuntimeException if iterations > MAX_ITER
      */
-    public static int gauss_seidel(Matrix a, Vector y, Vector x, double tol) {
+    public static Vector gauss_seidel(Matrix a, Vector y, Vector x, double tol) {
         int iterations = 0;
         double difference = tol + 1;
         Vector xVector = new Vector(x.rows());
