@@ -180,4 +180,63 @@ public class Hilbert {
 		System.out.println("||QR - H||: " + (MatrixCalculator.subtract(MatrixCalculator.multiply(qr[0], qr[1]), h)).norm());
 		System.out.println("||Hx - b||: " + MatrixCalculator.subtract(MatrixCalculator.multiply(h, x), b).norm());
 	}
+
+	/**
+	 * Solve a system Ax = b using LU and QR decompositions
+	 * Givens rotations and Householder Reflections
+	 *
+	 * @param a The matrix A
+	 * @param b The vector B
+	 */
+	public static void solveSystem(Matrix a, Vector b) {
+		System.out.println("\n\n\n\n");
+		System.out.println("--------------------------");
+		System.out.println("Original Matrix");
+		System.out.println("--------------------------");
+		System.out.println(a);
+		System.out.println("--------------------------");
+		System.out.println("B vector in Ax = b");
+		System.out.println("--------------------------");
+		System.out.println(b);
+		Matrix[] lu = MatrixCalculator.lu_fact(a);
+		Vector x = MatrixCalculator.solve_lu_b(lu[0], lu[1], b);
+		System.out.println("\n\n\n\n");
+		System.out.println("--------------------------");
+		System.out.println("MATRIX SOLVED USING LU");
+		System.out.println("--------------------------");
+		System.out.println("1) Lower Triangular Matrix");
+		System.out.println(lu[0]);
+		System.out.println("2) Upper Triangular Matrix");
+		System.out.println(lu[1]);
+		System.out.println("Vector x: " + x);
+		System.out.println("||LU - A||: " + (MatrixCalculator.subtract(MatrixCalculator.multiply(lu[0], lu[1]), a)).norm());
+		System.out.println("||Ax - b||: " + MatrixCalculator.subtract(MatrixCalculator.multiply(a, x), b).norm());
+		System.out.println("\n\n\n\n");
+		Matrix[] qr = MatrixCalculator.qr_fact_househ(a);
+		x = MatrixCalculator.solve_qr_b(qr[0], qr[1], b);
+		System.out.println("-----------------------------------------------------");
+		System.out.println("MATRIX SOLVED USING QR USING HOUSEHOLDER REFLECTIONS");
+		System.out.println("-----------------------------------------------------");
+		System.out.println("1) Q Matrix");
+		System.out.println(qr[0]);
+		System.out.println("2) R Matrix");
+		System.out.println(qr[1]);
+		System.out.println("Vector x: " + x);
+		System.out.println("||QR - H||: " + (MatrixCalculator.subtract(MatrixCalculator.multiply(qr[0], qr[1]), a)).norm());
+		System.out.println("||Ax - b||: " + MatrixCalculator.subtract(MatrixCalculator.multiply(a, x), b).norm());
+		System.out.println("\n\n\n\n");
+		qr = MatrixCalculator.qr_fact_givens(a);
+		x = MatrixCalculator.solve_qr_b(qr[0], qr[1], b);
+		System.out.println("---------------------------------------------");
+		System.out.println("MATRIX SOLVED USING QR USING GIVENS ROTATIONS");
+		System.out.println("---------------------------------------------");
+		System.out.println("1) Q Matrix");
+		System.out.println(qr[0]);
+		System.out.println("2) R Matrix");
+		System.out.println(qr[1]);
+		System.out.println("Vector x: " + x);
+		System.out.println("||QR - H||: " + (MatrixCalculator.subtract(MatrixCalculator.multiply(qr[0], qr[1]), a)).norm());
+		System.out.println("||Ax - b||: " + MatrixCalculator.subtract(MatrixCalculator.multiply(a, x), b).norm());
+		System.out.println("\n\n\n\n");
+	}
 }

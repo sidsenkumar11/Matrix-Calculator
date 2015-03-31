@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 /**
  * Representation of a vector
  *
@@ -7,6 +9,17 @@
 public class Vector {
 	
 	private double[] vector;
+
+	/**
+	 * Constructs a vector with the specified data
+	 * @param elements A 2D array made from a linked list and string array, each string array is 1 element long
+	 */
+	public Vector(LinkedList<String[]> rows) {
+		this.vector = new double[rows.size()];
+		for (int row = 0; row < rows.size(); row++) {
+			set(row, Double.parseDouble(rows.get(row)[0]));
+		}
+	}
 
 	/**
 	 * Constructs a vector with the specified

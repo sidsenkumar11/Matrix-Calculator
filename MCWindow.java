@@ -10,18 +10,19 @@ import java.io.IOException;
  */
 public class MCWindow {
 
-	private LinkedList<Matrix> matrices;
 	private Scanner scan;
 
 	public MCWindow() {
-		this.matrices = new LinkedList<Matrix>();
 		this.scan = new Scanner(System.in);
 	}
 
 	/**
 	 * Read in all Matrix .dat files into matrices
 	 */
-	public void readMatrices(LinkedList<String> fileNames) {
+	public LinkedList[] readMatrices(String[] fileNames) {
+
+		LinkedList<Matrix> matrices = new LinkedList<Matrix>();
+		LinkedList<Vector> vectors = new LinkedList<Vector>();
 
 		for (String fileName : fileNames) {
 			try {
@@ -36,15 +37,29 @@ public class MCWindow {
 					rows.add(row);
 				}
 
-				// Create Matrix
-				Matrix matrix = new Matrix(rows);
-				matrices.add(matrix);
+				// Create Matrix or vector
+				if (rows.get(0).length == 1) {
+					vectors.add(new Vector(rows));
+				} else {
+					matrices.add(new Matrix(rows));
+				}
 
 			} catch(IOException exception) {
 				System.out.println("Error processing file: " + exception);
 			}
 		}
 
+		LinkedList[] returnData;
+		
+		if (vectors.size() == 0) {
+			returnData = new LinkedList[1];
+			returnData[0] = matrices;
+		} else {
+			returnData = new LinkedList[2];
+			returnData[0] = matrices;
+			returnData[1] = vectors;
+		}
+		return returnData;
 	}
 
 	public void run() {
@@ -104,6 +119,7 @@ public class MCWindow {
 		System.out.println("(0) Quit");
 		System.out.println("(1) View and solve Hilbert Matrix for a particular n");
 		System.out.println("(2) View and solve Hilbert Matrix for n = 2 to 20");
+		System.out.println("(3) Solve Ax = b for some matrix A and some matrix b");
 		System.out.println("--------------------------------------------------------------------------------");
 		String input = "";
 		int n = -1;
@@ -112,16 +128,16 @@ public class MCWindow {
 			input = scan.next();
 			try {
 				n = Integer.parseInt(input);
-				while (n < 0 || n > 2) {
+				while (n < 0 || n > 3) {
 					System.out.println("--------------------------------------------------------------------------------");
-					System.out.println("Please enter a valid integer greater than or equal to 0 and less than three.");
+					System.out.println("Please enter a valid integer greater than or equal to 0 and less than four.");
 					System.out.println("--------------------------------------------------------------------------------");
 					n = -1;
 					break;
 				}
 			} catch (Exception e) {
 				System.out.println("--------------------------------------------------------------------------------");
-				System.out.println("Please enter a valid integer greater than or equal to 0 and less than three.");
+				System.out.println("Please enter a valid integer greater than or equal to 0 and less than four.");
 				System.out.println("--------------------------------------------------------------------------------");
 			}
 		}
@@ -153,6 +169,73 @@ public class MCWindow {
 			}
 		}
 		return n;
+	}
+
+	public String[] solveAXBInput() {
+		System.out.println("--------------------------------------------------------------------------------");
+		System.out.println("Enter the name of the file containing the matrix A");
+		System.out.println("followed by the name of the file containing the vector B, or 0 to quit.");
+		System.out.println("Ex. - Input: a.dat b.dat");
+		System.out.println("If you wish to enter an augmented matrix, simply enter one file name and 0");
+		System.out.println("Ex. - Input: a.dat 0");
+		System.out.println("--------------------------------------------------------------------------------");
+		String[] files = null;
+		boolean successfullyRead = false;
+		while (!successfullyRead) {
+			System.out.print("Input: ");
+			String inputOne = scan.next();
+			String inputTwo = scan.next();
+			String input = "";
+			if (inputTwo.equals("0")) {
+				input = inputOne;
+			} else {
+				input = inputOne + " " + inputTwo;
+			}
+			files = input.split(" ");
+			if (files.length == 0) {
+				System.out.println("--------------------------------------------------------------------------------");
+				System.out.println("Please enter valid file name(s) or 0.");
+				System.out.println("--------------------------------------------------------------------------------");
+			} else if (!files[0].equals("0")) {
+				successfullyRead = true;
+				for (int i = 0; i < 2 && i < files.length && successfullyRead; i++) {
+					try {
+						FileReader reader = new FileReader(files[i]);
+					} catch (Exception e) {
+						successfullyRead = false;
+						System.out.println("--------------------------------------------------------------------------------");
+						System.out.println("Please enter valid file name(s) or 0.");
+						System.out.println("--------------------------------------------------------------------------------");
+					}
+				}
+			} else {
+				successfullyRead = true;
+			}
+		}
+		return files;
+	}
+
+	public void solveAXB(String[] files) {
+		LinkedList[] matricesAndVectors = readMatrices(files);
+		if (matricesAndVectors.length == 1) {
+			// Augmented matrix
+			Matrix augmented = (Matrix) matricesAndVectors[0].get(0);
+			System.out.println("\n\n");
+			System.out.println("--------------------------");
+			System.out.println("INITIAL AUGMENTED MATRIX");
+			System.out.println("--------------------------");
+			System.out.println(augmented);
+			Matrix a = augmented.getMatrix(0, augmented.rows() - 1, 0, augmented.columns() - 2);
+			Vector b = augmented.getSubVector(0, augmented.rows() - 1, augmented.columns() - 1);
+			Hilbert.solveSystem(a, b);
+		} else if (matricesAndVectors.length == 2) {
+			// Matrix and Vector
+			Matrix a = (Matrix) matricesAndVectors[0].get(0);
+			Vector b = (Vector) matricesAndVectors[1].get(0);
+			Hilbert.solveSystem(a, b);
+		} else {
+			System.out.println("Fatal error");
+		}
 	}
 
 	public int leslieInput() {
@@ -194,12 +277,19 @@ public class MCWindow {
 			if (n != 0) {
 				if (n == 1) {
 					n = hilbertInputIndividual();
-					Hilbert x = new Hilbert(n);
-					x.solveAllMethods();
+					if (n != 0) {
+						Hilbert x = new Hilbert(n);
+						x.solveAllMethods();
+					}
 				} else if (n == 2) {
 					for (int i = 2; i <= 20; i++) {
 						Hilbert x = new Hilbert(i);
 						x.solveAllMethods();
+					}
+				} else if (n == 3) {
+					String[] files = solveAXBInput();
+					if (!files[0].equals("0")) {
+						solveAXB(files);
 					}
 				}
 
@@ -237,6 +327,7 @@ public class MCWindow {
 	}
 
 	public static void main(String[] args) {
+		System.out.println("--------------------------------------------------------------------------------");
 		System.out.println("***NOTE*** - If the formatting of the numbers or matrices seems off, resize your shell/terminal so that the screen is wider and so that pixels are smaller until everything fits properly as intended. As a guesstimate, this whole block of text constituting the NOTE should all appear on a single line.");
 		MCWindow runner = new MCWindow();
 		runner.run();
