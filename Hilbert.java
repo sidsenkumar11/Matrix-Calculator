@@ -62,7 +62,7 @@ public class Hilbert {
 	 * Shows solutions to QR
 	 */
 	public void solveUsingQR() {
-		 solveUsingQRHouseHolder();
+		solveUsingQRHouseHolder();
 		solveUsingQRGivens();
 	}
 

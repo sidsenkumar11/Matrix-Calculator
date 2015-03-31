@@ -322,4 +322,52 @@ public class MatrixCalculator {
     	BigDecimal x = new BigDecimal(Math.sqrt(value.doubleValue()));
     	return x.add(new BigDecimal(value.subtract(x.multiply(x)).doubleValue() / (x.doubleValue() * 2.0)));
 	}
+
+	/**
+	 * Rounds the given string to the desired number of digits for display,
+	 * then returns string with scientific notation of number.
+	 * Takes in a number less than 1 in magnitude
+	 * @param number The number to be rounded
+	 * @param numDigits The desired visible number of digits
+	 * @return The rounded scientific notation BigDecimal
+	 */
+	public static String sciNotLess(BigDecimal original) {
+		if (original.equals(BigDecimal.ZERO)) {
+			return (BigDecimal.ZERO).toString();
+		}
+		int numTimesMoved = 0;
+		String string = original.stripTrailingZeros().toPlainString();
+		int index = string.indexOf('.') + 1;
+		while (string.charAt(index) == '0') {
+			index++;
+			numTimesMoved++;
+		}
+
+		String scientific = "";
+		if (original.compareTo(BigDecimal.ZERO) < 0) {
+			scientific += "-";
+		}
+		// Index points to the first nonzero character
+		scientific += string.substring(index, index + 1);
+		index++;
+		if (index < string.length()) {
+			scientific += ".";
+			int nextDigit = 0;
+			if (index + 1 < string.length()) {
+				nextDigit = Integer.parseInt(string.substring(index + 1, index + 2));
+			}
+			int thisDigit = Integer.parseInt(string.substring(index, index + 1));
+			if (nextDigit >= 5) {
+				thisDigit++;
+			}
+			scientific += thisDigit;
+		}
+
+		scientific += "E-" + (numTimesMoved + 1);
+		return scientific;
+	}
+
+	public static void main(String[] args) {
+		System.out.println(sciNotLess(new BigDecimal("-.000000000001551456452")));
+	}
 }
