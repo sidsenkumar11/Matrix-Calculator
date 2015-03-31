@@ -24,19 +24,6 @@ public class IterativeMethods {
         Vector oldXVector = new Vector(x.rows());
         double sum;
 
-        /*
-        xVector.i = (1/a.ii)(y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
-        Steps:
-        1) iterate through y and add each element to new xVector
-           xVector.i = y.i
-        2) iterate through each element in a
-           xVector.i = y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
-           xVector.i = (1/a.ii) * x.i
-        3) add xVector to ArrayList of xVectors
-        4) see if xVector.get(i + 1) - xVector.get(i) is less than tol
-           **if not, do it again
-        */
-
         for (int i = 0; i < oldXVector.rows(); i++) {
             oldXVector.set(i, x.get(i));
         }
@@ -90,20 +77,6 @@ public class IterativeMethods {
         Vector xVector = new Vector(x.rows());
         Vector oldXVector = new Vector(x.rows());
         double sum;
-
-        /*
-        xVector.i = (1/a.ii)(y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
-        Steps:
-        1) iterate through y and add each element to new xVector
-           xVector.i = y.i
-        2) iterate through each element in A. Each time you iterate,
-           use the new found x.i from the last iteration.
-           xVector.i = y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
-           xVector.i = (1/a.ii) * x.i
-        3) add xVector to ArrayList of xVectors
-        4) see if xVector.get(i + 1) - xVector.get(i) is less than tol
-           **if not, do it again
-        */
 
         for (int i = 0; i < oldXVector.rows(); i++) {
             oldXVector.set(i, x.get(i));
