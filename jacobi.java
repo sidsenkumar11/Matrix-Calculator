@@ -7,19 +7,19 @@
 public class jacobi {
 
     private static final int MAX_ITER = 100;
+    private static int iterations;
 
     /**
-     * Method for Jacobi iteration. Returns the number of iterations
-     * made after || x.n - x.n-1 || < tolerance.
+     * Method for Jacobi iteration. Returns x vector reached
+     * after the statement ( || x.n - x.n-1 || < tolerance ) is true.
      * @param a Matrix n x n
      * @param y Vector n x 1
      * @param x Initial guess vector
      * @param tol Error tolerance number
-     * @return number of iterations required to reach tolerance
+     * @return x vector approximation
      * @throws RuntimeException if iterations > MAX_ITER
      */
-    public static int jacobi(Matrix a, Vector y, Vector x, double tol) {
-        int iterations = 0;
+    public static Vector jacobi(Matrix a, Vector y, Vector x, double tol) {
         double difference = tol + 1;
         Vector xVector = new Vector(x.rows());
         Vector oldXVector = new Vector(x.rows());
@@ -60,7 +60,8 @@ public class jacobi {
 
         }
 
-        return iterations;
+        System.out.println(iterations + " iterations made.");
+        return xVector;
     }
 
 }
