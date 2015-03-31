@@ -18,11 +18,11 @@ public class IterativeMethods {
      * @return number of iterations required to reach tolerance
      */
     public static int jacobi(Matrix a, Vector y, Vector x, double tol) {
-        int iterations = 1;
+        int iterations = 0;
         double difference = tol + 1;
         ArrayList<Vector> xVectors = new ArrayList<Vector>();
         Vector xVector = new Vector(x.rows());
-        Vector oldXVector = x;
+        Vector oldXVector = new Vector(x.rows());
         double sum;
 
         /*
@@ -38,12 +38,16 @@ public class IterativeMethods {
            **if not, do it again
         */
 
+        for (int i = 0; i < oldXVector.rows(); i++) {
+            oldXVector.set(i, x.get(i));
+        }
+
         while(!(difference < tol)) {
             if (iterations > MAX_ITER) {
                 throw new IllegalArgumentException();
             }
 
-            System.out.println("\nIteration #" + iterations);
+            iterations++;
 
             for (int i = 0; i < oldXVector.rows(); i++) {
                 oldXVector.set(i, xVector.get(i));
@@ -57,28 +61,15 @@ public class IterativeMethods {
                     }
                 }
                 sum = sum / a.get(i, i);
-                System.out.println("sum " + i + " = " + sum);
 
                 xVector.set(i, sum);
             }
 
-            System.out.println("oldXVector = " + oldXVector);
-            System.out.println("xVector = " + xVector);
-
             if (iterations > 1) {
                 difference = xVector.get(0) - oldXVector.get(0);
                 difference = Math.abs(difference);
-                System.out.println("\nDifference:\n" + xVector.get(0)
-                                    + " - " + oldXVector.get(0) + " = "
-                                    + difference);
             }
 
-            for (int i = 0; i < x.rows(); i++) {
-                x.set(i, xVector.get(i));
-            }
-            System.out.println();
-
-            iterations++;
         }
 
         return iterations;
@@ -96,9 +87,9 @@ public class IterativeMethods {
         int iterations = 0;
         double difference = tol + 1;
         ArrayList<Vector> xVectors = new ArrayList<Vector>();
-        Vector xVector;
-        int oldIndex = 0;
-        int newIndex = 1;
+        Vector xVector = new Vector(x.rows());
+        Vector oldXVector = new Vector(x.rows());
+        double sum;
 
         /*
         xVector.i = (1/a.ii)(y.i - a.i2*x.2 - ... - a.ii-1*x.i-1)
@@ -114,37 +105,42 @@ public class IterativeMethods {
            **if not, do it again
         */
 
-        //still need to change this from being for jacobi to gauss-seidel
-        while(!(difference - tol < 0)) {
-            xVector = new Vector(y.rows());
-            for (int i = 0; i < y.rows(); i++) {
-                xVector.set(i, y.get(i));
-            }
+        for (int i = 0; i < oldXVector.rows(); i++) {
+            oldXVector.set(i, x.get(i));
+        }
 
-            double sum;
-            for (int i = 0; i < a.rows(); i++) {
-                sum = xVector.get(i);
-                for (int j = 1; j < a.columns(); j++) {
-                    if (i == j) {
-                        j++;
-                    }
-                    sum += a.get(i, j) * x.get(i);
-                }
-                sum *= 1 / a.get(i, i);
-
-                xVector.set(i, sum);
-                x.set(i, sum);
-                xVectors.add(xVector);
-            }
-
-            if (xVectors.size() > 1) {
-                difference = xVectors.get(oldIndex).get(0) - xVectors.get(newIndex).get(0);
-                difference = Math.abs(difference);
+        while(!(difference < tol)) {
+            if (iterations > MAX_ITER) {
+                throw new IllegalArgumentException();
             }
 
             iterations++;
-            oldIndex++;
-            newIndex++;
+
+            for (int i = 0; i < oldXVector.rows(); i++) {
+                oldXVector.set(i, xVector.get(i));
+            }
+
+            for (int i = 0; i < a.rows(); i++) {
+                sum = y.get(i);
+                for (int j = 0; j < a.columns(); j++) {
+                    if (i != j) {
+                        sum -= a.get(i, j) * x.get(j);
+                    }
+                }
+                sum = sum / a.get(i, i);
+
+                xVector.set(i, sum);
+                x.set(i, sum);
+            }
+
+            if (iterations > 1) {
+                difference = xVector.get(0) - oldXVector.get(0);
+                difference = Math.abs(difference);
+            }
+
+            for (int i = 0; i < x.rows(); i++) {
+                x.set(i, xVector.get(i));
+            }
         }
 
         return iterations;
@@ -163,7 +159,7 @@ public class IterativeMethods {
         Matrix a = new Matrix(3, 3);
         Vector y = new Vector(3);
         Vector x = new Vector(3);
-        double tolerance = Math.pow(10, -3);
+        double tolerance = Math.pow(10, -4);
 
         for (int i = 0; i < a.rows(); i++) {
             for (int j = 0; j < a.columns(); j++) {
@@ -179,8 +175,13 @@ public class IterativeMethods {
             x.set(i, xValues[i]);
         }
 
+        System.out.println("Jacobi:");
         int iterations = jacobi(a, y, x, tolerance);
         System.out.println("Number of iterations: " + iterations);
+
+        System.out.println("\nGauss-Seidel:");
+        int iterations2 = gauss_seidel(a, y, x, tolerance);
+        System.out.println("Number of iterations: " + iterations2);
 
     }
 
