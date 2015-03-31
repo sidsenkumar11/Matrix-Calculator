@@ -376,12 +376,12 @@ public class MCWindow {
 			System.out.println(augmented);
 			Matrix a = augmented.getMatrix(0, augmented.rows() - 1, 0, augmented.columns() - 2);
 			Vector b = augmented.getSubVector(0, augmented.rows() - 1, augmented.columns() - 1);
-			power_method.power_method(a, tol, b);
+			System.out.println(power_method.power_method(a, tol, b));
 		} else if (matricesAndVectors.length == 2) {
 			// Matrix and Vector
 			Matrix a = (Matrix) matricesAndVectors[0].get(0);
 			Vector b = (Vector) matricesAndVectors[1].get(0);
-			power_method.power_method(a, tol, b);
+			System.out.println(power_method.power_method(a, tol, b));
 		} else {
 			System.out.println("Fatal error");
 		}
