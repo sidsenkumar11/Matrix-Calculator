@@ -5,7 +5,7 @@ import java.util.Random;
  * @author Katherine Cabezas
  * @version 1.0
  */
-public class Encoder {
+public class ConvolCode {
 
     private int[] x;
     private Matrix matrixA0;
@@ -14,7 +14,7 @@ public class Encoder {
     /**
      * Constructor for Encoder.
      */
-    public Encoder(int length) {
+    public ConvolCode(int length) {
         matrixA0 = new Matrix(length, 3);
         matrixA1 = new Matrix(length, 3);
         x = new int[length];
@@ -126,8 +126,8 @@ public class Encoder {
 
     //for testing purposes
     public static void main(String[] args) {
-        Encoder encoder = new Encoder(8);
-        int[] stream = encoder.getX();
+        ConvolCode coder = new ConvolCode(8);
+        int[] stream = coder.getX();
 
         for (int i : stream) {
             System.out.print(i+ " ");
@@ -135,21 +135,21 @@ public class Encoder {
 
         System.out.println();
 
-        int[] y0 = encoder.calculateY0(stream);
+        int[] y0 = coder.calculateY0(stream);
         for (int i: y0) {
             System.out.print(i + " ");
         }
 
         System.out.println();
 
-        int[] y1 = encoder.calculateY1(stream);
+        int[] y1 = coder.calculateY1(stream);
         for (int i: y1) {
             System.out.print(i + " ");
         }
 
         System.out.println();
 
-        String[] y = encoder.encode(stream);
+        String[] y = coder.encode(stream);
         for (String s: y) {
             System.out.print(s + " ");
         }
