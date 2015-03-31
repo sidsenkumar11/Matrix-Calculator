@@ -48,6 +48,6 @@ public class Leslie {
 	}
 
 	public PowerObject getDominantEigenvalue() {
-		return MatrixCalculator.power_method(a, .00000001), population);
+		return MatrixCalculator.power_method(a, .00000001, population);
 	}
 }
