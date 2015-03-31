@@ -1,5 +1,5 @@
 /**
- * Program to create convolutional code word for
+ * Program to decode convolutional code word for
  * binary data streams.
  * @author Katherine Cabezas
  * @version 1.0
@@ -8,9 +8,9 @@ public class Decoder {
 
     private static final int MAX_ITER = 100;
 
-    public static Vector[] splitY(String[] code) {
-        
-    }
+    // public static Vector[] splitY(String[] code) {
+    //
+    // }
 
     /**
      * Method for Jacobi iteration. Returns the x vector reached
