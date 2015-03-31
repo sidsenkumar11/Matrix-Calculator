@@ -49,7 +49,6 @@ public class jacobi {
                     }
                 }
                 sum = sum / a.get(i, i);
-                System.out.println("Sum " + i + "= " + sum);
 
                 xVector.set(i, sum);
             }
@@ -66,7 +65,7 @@ public class jacobi {
     }
 
     public static void main(String[] args) {
-        
+
     }
 
 }

@@ -5,6 +5,10 @@
  * @version 2.0
  */
 public class gauss_seidel {
+
+    private static final int MAX_ITER = 100;
+    private static int iterations;
+
     /**
      * Method for Gauss-Seidel iteration.
      * @param a Matrix n x n
