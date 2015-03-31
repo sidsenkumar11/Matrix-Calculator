@@ -36,7 +36,7 @@ public class IterativeMethods {
            **if not, do it again
         */
 
-        while(!(difference - tol < 0)) {
+        while(!(difference < tol)) {
             xVector = new Vector(y.rows());
             for (int i = 0; i < y.rows(); i++) {
                 xVector.set(i, y.get(i));
@@ -45,13 +45,14 @@ public class IterativeMethods {
             double sum;
             for (int i = 0; i < a.rows(); i++) {
                 sum = xVector.get(i);
-                for (int j = 0; j < a.columns(); j++) {
+                for (int j = 1; j < a.columns(); j++) {
                     if (i == j) {
                         j++;
+                    } else {
+                        sum += a.get(i, j) * x.get(i);
                     }
-                    sum += a.get(i, j) * x.get(i);
                 }
-                sum *= 1 / a.get(i, i);
+                sum *= (1 / a.get(i, i));
 
                 xVector.set(i, sum);
                 xVectors.add(xVector);
@@ -113,13 +114,13 @@ public class IterativeMethods {
             double sum;
             for (int i = 0; i < a.rows(); i++) {
                 sum = xVector.get(i);
-                for (int j = 0; j < a.columns(); j++) {
+                for (int j = 1; j < a.columns(); j++) {
                     if (i == j) {
                         j++;
                     }
                     sum += a.get(i, j) * x.get(i);
                 }
-                sum *= 1. / a.get(i, i);
+                sum *= 1 / a.get(i, i);
 
                 xVector.set(i, sum);
                 x.set(i, sum);
