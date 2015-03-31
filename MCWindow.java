@@ -246,6 +246,7 @@ public class MCWindow {
 		System.out.println("(2) View Leslie Matrix");
 		System.out.println("(3) Pass one iteration and view population vector");
 		System.out.println("(4) Use power method to find dominant eigenvalue");
+		System.out.println("(5) Input Leslie Matrix and initial population vector");
 		System.out.println("--------------------------------------------------------------------------------");
 		String input = "";
 		int n = -1;
@@ -254,20 +255,45 @@ public class MCWindow {
 			input = scan.next();
 			try {
 				n = Integer.parseInt(input);
-				while (n < 0 || n > 4) {
+				while (n < 0 || n > 5) {
 					System.out.println("--------------------------------------------------------------------------------");
-					System.out.println("Please enter a valid integer greater than or equal to 0 and less than five.");
+					System.out.println("Please enter a valid integer greater than or equal to 0 and less than six.");
 					System.out.println("--------------------------------------------------------------------------------");
 					n = -1;
 					break;
 				}
 			} catch (Exception e) {
 				System.out.println("--------------------------------------------------------------------------------");
-				System.out.println("Please enter a valid integer greater than or equal to 0 and less than five.");
+				System.out.println("Please enter a valid integer greater than or equal to 0 and less than six.");
 				System.out.println("--------------------------------------------------------------------------------");
 			}
 		}
 		return n;
+	}
+
+	public void changeLeslieInfo(String[] files, Leslie leslie) {
+		LinkedList[] matricesAndVectors = readMatrices(files);
+		if (matricesAndVectors.length == 1) {
+			// Augmented matrix
+			Matrix augmented = (Matrix) matricesAndVectors[0].get(0);
+			System.out.println("\n\n");
+			System.out.println("--------------------------");
+			System.out.println("INPUTTED AUGMENTED MATRIX");
+			System.out.println("--------------------------");
+			System.out.println(augmented);
+			Matrix a = augmented.getMatrix(0, augmented.rows() - 1, 0, augmented.columns() - 2);
+			Vector b = augmented.getSubVector(0, augmented.rows() - 1, augmented.columns() - 1);
+			leslie.setLeslie(a);
+			leslie.setPopulation(b);
+		} else if (matricesAndVectors.length == 2) {
+			// Matrix and Vector
+			Matrix a = (Matrix) matricesAndVectors[0].get(0);
+			Vector b = (Vector) matricesAndVectors[1].get(0);
+			leslie.setLeslie(a);
+			leslie.setPopulation(b);
+		} else {
+			System.out.println("Fatal error");
+		}
 	}
 
 	public void runHilbertMatrix() {
@@ -292,7 +318,6 @@ public class MCWindow {
 						solveAXB(files);
 					}
 				}
-
 			}
 		}
 	}
@@ -321,6 +346,13 @@ public class MCWindow {
 				} else if (n == 4) {
 					PowerObject power = leslie.getDominantEigenvalue();
 					System.out.println(power);
+				} else if (n == 5) {
+					String[] fileNames = solveAXBInput();
+					changeLeslieInfo(fileNames, leslie);
+					System.out.println("Leslie Matrix");
+					System.out.println(leslie.getLeslieMatrix());
+					System.out.println("Population Vector");
+					System.out.println(leslie.getPopulationVector());
 				}
 			}
 		}

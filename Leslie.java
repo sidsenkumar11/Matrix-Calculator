@@ -39,6 +39,14 @@ public class Leslie {
 		this.population = MatrixCalculator.multiply(a, population);
 	}
 
+	public void setLeslie(Matrix matrix) {
+		this.a = matrix;
+	}
+
+	public void setPopulation(Vector vector) {
+		this.population = vector;
+	}
+
 	public Matrix getLeslieMatrix() {
 		return a;
 	}
