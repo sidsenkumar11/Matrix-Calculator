@@ -8,11 +8,15 @@ import java.util.Random;
 public class Encoder {
 
     private int[] x;
+    private Matrix matrixA0;
+    private Matrix matrixA1;
 
     /**
      * Constructor for Encoder.
      */
     public Encoder(int length) {
+        matrixA0 = new Matrix(length, 3);
+        matrixA1 = new Matrix(length, 3);
         x = new int[length];
         Random randNumList = new Random();
 
@@ -39,10 +43,19 @@ public class Encoder {
         for (int i = 0; i < y0.length; i++) {
             if ((i - 2) < 0) {
                 y0[i] = stream[i];
+                matrixA0.set(i, 0, stream[i]);
+                matrixA0.set(i, 1, 0);
+                matrixA0.set(i, 2, 0);
             } else if ((i - 3) < 0) {
                 y0[i] = stream[i] + stream[i - 2];
+                matrixA0.set(i, 0, stream[i]);
+                matrixA0.set(i, 1, stream[i - 2]);
+                matrixA0.set(i, 2, 0);
             } else {
                 y0[i] = stream[i] + stream[i - 2] + stream[i - 3];
+                matrixA0.set(i, 0, stream[i]);
+                matrixA0.set(i, 1, stream[i - 2]);
+                matrixA0.set(i, 2, stream[i - 3]);
             }
             y0[i] = y0[i] % 2;
         }
@@ -59,14 +72,31 @@ public class Encoder {
         for (int i = 0; i < y1.length; i++) {
             if ((i - 1) < 0) {
                 y1[i] = stream[i];
+                matrixA1.set(i, 0, stream[i]);
+                matrixA1.set(i, 1, 0);
+                matrixA1.set(i, 2, 0);
             } else if ((i - 3) < 0) {
                 y1[i] = stream[i] + stream[i - 1];
+                matrixA1.set(i, 0, stream[i]);
+                matrixA1.set(i, 1, stream[i - 1]);
+                matrixA1.set(i, 2, 0);
             } else {
                 y1[i] = stream[i] + stream[i - 1] + stream[i - 3];
+                matrixA1.set(i, 0, stream[i]);
+                matrixA1.set(i, 1, stream[i - 1]);
+                matrixA1.set(i, 2, stream[i - 3]);
             }
             y1[i] = y1[i] % 2;
         }
         return y1;
+    }
+
+    public Matrix getMatrixA0() {
+        return matrixA0;
+    }
+
+    public Matrix getMatrixA1() {
+        return matrixA1;
     }
 
     /**
@@ -74,14 +104,21 @@ public class Encoder {
      * @param stream Binary data stream
      * @return convolutional code word y
      */
-    public int[] encode(int[] stream) {
+    public String[] encode(int[] stream) {
         int[] y0 = calculateY0(stream);
         int[] y1 = calculateY1(stream);
-        int[] y = new int[stream.length];
+        String[] y = new String[stream.length];
 
         for (int i = 0; i < stream.length; i++) {
-            String yValue = Integer.toString(y0[i]) + Integer.toString(y1[i]);
-            y[i] = Integer.parseInt(yValue);
+            if (y0[i] == 1 && y1[i] == 1) {
+                y[i] = "11";
+            } else if (y0[i] == 0 && y1[i] == 1) {
+                y[i] = "01";
+            } else if (y0[i] == 1 && y1[i] == 0) {
+                y[i] = "10";
+            } else {
+                y[i] = "00";
+            }
         }
 
         return y;
@@ -100,21 +137,21 @@ public class Encoder {
 
         int[] y0 = encoder.calculateY0(stream);
         for (int i: y0) {
-            System.out.print(i+ " ");
+            System.out.print(i + " ");
         }
 
         System.out.println();
 
         int[] y1 = encoder.calculateY1(stream);
         for (int i: y1) {
-            System.out.print(i+ " ");
+            System.out.print(i + " ");
         }
 
         System.out.println();
 
-        int[] y = encoder.encode(stream);
-        for (int i: y) {
-            System.out.print(i+ " ");
+        String[] y = encoder.encode(stream);
+        for (String s: y) {
+            System.out.print(s + " ");
         }
 
         System.out.println();
