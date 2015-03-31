@@ -116,4 +116,21 @@ public class Leslie {
 	public PowerObject getDominantEigenvalue() {
 		return MatrixCalculator.power_method(a, .00000001, population);
 	}
+
+	public static void main(String[] args) {
+		Leslie x = new Leslie();
+		x.passOneIteration(); // 2000 - 2010
+		x.passOneIteration(); // 2010 - 2020
+		Matrix leslie = x.getLeslieMatrix();
+		leslie.set(0, 1, leslie.get(0, 1) / 2);
+		x.setLeslie(leslie);
+		x.passOneIteration(); // 2020 - 2030
+		System.out.println("2030: " + x.getPopulationVector());
+		x.passOneIteration(); // 2030 - 2040
+		System.out.println("2040: " + x.getPopulationVector());
+		x.passOneIteration(); // 2040 - 2050
+		System.out.println("2050: " + x.getPopulationVector());
+
+		System.out.println(x.getDominantEigenvalue());
+	}
 }
