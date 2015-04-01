@@ -60,7 +60,9 @@ public class qr_fact_givens {
 		for (int row = 0; row < R.rows(); row++) {
 			for (int column = 0; column < R.columns(); column++) {
 				if (row > column) {
-					R.set(row, column, 0);
+					if (Math.abs(R.get(row, column)) <= Math.pow(10, -15)) {
+						R.set(row, column, 0);
+					}
 				}
 			}
 		}
