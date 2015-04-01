@@ -17,9 +17,6 @@ MCWindow provides 4 options -
 
 To run programs that are associated with a certain part of the project, simply enter the number. For example, if you want to do computations with power_method, since this was part of Urban Dynamics, enter "3". Then press enter.
 
-****IMPORTANT!*****
-For part 2, Convolution Codes, run instead "ConvoCode.java". Pressing 2 in the program will instruct you to do the same.
-
 Hilbert Matrix has 3 options.
 
 (0) Quit
@@ -34,6 +31,12 @@ Hilbert Matrix has 3 options.
 
 A user should input the matrix file followed by a space and then the vector file. If the matrix is an augmented matrix, the user simply needs to enter the file name, a space, and 0. For example, "a.dat 0".
 
+
+Convolution Codes has:
+
+0 - Quits the program
+1 - Asks for an input n and prints out the resulting encoded word
+2 - 
 Urban Population Dynamics has:
 
 0 - Quits the program
