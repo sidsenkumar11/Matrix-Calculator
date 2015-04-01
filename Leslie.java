@@ -60,6 +60,7 @@ public class Leslie {
 	}
 
 	public static void main(String[] args) {
+		System.out.println("When halving the birth rate at 2020...");
 		Leslie x = new Leslie();
 		x.passOneIteration(); // 2000 - 2010
 		x.passOneIteration(); // 2010 - 2020

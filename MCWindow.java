@@ -119,7 +119,7 @@ public class MCWindow {
 		System.out.println("(0) Quit");
 		System.out.println("(1) View and solve Hilbert Matrix for a particular n");
 		System.out.println("(2) View and solve Hilbert Matrix for n = 2 to 20");
-		System.out.println("(3) Solve Ax = b for some matrix A and some matrix b");
+		System.out.println("(3) Solve Ax = b for some matrix A and some vector b");
 		System.out.println("--------------------------------------------------------------------------------");
 		String input = "";
 		int n = -1;
