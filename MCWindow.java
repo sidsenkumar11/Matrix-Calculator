@@ -347,12 +347,47 @@ public class MCWindow {
                 }
                 System.out.println("Encoded: " + word);
             } else if (input == 2) {
-
+            	String[] fileNames = solveAXBInput();
+            	if (!fileNames[0].equals(("0"))) {
+					System.out.print("Please enter a tolerance: ");
+					double tol = scan.nextDouble();
+					convolutionPartTwo(fileNames, tol);
+				}
             } else if (input != 0) {
                 System.out.println("Please enter an integer between 0 and 2 inclusive");
             }
         }
-        System.out.println("Thank you for using our program");
+	}
+
+	public void convolutionPartTwo(String[] files, double tol) {
+		LinkedList[] matricesAndVectors = readMatrices(files);
+		if (matricesAndVectors.length == 1) {
+			// Augmented matrix
+			Matrix augmented = (Matrix) matricesAndVectors[0].get(0);
+			System.out.println("\n\n");
+			System.out.println("--------------------------");
+			System.out.println("INPUTTED AUGMENTED MATRIX");
+			System.out.println("--------------------------");
+			System.out.println(augmented);
+			Matrix a = augmented.getMatrix(0, augmented.rows() - 1, 0, augmented.columns() - 2);
+			Vector y = augmented.getSubVector(0, augmented.rows() - 1, augmented.columns() - 1);
+			Vector x = new Vector(y.numElements());
+			System.out.println("GAUSS-SEIDEL");
+			gauss_seidel.gauss_seidel(a, y, x, tol);
+			System.out.println("JACOBI");
+			jacobi.jacobi(a, y, x, tol);
+		} else if (matricesAndVectors.length == 2) {
+			// Matrix and Vector
+			Matrix a = (Matrix) matricesAndVectors[0].get(0);
+			Vector y = (Vector) matricesAndVectors[1].get(0);
+			Vector x = new Vector(y.numElements());
+			System.out.println("GAUSS-SEIDEL");
+			gauss_seidel.gauss_seidel(a, y, x, tol);
+			System.out.println("JACOBI");
+			jacobi.jacobi(a, y, x, tol);
+		} else {
+			System.out.println("Fatal error");
+		}
 	}
 
 	public void runUrbanPopulationDynamics() {

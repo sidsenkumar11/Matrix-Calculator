@@ -36,7 +36,8 @@ Convolution Codes has:
 
 0 - Quits the program
 1 - Asks for an input n and prints out the resulting encoded word
-2 - 
+2 - Runs iterative methods on given matrix A and y. Same input rules as Hilbert.
+
 Urban Population Dynamics has:
 
 0 - Quits the program
