@@ -148,39 +148,10 @@ public class ConvolCode {
                 y[i] = "00";
             }
         }
-
         return y;
     }
 
     public static void main(String[] args) {
-        System.out.println("------------------------------------------------");
-        System.out.println("Welcome to the Convolutional Code program!");
-        System.out.println("What would you like to do?");
-        System.out.println("------------------------------------------------");
-        System.out.println("(0) Exit the program");
-        System.out.println("(1) Encode");
-        System.out.println("(2) Iterative Methods");
-        Scanner scan = new Scanner(System.in);
-        System.out.print("Input: ");
-        int input = -1;
-        while (input != 0) {
-            input = scan.nextInt();
-            if (input == 1) {
-                System.out.print("Please enter the desired length n of the stream: ");
-                int length = scan.nextInt();
-                ConvolCode x = new ConvolCode(length);
-                String[] array = x.encode();
-                String word = "";
-                for (String a : array) {
-                    word += a + " ";
-                }
-                System.out.println("Ecnoded: " + word);
-            } else if (input == 2) {
 
-            } else if (input != 0) {
-                System.out.println("Please enter an integer between 0 and 2 inclusive");
-            }
-        }
-        System.out.println("Thank you for using our program");
     }
 }
