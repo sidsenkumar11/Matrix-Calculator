@@ -324,7 +324,7 @@ public class MCWindow {
 	}
 
 	public void runConvolutionCodes() {
-		System.out.println("Came to convolution");
+		System.out.println("Please run ConvolCode.java from the command line to use this program.");
 	}
 
 	public void runUrbanPopulationDynamics() {
