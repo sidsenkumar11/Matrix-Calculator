@@ -18,6 +18,7 @@ public class ConvolCode {
      * binary stream x.
      * @param length Desired length for binary stream x
      */
+
     public ConvolCode(int length) {
         matrixA0 = new Matrix(length, 3);
         matrixA1 = new Matrix(length, 3);
@@ -162,11 +163,11 @@ public class ConvolCode {
         }
         System.out.println();
 
-        // double[] x = {0, 0, 0};
-        // Vector x_guess = new Vector(x);
-        // double tol = Math.pow(10, -8);
-        // System.out.println(coder.getMatrixA0());
-        // System.out.println(coder.getY0());
+        double[] x = {0, 0, 0};
+        Vector x_guess = new Vector(x);
+        double tol = Math.pow(10, -8);
+        System.out.println(coder.getMatrixA0());
+        System.out.println(coder.getY0());
         // Vector x_final = jacobi.j_decode(coder.getMatrixA0(), coder.getY0(), x_guess, tol);
         // System.out.println(x_final);
         // double[][] aMatrix = {
