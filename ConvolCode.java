@@ -151,7 +151,6 @@ public class ConvolCode {
         return y;
     }
 
-    //for testing purposes
     public static void main(String[] args) {
         double[] stream = { 1, 0, 1 };
         ConvolCode coder = new ConvolCode(stream);
