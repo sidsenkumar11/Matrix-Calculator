@@ -22,9 +22,9 @@ Hilbert Matrix has 4 options.<br />
 0 - Exits the Hilbert Matrix procedures and returns to the main menu.<br />
 1 - Allows a user to enter an integer n for a Hilbert Matrix of dimensions n x n and then displays the LU/QR-Householder/QR-Givens factorizations, solutions and approximate error.<br />
 2 - Displays all n = 2 to 20 Hilbert matrices, solutions, and errors for all factorizations.<br />
-3 - Allows a user to input a matrix and/or vector, then solves the system using all three factorization methods, prints out the matrices, errors, and solution vectors.
-######A user should input the matrix file followed by a space and then the vector file. If the matrix is an augmented matrix, the user simply needs to enter the file name, a space, and 0. For example, "a.dat 0".
-<br /><br />
+3 - Allows a user to input a matrix and/or vector, then solves the system using all three factorization methods, prints out the matrices, errors, and solution vectors.<br />
+Note:
+#####A user should input the matrix file followed by a space and then the vector file. If the matrix is an augmented matrix, the user simply needs to enter the file name, a space, and 0. For example, "a.dat 0".
 <img src="hilbert-in-action.png" /><br />
 ### Convolution Codes
 Convolution Codes has 3 options.<br />
